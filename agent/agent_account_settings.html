@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Agent Account Settings – Digital Realty</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #eef5f0;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: white;
+      padding: 14px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-right a {
+      margin-left: 20px;
+      font-weight: 600;
+      color: #0a5c45;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: .2s;
+    }
+    .nav-right a:hover {
+      background: #e3f2ec;
+    }
+
+    /* MAIN SETTINGS CARD */
+    .dashboard-container {
+      max-width: 700px;
+      margin: auto;
+      padding: 40px;
+    }
+
+    .dashboard-title {
+      font-size: 30px;
+      font-weight: 700;
+      color: #0a5c45;
+      margin-bottom: 5px;
+    }
+
+    .dashboard-subtitle {
+      font-size: 16px;
+      color: #4d6658;
+      margin-bottom: 25px;
+    }
+
+    .auth-form label {
+      font-weight: 600;
+      color: #0a5c45;
+      margin-top: 14px;
+      display: block;
+    }
+
+    .auth-form input {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 6px;
+      border: 1px solid #aac7b1;
+      border-radius: 10px;
+      background: #fafafa;
+      outline: none;
+      transition: .2s;
+    }
+
+    .auth-form input:focus {
+      border-color: #0a5c45;
+      box-shadow: 0 0 0 3px rgba(10, 92, 69, 0.25);
+    }
+
+    /* BUTTONS */
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      background: #0a5c45;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: .25s;
+    }
+
+    .auth-btn:hover {
+      background: #084d36;
+    }
+
+    .cancel-btn {
+      width: 100%;
+      padding: 12px;
+      background: #555;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-top: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: .25s;
+    }
+
+    .cancel-btn:hover {
+      background: #333;
+    }
+  </style>
+</head>
+
+<body>
+
+<script src="/assets/js/session.js"></script>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="nav-left">
+    <h2 style="margin:0; font-weight:700; color:#0a5c45;">Digital Realty – Agent</h2>
+  </div>
+
+  <nav class="nav-right">
+    <a href="agent_dashboard.html">Dashboard</a>
+    <a href="agent_account_settings.html" class="active">Account Settings</a>
+    <a href="#" id="logoutBtn">Logout</a>
+  </nav>
+</header>
+
+<!-- ACCOUNT SETTINGS -->
+<div class="dashboard-container">
+  <h2 class="dashboard-title">Account Settings</h2>
+  <p class="dashboard-subtitle">Manage your personal information</p>
+
+  <form class="auth-form" id="profileForm">
+
+    <label>Full Name</label>
+    <input type="text" id="agentFullName" disabled required>
+
+    <label>Email (cannot be changed)</label>
+    <input type="email" id="agentEmail" disabled>
+
+    <label>Contact Number</label>
+    <input type="text" id="agentContact" maxlength="11" disabled required>
+
+    <label>Change Password (optional)</label>
+    <input type="password" id="agentPassword" disabled placeholder="Enter new password">
+
+    <div id="buttonArea">
+      <button type="button" class="auth-btn" id="editBtn">Edit Settings</button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+const API_BASE = "http://localhost:5000/api";
+
+// Require agent login
+if (!Session.requireRole("agent", "/agent/agent_login.html")) {}
+
+const sessionUser = Session.getUser();
+const token = Session.getToken();
+
+// INITIAL LOAD
+document.addEventListener("DOMContentLoaded", () => {
+  if (!sessionUser) return window.location.href = "/agent/agent_login.html";
+
+  // Fill fields with session data
+  document.getElementById("agentFullName").value = sessionUser.full_name || "";
+  document.getElementById("agentEmail").value = sessionUser.email || "";
+  document.getElementById("agentContact").value = sessionUser.contact || "";
+  document.getElementById("agentPassword").value = "";
+
+  // Logout
+  document.getElementById("logoutBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    Session.logout("/login.html");
+  });
+
+});
+
+// ENABLE EDIT MODE
+document.getElementById("editBtn").addEventListener("click", enableEdit);
+
+function enableEdit() {
+  document.getElementById("agentFullName").disabled = false;
+  document.getElementById("agentContact").disabled = false;
+  document.getElementById("agentPassword").disabled = false;
+
+  // Replace buttons
+  document.getElementById("buttonArea").innerHTML = `
+    <button type="submit" class="auth-btn" id="saveBtn">Save Changes</button>
+    <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+  `;
+
+  document.getElementById("saveBtn").addEventListener("click", saveAgentProfile);
+  document.getElementById("cancelBtn").addEventListener("click", () => window.location.reload());
+}
+
+// SAVE PROFILE (UPDATED)
+async function saveAgentProfile(e) {
+  e.preventDefault();
+
+  const full_name = document.getElementById("agentFullName").value.trim();
+  const contact = document.getElementById("agentContact").value.trim();
+  const email = document.getElementById("agentEmail").value.trim();
+  const password = document.getElementById("agentPassword").value;
+
+  // Field validation
+  if (!full_name || !email || !contact) {
+    alert("Full name, email, and contact are required.");
+    return;
+  }
+
+  if (!/^09\d{9}$/.test(contact)) {
+    alert("Contact number must start with 09 and be 11 digits.");
+    return;
+  }
+
+  const payload = { full_name, contact, email };
+
+  if (password && password.length > 0) {
+    if (password.length < 8) {
+      alert("Password must be at least 8 characters.");
+      return;
+    }
+    payload.password = password;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/update/${sessionUser.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const json = await res.json();
+
+    if (!res.ok) {
+      alert(json.error || "Failed to update account.");
+      return;
+    }
+
+    // Backend should return updated user object
+    const updatedUser = json.user || json.data || { ...sessionUser, ...payload };
+
+    // Save back to local session
+    Session.saveSession(updatedUser, token);
+
+    alert("Account updated successfully!");
+    window.location.reload();
+
+  } catch (err) {
+    console.error("SAVE PROFILE ERROR:", err);
+    alert("Server error. Please try again later.");
+  }
+}
+</script>
+
+</body>
+</html>

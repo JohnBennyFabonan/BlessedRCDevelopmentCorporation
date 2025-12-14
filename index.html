@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blessed R&C Development Corporation – Find Your Perfect Lot</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #f5f7f6;
+    color: #263238;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* NAVBAR */
+.navbar {
+    background: #1B5E20;
+    padding: 18px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.nav-logo {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* NAV BUTTONS */
+.nav-right a {
+    margin-left: 20px;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #FFFFFF !important;
+}
+
+.btn-login {
+    background: #2E7D32;
+    color: white !important;
+    border: 2px solid #2E7D32;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-signup {
+    background: #2E7D32;
+    color: #2E7D32 !important;
+    border: 2px solid #2E7D32;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* HERO */
+.hero {
+    display: flex;
+    padding: 60px 40px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.hero-content {
+    max-width: 50%;
+    min-width: 300px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    color: #1B5E20;
+}
+
+.hero p {
+    font-size: 18px;
+    color: #455A64;
+}
+
+.btn-primary {
+    background: #2E7D32;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 10px;
+}
+
+.hero-image {
+    width: 45%;
+    height: 320px;
+    border-radius: 16px;
+    background: url('assets/img/LotFront.jpg') center/cover no-repeat;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* SECTIONS */
+.section {
+    padding: 50px 40px;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 32px;
+    color: #1B5E20;
+}
+
+/* PROPERTY GRID */
+.property-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+    text-align: left;
+}
+
+.card-content h3 {
+    font-size: 20px;
+    color: #1B5E20;
+}
+
+.price-tag {
+    margin-top: 8px;
+    font-weight: 700;
+    font-size: 17px;
+    color: #1B5E20;
+}
+
+/* ABOUT */
+.about-text {
+    font-size: 18px;
+    max-width: 700px;
+    line-height: 1.6;
+    margin: auto;
+    color: #455A64;
+}
+
+/* MISSION & VISION */
+.mv-container {
+    max-width: 1100px;
+    margin: 50px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background: white;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    text-align: left;
+}
+
+.mv-container h3 {
+    font-size: 26px;
+    color: #1B5E20;
+    font-weight: 700;
+}
+
+.mv-container p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #444;
+    text-align: justify;   /* JUSTIFIED ✔ */
+}
+
+/* FOOTER */
+.footer {
+    background: #1B5E20;
+    color: white;
+    text-align: center;
+    padding: 18px;
+    margin-top: 30px;
+}
+</style>
+
+<script src="assets/js/session.js"></script>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">
+        <img src="assets/img/LOGO-removebg-preview.png" class="nav-logo" alt="Logo">
+        <span>Blessed R&C Development Corporation</span>
+    </div>
+
+    <div class="nav-right" id="navLinks"></div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Find Your Ideal Property</h1>
+        <p>Explore premium lots offered by Blessed R&C Realty Development Corporation.</p>
+        <a href="#properties" class="btn-primary">Browse Properties</a>
+    </div>
+    <div class="hero-image"></div>
+</section>
+
+<!-- PROPERTIES -->
+<section class="section" id="properties">
+    <h2 class="section-title">Available Properties</h2>
+    <div class="property-grid" id="propertyList"></div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+    <h2 class="section-title">About Us</h2>
+    <p class="about-text">
+        Blessed R&C Development Corporation is a trusted real estate provider committed to offering secure, high-quality, and affordable residential lots, helping individuals and families build a better future through reliable property investment opportunities.
+    </p>
+
+    <!-- MISSION & VISION -->
+    <div class="mv-container">
+        <div>
+            <h3>Mission</h3>
+            <p>
+                Our mission is to provide comprehensive, reliable, and innovative real estate solutions 
+                that empower individuals to achieve their dreams of homeownership, investment success, 
+                and financial freedom. Through our unwavering dedication to our mission, we aim to be 
+                a leading force in the real estate industry, transforming lives, and helping individuals 
+                realize their dreams of a prosperous and fulfilling real estate journey.
+            </p>
+        </div>
+
+        <div>
+            <h3>Vision</h3>
+            <p>
+                As a leading provider of transformative real estate experiences, our vision is to positively 
+                impact the lives of individuals and communities. The company strives to achieve industry 
+                leadership by focusing on excellence, innovation, and making a lasting difference.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>© 2025 Blessed R&C Development Corp. All Rights Reserved.</p>
+</footer>
+
+<!-- JS FUNCTIONALITY (unchanged) -->
+<script>
+const API_BASE = "http://localhost:5000/api";
+const FILE_BASE = "http://localhost:5000";
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const user = Session.getUser();
+    const nav = document.getElementById("navLinks");
+
+    if (user && user.role === "client") {
+        nav.innerHTML = `
+            <a href="customer/customer_dashboard.html" class="btn-login">Dashboard</a>
+            <a href="#" onclick="Session.logout('/index.html')" class="btn-signup">Logout</a>
+        `;
+    } else if (user && user.role === "admin") {
+        nav.innerHTML = `
+            <a href="admin/admin_dashboard.html" class="btn-login">Admin</a>
+            <a href="#" onclick="Session.logout('/index.html')" class="btn-signup">Logout</a>
+        `;
+    } else {
+        nav.innerHTML = `
+            <a href="login.html" class="btn-login">Login</a>
+            <a href="customer/signup.html" class="btn-signup">Sign Up</a>
+        `;
+    }
+
+    const container = document.getElementById("propertyList");
+
+    try {
+        const res = await fetch(`${API_BASE}/properties`);
+        const json = await res.json();
+
+        if (!json.success) throw new Error("API error loading properties");
+
+        container.innerHTML = "";
+
+        json.data.forEach((p) => {
+            let images = [];
+
+            if (Array.isArray(p.images)) images = p.images;
+            else if (typeof p.images === "string" && p.images.trim() !== "") {
+                try { images = JSON.parse(p.images); } catch {}
+            }
+
+            /* ✅ ONLY FIX */
+            let firstImage = "assets/img/no-image.jpg";
+            if (images.length > 0) {
+                firstImage = images[0].startsWith("http")
+                    ? images[0]                // AWS S3
+                    : `${FILE_BASE}${images[0]}`; // Local
+            }
+
+            const card = document.createElement("div");
+            card.classList.add("card");
+
+            card.innerHTML = `
+                <img src="${firstImage}" alt="Property Image">
+                <div class="card-content">
+                    <h3>${p.title}</h3>
+                    <p>${p.location || "Batangas"}</p>
+                    <p class="price-tag">₱${Number(p.price || 0).toLocaleString()}</p>
+                    <button class="view-btn" onclick="viewDetails('${p.id}')">View Details</button>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+
+    } catch (err) {
+        console.error("Homepage Load Error:", err);
+        container.innerHTML = "<p>Error loading properties.</p>";
+    }
+});
+
+function viewDetails(id) {
+    localStorage.setItem("viewPropertyId", id);
+    window.location.href = "property.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin – Manage Appointments</title>
+
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+  <script src="/assets/js/session.js"></script>
+
+  <style>
+    /* ===== GLOBAL ===== */
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #eef5f0;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .layout {
+      display: flex;
+      width: 100%;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 240px;
+      background: #0f4d20;
+      padding: 30px 20px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+    }
+
+    .sidebar-title {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .side-link {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.10);
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.2s ease-in-out;
+    }
+
+    .side-link:hover {
+      background: rgba(255,255,255,0.20);
+      transform: translateX(5px);
+    }
+
+    .side-link.active {
+      background: white;
+      color: #1B5E20;
+      font-weight: 600;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      margin-left: 270px;
+      padding: 40px;
+      width: calc(100% - 270px);
+    }
+
+    .page-title {
+      font-size: 30px;
+      font-weight: 700;
+      color: #1B5E20;
+      margin-bottom: 25px;
+    }
+
+    .content-card {
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+
+    thead {
+      background: #1B5E20;
+      color: white;
+    }
+
+    thead th {
+      padding: 14px;
+      font-size: 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    tbody td {
+      padding: 14px;
+      border-bottom: 1px solid #e3e3e3;
+      color: #444;
+    }
+
+    tbody tr:hover {
+      background: #eef7f0;
+    }
+
+    .status-box {
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-weight: 600;
+      color: white;
+      font-size: 13px;
+    }
+
+    .pending { background: #e5b100; }
+    .approved { background: #2fa84f; }
+    .declined { background: #d9534f; }
+
+    .approve-btn,
+    .decline-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      border: none;
+      transition: 0.2s;
+    }
+
+    .approve-btn {
+      background: #1B5E20;
+      color: white;
+    }
+    .approve-btn:hover {
+      background: #0e3e15;
+    }
+
+    .decline-btn {
+      background: #c0392b;
+      color: white;
+    }
+    .decline-btn:hover {
+      background: #922b21;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+    <a href="admin_dashboard.html" class="side-link"><i class="ri-dashboard-fill"></i> Dashboard</a>
+    <a href="admin_manage_properties.html" class="side-link"><i class="ri-building-4-fill"></i> Manage Properties</a>
+    <a href="admin_manage_appointments.html" class="side-link active"><i class="ri-calendar-check-fill"></i> Appointments</a>
+    <a href="admin_manage_staff.html" class="side-link"><i class="ri-team-fill"></i> Manage Staff</a>
+    <a href="admin_manage_agents.html" class="side-link"><i class="ri-handshake-fill"></i> Manage Agents</a>
+    <a href="admin_manage_customers.html" class="side-link"><i class="ri-user-3-fill"></i> Manage Clients</a>
+    <a href="admin_account_settings.html" class="side-link"><i class="ri-settings-3-fill"></i> Account Settings</a>
+
+    <a href="#" class="side-link logout-link" onclick="Session.logout('/admin/admin_login.html')">
+      <i class="ri-logout-box-r-fill"></i> Logout
+    </a>
+  </aside>
+
+  <main class="main-content">
+    <div class="content-card">
+
+      <h2 class="page-title">Manage Appointments</h2>
+
+      <table class="appt-table" id="apptTable">
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Property</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+    </div>
+  </main>
+
+</div>
+
+<script>
+const API = "http://localhost:5000/api";
+
+// Require Admin Login
+Session.requireRole("admin", "/admin/admin_login.html");
+
+// Load Appointments
+async function loadAppointments() {
+  const tbody = document.querySelector("#apptTable tbody");
+  tbody.innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
+
+  try {
+    const res = await fetch(`${API}/appointments`);
+    const json = await res.json();
+
+    tbody.innerHTML = "";
+
+    if (!json.success || !json.data.length) {
+      tbody.innerHTML = "<tr><td colspan='7'>No appointments found.</td></tr>";
+      return;
+    }
+
+    json.data.forEach(a => {
+      const status = a.status.toLowerCase();
+
+      const row = `
+        <tr>
+          <td>${a.full_name}</td>
+          <td>${a.property_title || ("Property #" + a.property_id)}</td>
+          <td>${a.date}</td>
+          <td>${a.time}</td>
+          <td>${a.message || ""}</td>
+          <td>
+            <span class="status-box ${status}">
+              ${status.charAt(0).toUpperCase() + status.slice(1)}
+            </span>
+          </td>
+          <td>
+            ${status === "pending" ? `
+              <button class="approve-btn" onclick="updateStatus(${a.id}, 'approved')">Approve</button>
+              <button class="decline-btn" onclick="updateStatus(${a.id}, 'declined')">Decline</button>
+            ` : "—"}
+          </td>
+        </tr>
+      `;
+
+      tbody.insertAdjacentHTML("beforeend", row);
+    });
+
+  } catch (err) {
+    console.error("❌ LOAD ERROR:", err);
+    tbody.innerHTML = "<tr><td colspan='7'>Error loading appointments.</td></tr>";
+  }
+}
+
+// =====================================
+// UPDATE STATUS (ADMIN)
+// =====================================
+async function updateStatus(id, status) {
+  if (!confirm(`Mark appointment as ${status.toUpperCase()}?`)) return;
+
+  try {
+    const res = await fetch(`${API}/appointments/${id}/status`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status })
+    });
+
+    const json = await res.json();
+
+    if (!res.ok || !json.success) {
+      alert(json.error || "Failed to update status.");
+      return;
+    }
+
+    alert(`Appointment marked as ${status.toUpperCase()}`);
+    loadAppointments();
+
+  } catch (err) {
+    console.error("❌ UPDATE STATUS ERROR:", err);
+    alert("Server error updating status.");
+  }
+}
+
+// Initial load
+loadAppointments();
+</script>
+
+</body>
+</html>

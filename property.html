@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Property Details – Digital Realty</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #e7f2ed;
+      color: #263238;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: #1B5E20;
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      font-size: 20px;
+      font-weight: 600;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    .property-layout {
+      display: flex;
+      gap: 40px;
+      padding: 40px 60px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    /* LEFT SIDE - GALLERY */
+    .property-left {
+      flex: 1.1;
+    }
+
+    .prop-main-img {
+      width: 100%;
+      height: 420px;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+    }
+
+    .thumbnail-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .thumbnail {
+      width: 90px;
+      height: 70px;
+      border-radius: 8px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.2s;
+    }
+    .thumbnail:hover {
+      border-color: #1B5E20;
+    }
+
+    /* MAP BUTTON */
+    .map-btn {
+      display: block;
+      background: #1B5E20;
+      padding: 14px;
+      text-align: center;
+      color: white;
+      margin-top: 25px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    /* RIGHT SIDE */
+    .property-right {
+      flex: 0.9;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    }
+
+    .property-right h1 {
+      margin: 0;
+      font-size: 32px;
+      color: #1B5E20;
+    }
+
+    .property-right p {
+      margin: 6px 0;
+      color: #455A64;
+      font-size: 16px;
+    }
+
+    .property-info-grid {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .info-item h4 {
+      margin: 0;
+      font-size: 14px;
+      color: #1B5E20;
+    }
+
+    .info-item p {
+      margin: 2px 0 0;
+      font-weight: 600;
+      color: #263238;
+    }
+
+    /* BUTTON ROW */
+    .button-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .action-btn {
+      background: #1B5E20;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: 0.2s;
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      background: #174d1b;
+    }
+
+    .availability-btn {
+      background: #245f3a;
+    }
+
+    /* AGENT CARD */
+    .agent-card {
+      background: #f4faf5;
+      padding: 18px;
+      border-radius: 12px;
+      margin-top: 30px;
+      border-left: 6px solid #1B5E20;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .agent-info h3 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      color: #1B5E20;
+    }
+
+    .agent-info p {
+      margin: 3px 0;
+      color: #455A64;
+      font-size: 15px;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+    }
+
+    .availability-img {
+      max-width: 500px;
+      border-radius: 10px;
+    }
+
+    .close {
+      cursor: pointer;
+      float: right;
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #1B5E20;
+    }
+
+    @media (max-width: 900px) {
+      .property-layout { flex-direction: column; }
+      .prop-main-img { height: 300px; }
+    }
+  </style>
+
+  <script src="/assets/js/session.js"></script>
+</head>
+
+<body>
+
+<header class="navbar">
+  Blessed R&C Development Corporation
+  <div class="nav-right" id="navButtons"></div>
+</header>
+
+<section class="property-layout">
+  <div class="property-left">
+    <img id="mainImage" class="prop-main-img">
+    <div id="thumbnailRow" class="thumbnail-row"></div>
+    <a id="googleMapLink" target="_blank" class="map-btn">📍 Open Location in Google Maps</a>
+  </div>
+
+  <div class="property-right">
+    <h1 id="propTitle"></h1>
+    <p id="propLocation"></p>
+    <p id="propPrice"></p>
+
+    <div class="property-info-grid">
+      <div class="info-item"><h4>Lot Area</h4><p id="infoArea"></p></div>
+      <div class="info-item"><h4>Status</h4><p id="infoStatus"></p></div>
+      <div class="info-item"><h4>Type</h4><p id="infoType"></p></div>
+      <div class="info-item"><h4>Phase</h4><p id="infoPhase"></p></div>
+    </div>
+
+    <p id="propDescription" style="margin-top:18px;"></p>
+
+    <!-- BUTTON ROW with NEW TAB CALCULATOR -->
+    <div class="button-row">
+      <a id="vrTourBtn" class="action-btn" target="_blank">VR Tour</a>
+      <button id="bookBtn" class="action-btn">Book Appointment</button>
+      <button onclick="openAvailability()" class="action-btn availability-btn">Availability</button>
+
+      <!-- Calculator now opens in a NEW TAB -->
+      <a href="customer/calculator.html" 
+         class="action-btn" 
+         target="_blank" 
+         style="background:#2E7D32;">
+         Compute Payment
+      </a>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-info">
+        <h3 id="agentName"></h3>
+        <p id="agentPhone"></p>
+        <p id="agentEmail"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AVAILABILITY MODAL -->
+<div id="availabilityModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeAvailability()">&times;</span>
+    <img id="availabilityImage" class="availability-img">
+  </div>
+</div>
+
+<script>
+const API_BASE = "http://localhost:5000/api";
+const FILE_BASE = "http://localhost:5000";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const id = localStorage.getItem("viewPropertyId");
+  if (!id) return alert("No property selected.");
+
+  try {
+    const res = await fetch(`${API_BASE}/properties/${id}`);
+    const json = await res.json();
+    if (!json.success) throw new Error("Failed to load property");
+    const p = json.data;
+
+    document.getElementById("propTitle").textContent = p.title;
+    document.getElementById("propLocation").textContent = "📍 " + (p.location || "");
+    document.getElementById("propPrice").textContent =
+      "₱" + Number(p.price || 0).toLocaleString();
+
+    document.getElementById("infoArea").textContent =
+      (p.lot_area || "0") + " sqm";
+    document.getElementById("infoStatus").textContent = p.status || "";
+    document.getElementById("infoType").textContent = p.type || "";
+    document.getElementById("infoPhase").textContent = p.phase || "";
+    document.getElementById("propDescription").textContent = p.description || "";
+
+    // ================= IMAGE FIX =================
+    let images = [];
+    if (Array.isArray(p.images)) images = p.images;
+    else if (typeof p.images === "string") {
+      try { images = JSON.parse(p.images); } catch {}
+    }
+
+    // ✅ FIX: handle AWS S3 + local uploads
+    images = images.map(img =>
+      img.startsWith("http") ? img : `${FILE_BASE}${img}`
+    );
+
+    if (images.length === 0) {
+      images = ["../assets/img/no-image.jpg"];
+    }
+
+    const mainImage = document.getElementById("mainImage");
+    mainImage.src = images[0];
+
+    const thumbnailRow = document.getElementById("thumbnailRow");
+    thumbnailRow.innerHTML = "";
+
+    images.forEach(src => {
+      const th = document.createElement("img");
+      th.src = src;
+      th.classList.add("thumbnail");
+      th.onclick = () => (mainImage.src = src);
+      thumbnailRow.appendChild(th);
+    });
+
+    // ================= LINKS =================
+    document.getElementById("vrTourBtn").href = p.virtual_tour || "#";
+    document.getElementById("googleMapLink").href = p.google_map || "#";
+
+    // ================= AVAILABILITY IMAGE FIX =================
+    const availImg = document.getElementById("availabilityImage");
+    if (p.availability_image) {
+      availImg.src = p.availability_image.startsWith("http")
+        ? p.availability_image
+        : `${FILE_BASE}${p.availability_image}`;
+    }
+
+    // ================= AGENT DETAILS (UNCHANGED) =================
+    const agentName = document.getElementById("agentName");
+    const agentPhone = document.getElementById("agentPhone");
+    const agentEmail = document.getElementById("agentEmail");
+
+    if (!p.agent) {
+      agentName.textContent = "No Agent Assigned";
+      agentPhone.textContent = "";
+      agentEmail.textContent = "";
+    } else {
+      const agentRes = await fetch(`${API_BASE}/agents/${p.agent}`);
+      const agentJson = await agentRes.json();
+      if (agentJson.success && agentJson.data) {
+        const a = agentJson.data;
+        agentName.textContent = a.full_name;
+        agentPhone.textContent = "📞 " + (a.contact || "No phone");
+        agentEmail.textContent = "✉️ " + (a.email || "No email");
+      } else {
+        agentName.textContent = "Agent Not Found";
+      }
+    }
+
+  } catch (err) {
+    console.error("PROPERTY LOAD ERROR:", err);
+    alert("Failed to load property details");
+  }
+});
+
+// ================= BOOK BUTTON =================
+document.getElementById("bookBtn").addEventListener("click", () => {
+  const user = Session.getUser();
+  if (!user || !Session.isLoggedIn() || user.role !== "client") {
+    alert("Please log in first.");
+    return window.location.href = "/login.html";
+  }
+  window.location.href = "/customer/booking.html";
+});
+
+// ================= MODAL =================
+function openAvailability() {
+  document.getElementById("availabilityModal").style.display = "flex";
+}
+
+function closeAvailability() {
+  document.getElementById("availabilityModal").style.display = "none";
+}
+</script>
+
+
+</body>
+</html>

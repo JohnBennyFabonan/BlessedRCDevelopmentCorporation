@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Realty – Lot Calculator</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: #e7f2ed; /* Digital Realty mint background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 10px;
+        }
+
+        /* HEADER / LOGO AREA */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            color: #1e5f3b;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #4b665a;
+            margin-top: 5px;
+        }
+
+        /* MAIN CARD UI */
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 520px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #1e3d32;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 10px;
+            border: 1px solid #cdd5d1;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 14px;
+            background: #1e8e52;
+            border: none;
+            color: white;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #177444;
+        }
+
+        /* RESULTS */
+        .result-box {
+            margin-top: 25px;
+            background: #f0fdf4;
+            padding: 20px;
+            border-left: 6px solid #1e8e52;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .result-box h3 {
+            margin-top: 0;
+            color: #1e5f3b;
+        }
+
+        .result-line {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .highlight {
+            font-size: 22px;
+            font-weight: 700;
+            color: #177444;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Blessed R&C Development Corp. Calculator</h1>
+        <p>Compute your lot price, down payment, and monthly amortization.</p>
+    </div>
+
+    <div class="card">
+        <label>Lot Size (sqm):</label>
+        <input type="number" id="sqm" placeholder="Enter square meters">
+
+        <label>Price per sqm (₱):</label>
+        <input type="number" id="price" value="4500">
+
+        <label>Years to Pay:</label>
+        <select id="years">
+            <option value="1">1 year</option>
+            <option value="2">2 years</option>
+            <option value="3">3 years</option>
+            <option value="4">4 years</option>
+            <option value="5">5 years</option>
+        </select>
+
+        <button onclick="compute()">Calculate</button>
+
+        <div class="result-box" id="resultBox">
+            <h3>Computation Result</h3>
+            <div class="result-line" id="totalPrice"></div>
+            <div class="result-line" id="downPayment"></div>
+            <div class="result-line" id="balance"></div>
+            <div class="result-line" id="months"></div>
+            <div class="result-line highlight" id="monthlyPay"></div>
+        </div>
+    </div>
+
+<script>
+function compute() {
+    let sqm = Number(document.getElementById("sqm").value);
+    let price = Number(document.getElementById("price").value);
+    let years = Number(document.getElementById("years").value);
+
+    if (sqm <= 0 || price <= 0) {
+        alert("Please enter valid values.");
+        return;
+    }
+
+    let total = sqm * price;
+    let dp = total * 0.30;
+    let balance = total - dp;
+    let months = years * 12;
+    let monthly = balance / months;
+
+    document.getElementById("resultBox").style.display = "block";
+    document.getElementById("totalPrice").innerHTML = `<strong>Total Price:</strong> ₱${total.toLocaleString()}`;
+    document.getElementById("downPayment").innerHTML = `<strong>Down Payment (30%):</strong> ₱${dp.toLocaleString()}`;
+    document.getElementById("balance").innerHTML = `<strong>Remaining Balance:</strong> ₱${balance.toLocaleString()}`;
+    document.getElementById("months").innerHTML = `<strong>Number of Months:</strong> ${months}`;
+    document.getElementById("monthlyPay").innerHTML = `Monthly Payment: ₱${monthly.toLocaleString()}`;
+}
+</script>
+
+</body>
+</html>

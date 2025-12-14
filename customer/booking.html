@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Appointment – Digital Realty</title>
+
+  <style>
+    /* ===== GLOBAL ===== */
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #e7f2ed, #f4faf7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* ===== CARD CONTAINER ===== */
+    .booking-card {
+      width: 420px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 35px;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      animation: fadeIn .35s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== HEADINGS ===== */
+    .title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1B5E20;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #546E7A;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    /* ===== FORM ===== */
+    label {
+      font-weight: 600;
+      font-size: 14px;
+      color: #1B5E20;
+      display: block;
+      margin-top: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 6px;
+      border-radius: 12px;
+      border: 1px solid #c7dcd2;
+      font-size: 14px;
+      outline: none;
+      transition: 0.2s;
+      font-family: inherit;
+      background: #ffffff;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #1B5E20;
+      box-shadow: 0 0 0 2px rgba(27,94,32,0.2);
+    }
+
+    textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    /* ===== BUTTON ===== */
+    .submit-btn {
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
+      background: #1B5E20;
+      border: none;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .submit-btn:hover {
+      background: #164c19;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(27,94,32,0.25);
+    }
+
+    /* ===== FOOTER LINK ===== */
+    .footer-text {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 13px;
+      color: #546E7A;
+    }
+
+    .footer-text a {
+      color: #1B5E20;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+<script src="/assets/js/session.js"></script>
+
+<div class="booking-card">
+  <h2 class="title">Book Appointment</h2>
+  <p class="subtitle">Schedule a site viewing for this property</p>
+
+  <form id="bookingForm">
+
+    <label>Full Name</label>
+    <input id="fullName" type="text" required>
+
+    <label>Email</label>
+    <input id="email" type="email" required>
+
+    <label>Contact Number</label>
+    <input id="contact" type="text" maxlength="11" required>
+
+    <label>Preferred Date</label>
+    <input id="date" type="date" required>
+
+    <label>Preferred Time</label>
+    <input id="time" type="time" required>
+
+    <label>Message (Optional)</label>
+    <textarea id="message" placeholder="Additional notes..."></textarea>
+
+    <button class="submit-btn" type="submit">Submit Booking</button>
+
+    <p class="footer-text">
+      Want to view another property?
+      <a href="../index.html">Back to Listings</a>
+    </p>
+  </form>
+</div>
+
+<script>
+/* ---------- DO NOT TOUCH: ORIGINAL FUNCTIONALITY ---------- */
+if (!Session.requireRole("client", "/login.html")) throw "redirecting";
+
+const user = Session.getUser();
+const API_BASE = "http://localhost:5000/api";
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("fullName").value = user.full_name || "";
+  document.getElementById("email").value = user.email || "";
+  document.getElementById("contact").value = user.contact || "";
+});
+
+document.getElementById("bookingForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const propertyId = localStorage.getItem("viewPropertyId");
+  if (!propertyId) { alert("No property selected."); return; }
+
+  const selectedDate = new Date(document.getElementById("date").value);
+  const today = new Date(); today.setHours(0,0,0,0);
+  if (selectedDate < today) { alert("You cannot book a past date."); return; }
+
+  const timeValue = document.getElementById("time").value;
+  const [hour, minute] = timeValue.split(":").map(Number);
+  if (hour < 8 || hour > 16 || (hour === 16 && minute > 0)) {
+    alert("Booking hours are from 8:00 AM to 4:00 PM only."); return;
+  }
+
+  const payload = {
+    user_id: user.id,
+    property_id: Number(propertyId),
+    full_name: document.getElementById("fullName").value,
+    email: document.getElementById("email").value,
+    contact: document.getElementById("contact").value,
+    date: document.getElementById("date").value,
+    time: timeValue,
+    message: document.getElementById("message").value || ""
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/appointments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${Session.getToken()}` },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (!res.ok) { alert(data.error || "Unable to submit booking."); return; }
+
+    alert("Your appointment request has been sent successfully!");
+    window.location.href = "appointments.html";
+
+  } catch (err) {
+    console.error("Booking Error:", err);
+    alert("A server error occurred. Please try again.");
+  }
+});
+</script>
+
+</body>
+</html>

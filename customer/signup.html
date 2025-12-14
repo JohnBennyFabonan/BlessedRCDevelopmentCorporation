@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up – Digital Realty</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <style>
+    #strengthBar {
+      height: 6px;
+      width: 100%;
+      background: #ddd;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+    #strengthFill {
+      height: 100%;
+      width: 0%;
+      background: red;
+      border-radius: 4px;
+      transition: 0.3s;
+    }
+    #strengthText {
+      font-size: 14px;
+      margin-top: 5px;
+      font-weight: 600;
+    }
+
+    .show-btn {
+      position: absolute;
+      right: 12px;
+      top: 34px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #0a5c45;
+      user-select: none;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+  </style>
+</head>
+
+<body class="auth-body">
+
+  <div class="auth-container">
+
+    <h2 class="auth-title">Create Account</h2>
+    <p class="auth-subtitle">Join Digital Realty today</p>
+
+    <form class="auth-form" id="signupForm">
+
+      <label>Full Name</label>
+      <input id="fullName" type="text" required>
+
+      <label>Email</label>
+      <input id="email" type="email" required>
+
+      <label>Contact Number</label>
+      <input id="contact" type="text" maxlength="11" placeholder="09XXXXXXXXX" required>
+
+      <label>Birthday</label>
+      <input id="birthday" type="date" required>
+
+      <label>Address</label>
+      <input id="address" type="text" required>
+
+      <label>Password</label>
+      <div class="password-wrapper">
+        <input id="password" type="password" required oninput="checkPasswordStrength()">
+        <span class="show-btn" onclick="togglePassword('password', this)">Show</span>
+      </div>
+
+      <div id="strengthBar">
+        <div id="strengthFill"></div>
+      </div>
+      <p id="strengthText"></p>
+
+      <label>Confirm Password</label>
+      <div class="password-wrapper">
+        <input id="confirmPassword" type="password" required>
+        <span class="show-btn" onclick="togglePassword('confirmPassword', this)">Show</span>
+      </div>
+
+      <button id="signupBtn" class="btn auth-btn" type="submit" disabled style="opacity:0.5;">
+        Create Account
+      </button>
+
+      <p class="auth-footer">
+        Already have an account?
+        <a href="/login.html">Login</a>
+      </p>
+
+    </form>
+
+  </div>
+
+<script>
+function togglePassword(id, element) {
+  const input = document.getElementById(id);
+
+  if (input.type === "password") {
+    input.type = "text";
+    element.textContent = "Hide";
+  } else {
+    input.type = "password";
+    element.textContent = "Show";
+  }
+}
+
+function checkPasswordStrength() {
+  const pass = document.getElementById("password").value;
+  const bar = document.getElementById("strengthFill");
+  const text = document.getElementById("strengthText");
+  const submitBtn = document.getElementById("signupBtn");
+
+  let strength = 0;
+
+  if (pass.length >= 6) strength++;
+  if (pass.length >= 10) strength++;
+  if (/[0-9]/.test(pass)) strength++;
+  if (/[A-Z]/.test(pass)) strength++;
+  if (/[^A-Za-z0-9]/.test(pass)) strength++;
+
+  if (strength <= 1) {
+    bar.style.width = "20%";
+    bar.style.background = "red";
+    text.textContent = "Weak";
+    text.style.color = "red";
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = "0.5";
+  } else if (strength <= 3) {
+    bar.style.width = "60%";
+    bar.style.background = "orange";
+    text.textContent = "Medium";
+    text.style.color = "orange";
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = "0.5";
+  } else {
+    bar.style.width = "100%";
+    bar.style.background = "green";
+    text.textContent = "Strong";
+    text.style.color = "green";
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = "1";
+  }
+}
+
+document.getElementById("signupForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const fullName = document.getElementById("fullName").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const contact = document.getElementById("contact").value.trim();
+  const birthday = document.getElementById("birthday").value;
+  const address = document.getElementById("address").value.trim();
+  const pass = document.getElementById("password").value;
+  const confirm = document.getElementById("confirmPassword").value;
+
+  if (pass !== confirm) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  if (!/^09\d{9}$/.test(contact)) {
+    alert("Contact number must start with 09 and be 11 digits long.");
+    return;
+  }
+
+  if (!birthday) {
+    alert("Please select your birthday.");
+    return;
+  }
+
+  if (!address) {
+    alert("Please enter your full address.");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fullName: fullName,
+        email: email,
+        password: pass,
+        contact: contact,
+        birthday: birthday,
+        address: address
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.error || "Signup failed.");
+      return;
+    }
+
+    localStorage.setItem("userEmail", email);
+
+    alert("Account created successfully! Please log in.");
+    window.location.href = "/login.html";
+
+  } catch (err) {
+    console.error("SIGNUP ERROR:", err);
+    alert("Server error. Please try again.");
+  }
+});
+</script>
+
+</body>
+</html>

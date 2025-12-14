@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard – Digital Realty</title>
+
+  <!-- ICONS -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    /* ===== GLOBAL ===== */
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #eef5f0;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .layout {
+      display: flex;
+      width: 100%;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 240px;
+      background: #0f4d20;
+      padding: 30px 20px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+    }
+
+    .sidebar-title {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .side-link {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.10);
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: 0.2s ease-in-out;
+    }
+
+    .side-link:hover {
+      background: rgba(255,255,255,0.20);
+      transform: translateX(5px);
+    }
+
+    .side-link.active {
+      background: white;
+      color: #1B5E20;
+      font-weight: 600;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      margin-left: 270px;
+      padding: 40px;
+      width: calc(100% - 270px);
+    }
+
+    .page-title {
+      font-size: 30px;
+      font-weight: 700;
+      color: #1B5E20;
+      margin-bottom: 10px;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: #5a6e61;
+      margin-bottom: 35px;
+    }
+
+    /* ===== STAT CARDS ===== */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #1B5E20, #0f3e17);
+      padding: 25px;
+      border-radius: 18px;
+      color: white;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+      transition: 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px rgba(0,0,0,0.28);
+    }
+
+    .stat-icon {
+      font-size: 42px;
+      opacity: 0.25;
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+
+    .stat-title {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 40px;
+      font-weight: 800;
+      margin-top: 15px;
+    }
+
+    /* ===== COLORS FOR EACH CARD ===== */
+    .properties { background: linear-gradient(135deg, #2E7D32, #1B5E20); }
+    .appointments { background: linear-gradient(135deg, #0277BD, #01579B); }
+    .clients { background: linear-gradient(135deg, #6A1B9A, #4A148C); }
+    .staff { background: linear-gradient(135deg, #F57F17, #E65100); }
+    .agents { background: linear-gradient(135deg, #C62828, #8E0000); }
+
+  </style>
+</head>
+
+<body>
+
+<script src="/assets/js/session.js"></script>
+
+<div class="layout">
+  
+  <!-- ===== SIDE BAR ===== -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+    <a href="admin_dashboard.html" class="side-link active"><i class="ri-dashboard-fill"></i> Dashboard</a>
+    <a href="admin_manage_properties.html" class="side-link"><i class="ri-building-4-fill"></i> Manage Properties</a>
+    <a href="admin_manage_appointments.html" class="side-link"><i class="ri-calendar-check-fill"></i> Appointments</a>
+    <a href="admin_manage_staff.html" class="side-link"><i class="ri-team-fill"></i> Manage Staff</a>
+    <a href="admin_manage_agents.html" class="side-link"><i class="ri-handshake-fill"></i> Manage Agents</a>
+    <a href="admin_manage_customers.html" class="side-link"><i class="ri-user-3-fill"></i> Manage Clients</a>
+    <a href="admin_account_settings.html" class="side-link"><i class="ri-settings-3-fill"></i> Account Settings</a>
+
+    <a href="#" class="side-link" onclick="Session.logout('/admin/admin_login.html')"><i class="ri-logout-box-r-fill"></i> Logout</a>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
+    <h2 class="page-title">Admin Dashboard</h2>
+    <p class="page-subtitle">Overview of the entire system</p>
+
+    <div class="dashboard-grid">
+
+      <div class="stat-card properties">
+        <i class="ri-home-8-line stat-icon"></i>
+        <div class="stat-title">Total Properties</div>
+        <div class="stat-value" id="totalProperties">0</div>
+      </div>
+
+      <div class="stat-card appointments">
+        <i class="ri-calendar-event-fill stat-icon"></i>
+        <div class="stat-title">Total Appointments</div>
+        <div class="stat-value" id="totalAppointments">0</div>
+      </div>
+
+      <div class="stat-card clients">
+        <i class="ri-user-5-fill stat-icon"></i>
+        <div class="stat-title">Total Clients</div>
+        <div class="stat-value" id="totalClients">0</div>
+      </div>
+
+      <div class="stat-card staff">
+        <i class="ri-group-fill stat-icon"></i>
+        <div class="stat-title">Total Staff</div>
+        <div class="stat-value" id="totalStaff">0</div>
+      </div>
+
+      <div class="stat-card agents">
+        <i class="ri-shield-user-fill stat-icon"></i>
+        <div class="stat-title">Total Agents</div>
+        <div class="stat-value" id="totalAgents">0</div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- ===== ORIGINAL FUNCTIONALITY (UNCHANGED) ===== -->
+<script>
+if (!Session.requireRole("admin", "/admin/admin_login.html")) throw "redirect";
+
+const API_BASE = "http://localhost:5000/api";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await fetch(`${API_BASE}/admin/stats`, { 
+      headers: { "Authorization": `Bearer ${Session.getToken()}` }
+    });
+
+    if (!res.ok) throw new Error("Failed to load stats");
+
+    const raw = await res.json();
+    const stats = raw.data || raw;
+
+    document.getElementById("totalProperties").textContent   = stats.properties ?? 0;
+    document.getElementById("totalAppointments").textContent = stats.appointments ?? 0;
+    document.getElementById("totalClients").textContent      = stats.customers ?? 0;
+    document.getElementById("totalStaff").textContent        = stats.staff ?? 0;
+    document.getElementById("totalAgents").textContent       = stats.agents ?? 0;
+
+  } catch (err) {
+    console.error(err);
+    alert("Unable to fetch statistics.");
+  }
+});
+</script>
+
+</body>
+</html>

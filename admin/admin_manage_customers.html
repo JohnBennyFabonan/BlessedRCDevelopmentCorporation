@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin – Manage Customers</title>
+
+  <!-- ICONS -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    /* ===== GLOBAL ===== */
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #eef5f0;
+    }
+
+    .layout {
+      display: flex;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: #0f4d20;
+      padding: 30px 20px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+    }
+
+    .sidebar-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .side-link {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.10);
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+      transition: .2s;
+    }
+
+    .side-link:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateX(5px);
+    }
+
+    .side-link.active {
+      background: white;
+      color: #1B5E20;
+      font-weight: 600;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      margin-left: 270px;
+      padding: 40px;
+      width: calc(100% - 270px);
+    }
+
+    .page-title {
+      font-size: 30px;
+      font-weight: 700;
+      color: #1B5E20;
+    }
+
+    .content-card {
+      background: white;
+      padding: 35px;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      margin-top: 20px;
+    }
+
+    /* ===== CUSTOMER CARDS ===== */
+    .customer-grid {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .customer-card {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.10);
+      border-left: 6px solid #1B5E20;
+    }
+
+    .customer-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1B5E20;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      line-height: 22px;
+    }
+
+    .customer-card p {
+      margin: 6px 0;
+      font-size: 14px;
+      color: #444;
+    }
+
+    /* BUTTONS */
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .disable-btn,
+    .enable-btn,
+    .delete-btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .disable-btn { background: #c27b00; }
+    .disable-btn:hover { background: #a36800; }
+
+    .enable-btn { background: #1B5E20; }
+    .enable-btn:hover { background: #0d3e14; }
+
+    .delete-btn { background: #c0392b; }
+    .delete-btn:hover { background: #922b21; }
+  </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+    <a href="admin_dashboard.html" class="side-link"><i class="ri-dashboard-fill"></i> Dashboard</a>
+    <a href="admin_manage_properties.html" class="side-link"><i class="ri-building-4-fill"></i> Manage Properties</a>
+    <a href="admin_manage_appointments.html" class="side-link"><i class="ri-calendar-check-fill"></i> Appointments</a>
+    <a href="admin_manage_staff.html" class="side-link"><i class="ri-team-fill"></i> Manage Staff</a>
+    <a href="admin_manage_agents.html" class="side-link"><i class="ri-handshake-fill"></i> Manage Agents</a>
+    <a href="admin_manage_customers.html" class="side-link active"><i class="ri-user-3-fill"></i> Manage Clients</a>
+    <a href="admin_account_settings.html" class="side-link"><i class="ri-settings-3-fill"></i> Account Settings</a>
+
+    <!-- FIXED LOGOUT BUTTON -->
+    <a href="#" class="side-link" onclick="logoutAdmin()">
+      <i class="ri-logout-box-r-fill"></i> Logout
+    </a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="content-card">
+
+      <h2 class="page-title">Manage Client Accounts</h2>
+
+      <div id="customerList" class="customer-grid"></div>
+
+    </div>
+  </main>
+</div>
+
+<!-- STRICT SECURITY + FUNCTIONALITY -->
+<script>
+const API_BASE = "http://localhost:5000/api";
+
+/* ==================================================
+   🚫 PREVENT BACK BUTTON + BLOCK CACHED PAGES
+   (Runs immediately before DOM loads)
+================================================== */
+(function() {
+
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+      window.location.replace("../login.html");
+    }
+  });
+
+  const admin = JSON.parse(localStorage.getItem("user"));
+  const loggedIn = localStorage.getItem("loggedIn");
+
+  if (!admin || loggedIn !== "true" || admin.role !== "admin") {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.replace("../login.html");
+  }
+
+})();
+
+
+/* ==================================================
+   LOAD CUSTOMERS
+================================================== */
+document.addEventListener("DOMContentLoaded", loadCustomers);
+
+async function loadCustomers() {
+  const container = document.getElementById("customerList");
+  container.innerHTML = "Loading customers...";
+
+  try {
+    const res = await fetch(`${API_BASE}/admin/customers?role=client`);
+    const data = await res.json();
+    const customers = data.data || [];
+
+    if (customers.length === 0) {
+      container.innerHTML = "<p>No customer accounts found.</p>";
+      return;
+    }
+
+    container.innerHTML = "";
+
+    customers.forEach(u => {
+      const card = document.createElement("div");
+      card.classList.add("customer-card");
+
+      card.innerHTML = `
+        <h3 class="customer-name">${u.full_name}</h3>
+        <p><strong>Email:</strong> ${u.email}</p>
+        <p><strong>Contact:</strong> ${u.contact || "N/A"}</p>
+        <p><strong>Birthday:</strong> ${formatDate(u.birthday)}</p>
+        <p><strong>Address:</strong> ${u.address || "N/A"}</p>
+
+        <div class="actions">
+          ${
+            u.disabled
+              ? `<button class="enable-btn" onclick="enableUser(${u.id})">Enable</button>`
+              : `<button class="disable-btn" onclick="disableUser(${u.id})">Disable</button>`
+          }
+          <button class="delete-btn" onclick="deleteUser(${u.id})">Delete</button>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error("LOAD CUSTOMERS ERROR:", err);
+    container.innerHTML = "<p>Error loading customers.</p>";
+  }
+}
+
+
+/* ==================================================
+   USER MANAGEMENT FUNCTIONS
+================================================== */
+async function disableUser(id) {
+  if (!confirm("Disable this customer?")) return;
+  const res = await fetch(`${API_BASE}/admin/customers/${id}/disable`, { method: "PUT" });
+  const json = await res.json();
+  if (!res.ok) return alert(json.error);
+  alert("Customer disabled");
+  loadCustomers();
+}
+
+async function enableUser(id) {
+  if (!confirm("Enable this customer?")) return;
+  const res = await fetch(`${API_BASE}/admin/customers/${id}/enable`, { method: "PUT" });
+  const json = await res.json();
+  if (!res.ok) return alert(json.error);
+  alert("Customer enabled");
+  loadCustomers();
+}
+
+async function deleteUser(id) {
+  if (!confirm("Delete this customer permanently?")) return;
+  const res = await fetch(`${API_BASE}/admin/customers/${id}`, { method: "DELETE" });
+  const json = await res.json();
+  if (!res.ok) return alert(json.error);
+  alert("Customer deleted");
+  loadCustomers();
+}
+
+function formatDate(rawDate) {
+  if (!rawDate) return "N/A";
+  const d = new Date(rawDate);
+  return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
+}
+
+
+/* ==================================================
+   🚪 STRICT LOGOUT — BLOCK RETURN
+================================================== */
+function logoutAdmin() {
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.replace("../login.html");
+
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+      window.location.replace("../login.html");
+    }
+  });
+}
+
+</script>
+
+</body>
+</html>

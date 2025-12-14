@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Agent Profile – Digital Realty</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body class="auth-body">
+<script src="/assets/js/session.js"></script>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-left">
+      <h2 style="margin:0; font-weight:700; color:#0a5c45;">Digital Realty – Agent</h2>
+    </div>
+
+    <nav class="nav-right">
+      <a href="agent_dashboard.html" class="nav-link">Dashboard</a>
+      <a href="agent_profile.html" class="nav-link active">Profile</a>
+      <a href="#" class="nav-link" id="logoutBtn">Logout</a>
+    </nav>
+  </header>
+
+  <!-- PROFILE CONTAINER -->
+  <div class="dashboard-container" style="max-width: 700px;">
+
+    <h2 class="dashboard-title">My Profile</h2>
+    <p class="dashboard-subtitle">Your account information</p>
+
+    <form class="auth-form" id="profileForm">
+      <label>Full Name</label>
+      <input type="text" id="agentFullName" disabled required>
+
+      <label>Email</label>
+      <input type="email" id="agentEmail" disabled>
+
+      <label>Contact Number</label>
+      <input type="text" id="agentContact" maxlength="11" disabled required>
+
+      <label>Password</label>
+      <input type="password" id="agentPassword" placeholder="********" disabled>
+
+      <div id="buttonArea" style="margin-top: 15px;">
+        <button type="button" class="btn auth-btn" id="editBtn">Edit Profile</button>
+      </div>
+    </form>
+  </div>
+
+<script>
+const API_BASE = "http://localhost:5000/api";
+if (!Session.requireRole("agent", "/agent/agent_login.html")) {}
+
+const sessionUser = Session.getUser();
+const token = Session.getToken();
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!sessionUser) return window.location.href = "/agent/agent_login.html";
+
+  document.getElementById("agentFullName").value = sessionUser.full_name || "";
+  document.getElementById("agentEmail").value = sessionUser.email || "";
+  document.getElementById("agentContact").value = sessionUser.contact || "";
+  document.getElementById("agentPassword").value = "";
+
+  document.getElementById("logoutBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    Session.logout("/login.html");
+  });
+
+  document.getElementById("editBtn").addEventListener("click", enableEditing);
+});
+
+function enableEditing() {
+  document.getElementById("agentFullName").disabled = false;
+  document.getElementById("agentContact").disabled = false;
+  document.getElementById("agentPassword").disabled = false;
+
+  document.getElementById("buttonArea").innerHTML = `
+    <button type="submit" class="btn auth-btn" id="saveBtn">Save Changes</button>
+    <button type="button" class="btn cancel-btn" id="cancelBtn">Cancel</button>
+  `;
+
+  document.getElementById("saveBtn").addEventListener("click", saveAgentProfile);
+  document.getElementById("cancelBtn").addEventListener("click", () => window.location.reload());
+}
+
+async function saveAgentProfile(e) {
+  e.preventDefault();
+
+  const full_name = document.getElementById("agentFullName").value.trim();
+  const contact = document.getElementById("agentContact").value.trim();
+  const password = document.getElementById("agentPassword").value;
+
+  if (!/^09\d{9}$/.test(contact)) {
+    alert("Contact number must start with 09 and be 11 digits.");
+    return;
+  }
+
+  const payload = { full_name, contact };
+  if (password && password.length > 0) {
+    if (password.length < 8) { alert("Password must be at least 8 characters."); return; }
+    payload.password = password;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/auth/update/${sessionUser.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const json = await res.json();
+
+    if (!res.ok) {
+      alert(json.error || "Failed to update profile.");
+      return;
+    }
+
+    const updatedUser = json.user || json.data || { ...sessionUser, ...payload };
+    Session.saveSession(updatedUser, token);
+
+    alert("Profile updated successfully!");
+    window.location.reload();
+
+  } catch (err) {
+    console.error("PROFILE SAVE ERROR:", err);
+    alert("Server error. Try again later.");
+  }
+}
+</script>
+
+</body>
+</html>
