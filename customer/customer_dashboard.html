@@ -1,318 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Customer Dashboard – Digital Realty</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Customer Dashboard – Digital Realty</title>
+    <script src="/assets/js/config.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: #e7f2ed;
-      display: flex;
-      min-height: 100vh;
-    }
+    <style>
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #e7f2ed;
+        display: flex;
+        min-height: 100vh;
+      }
 
-/* ================================
+      /* ================================
    UNIVERSAL SIDEBAR — DIGITAL REALTY
 ================================= */
-.sidebar {
-  width: 230px;
-  background: #1B5E20;
-  padding: 30px 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-}
+      .sidebar {
+        width: 230px;
+        background: #1b5e20;
+        padding: 30px 20px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+      }
 
-.sidebar h2 {
-  font-size: 22px;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 15px;
-}
+      .sidebar h2 {
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 15px;
+      }
 
-.side-link {
-  background: rgba(255,255,255,0.15);
-  padding: 12px 14px;
-  border-radius: 10px;
-  color: white;
-  font-size: 15px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: 0.2s;
-  display: block;
-}
+      .side-link {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 12px 14px;
+        border-radius: 10px;
+        color: white;
+        font-size: 15px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: 0.2s;
+        display: block;
+      }
 
-.side-link:hover {
-  background: rgba(255,255,255,0.25);
-  transform: translateX(4px);
-}
+      .side-link:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateX(4px);
+      }
 
-/* ACTIVE LINK */
-.side-link.active {
-  background: white !important;
-  color: #1B5E20 !important;
-  font-weight: 600;
-}
+      /* ACTIVE LINK */
+      .side-link.active {
+        background: white !important;
+        color: #1b5e20 !important;
+        font-weight: 600;
+      }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-  }
-}
+      /* RESPONSIVE */
+      @media (max-width: 900px) {
+        .sidebar {
+          position: relative;
+          width: 100%;
+          height: auto;
+        }
+      }
 
+      /* MAIN CONTENT */
+      .main-content {
+        margin-left: 270px;
+        padding: 40px;
+        width: calc(100% - 270px);
+      }
 
-    /* MAIN CONTENT */
-    .main-content {
-      margin-left: 270px;
-      padding: 40px;
-      width: calc(100% - 270px);
-    }
+      .dashboard-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #1b5e20;
+      }
 
-    .dashboard-title {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: #1B5E20;
-    }
+      .dashboard-subtitle {
+        color: #546e7a;
+        font-size: 15px;
+        margin-bottom: 25px;
+      }
 
-    .dashboard-subtitle {
-      color: #546E7A;
-      font-size: 15px;
-      margin-bottom: 25px;
-    }
+      /* STATS GRID */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-bottom: 35px;
+      }
 
-    /* STATS GRID */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      margin-bottom: 35px;
-    }
+      .stats-card {
+        background: white;
+        padding: 25px;
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        border-left: 6px solid #1b5e20;
+        transition: 0.2s;
+      }
 
-    .stats-card {
-      background: white;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      border-left: 6px solid #1B5E20;
-      transition: 0.2s;
-    }
+      .stats-card:hover {
+        transform: translateY(-3px);
+      }
 
-    .stats-card:hover {
-      transform: translateY(-3px);
-    }
+      .stats-card h3 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+        color: #1b5e20;
+      }
 
-    .stats-card h3 {
-      margin: 0;
-      font-size: 32px;
-      font-weight: 700;
-      color: #1B5E20;
-    }
+      .stats-card p {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #546e7a;
+      }
 
-    .stats-card p {
-      margin-top: 8px;
-      font-size: 14px;
-      color: #546E7A;
-    }
+      /* TABLE */
+      .table-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1b5e20;
+        margin-bottom: 14px;
+      }
 
-    /* TABLE */
-    .table-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: #1B5E20;
-      margin-bottom: 14px;
-    }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 14px;
+        background: white;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      overflow: hidden;
-      border-radius: 14px;
-      background: white;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    }
+      thead {
+        background: #1b5e20;
+        color: white;
+      }
 
-    thead {
-      background: #1B5E20;
-      color: white;
-    }
+      thead th {
+        padding: 14px;
+        font-size: 15px;
+        font-weight: 600;
+      }
 
-    thead th {
-      padding: 14px;
-      font-size: 15px;
-      font-weight: 600;
-    }
+      tbody tr {
+        background: white;
+        transition: 0.2s;
+      }
 
-    tbody tr {
-      background: white;
-      transition: 0.2s;
-    }
+      tbody tr:hover {
+        background: #edf6f1;
+      }
 
-    tbody tr:hover {
-      background: #edf6f1;
-    }
+      tbody td {
+        padding: 14px;
+        font-size: 14px;
+        color: #455a64;
+        border-bottom: 1px solid #e0e0e0;
+      }
 
-    tbody td {
-      padding: 14px;
-      font-size: 14px;
-      color: #455A64;
-      border-bottom: 1px solid #e0e0e0;
-    }
+      .cancel-btn {
+        background: #d9534f;
+        color: white;
+        padding: 7px 12px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: 0.2s;
+      }
 
-    .cancel-btn {
-      background: #d9534f;
-      color: white;
-      padding: 7px 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: 0.2s;
-    }
+      .cancel-btn:hover {
+        background: #c9302c;
+      }
+    </style>
+  </head>
 
-    .cancel-btn:hover {
-      background: #c9302c;
-    }
-  </style>
-</head>
+  <body>
+    <script src="/assets/js/session.js"></script>
 
-<body>
+    <!-- 🟩 SIDEBAR -->
+    <aside class="sidebar">
+      <h2>Blessed R&C Development Corporation</h2>
 
-<script src="/assets/js/session.js"></script>
+      <a href="../index.html" class="side-link">🏡 View Properties</a>
+      <a href="customer_dashboard.html" class="side-link active"
+        >📊 Dashboard</a
+      >
+      <a href="appointments.html" class="side-link">📅 My Appointments</a>
+      <a href="account_settings.html" class="side-link">⚙️ Account Settings</a>
+      <a href="#" class="side-link" onclick="Session.logout('/login.html')"
+        >🚪 Logout</a
+      >
+    </aside>
 
-<!-- 🟩 SIDEBAR -->
-<aside class="sidebar">
-  <h2>Blessed R&C Development Corporation</h2>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <h2 class="dashboard-title" id="welcomeName">Welcome!</h2>
+      <p class="dashboard-subtitle">Here’s your activity overview</p>
 
-  <a href="../index.html" class="side-link">🏡 View Properties</a>
-  <a href="customer_dashboard.html" class="side-link active">📊 Dashboard</a>
-  <a href="appointments.html" class="side-link">📅 My Appointments</a>
-  <a href="account_settings.html" class="side-link">⚙️ Account Settings</a>
-  <a href="#" class="side-link" onclick="Session.logout('/login.html')">🚪 Logout</a>
-</aside>
+      <div class="stats-grid">
+        <div class="stats-card">
+          <h3 id="totalAppointments">0</h3>
+          <p>Total Appointments</p>
+        </div>
 
-<!-- MAIN CONTENT -->
-<div class="main-content">
-  <h2 class="dashboard-title" id="welcomeName">Welcome!</h2>
-  <p class="dashboard-subtitle">Here’s your activity overview</p>
+        <div class="stats-card">
+          <h3 id="upcomingCount">0</h3>
+          <p>Upcoming</p>
+        </div>
+      </div>
 
-  <div class="stats-grid">
-    <div class="stats-card">
-      <h3 id="totalAppointments">0</h3>
-      <p>Total Appointments</p>
+      <h3 class="table-title">Upcoming Appointments</h3>
+
+      <table id="appointmentsTable" style="display: none">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th style="text-align: center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="tableBody"></tbody>
+      </table>
+
+      <p
+        id="emptyMessage"
+        style="text-align: center; color: #546e7a; margin-top: 15px"
+      ></p>
     </div>
 
-    <div class="stats-card">
-      <h3 id="upcomingCount">0</h3>
-      <p>Upcoming</p>
-    </div>
-  </div>
+    <!-- FUNCTIONALITY (unchanged) -->
+    <script>
+      if (!Session.requireRole("client", "/login.html")) throw "redirecting";
+      const user = Session.getUser();
+      document.getElementById(
+        "welcomeName"
+      ).innerText = `Welcome, ${user.full_name}!`;
 
-  <h3 class="table-title">Upcoming Appointments</h3>
+      (async function load() {
+        try {
+          const res = await fetch(
+            `${API_CONFIG.BASE_URL}/api/appointments/user/${user.id}`,
+            {
+              headers: { Authorization: `Bearer ${Session.getToken()}` },
+            }
+          );
 
-  <table id="appointmentsTable" style="display:none;">
-    <thead>
-      <tr>
-        <th>Property</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Status</th>
-        <th style="text-align:center;">Action</th>
-      </tr>
-    </thead>
+          const json = await res.json();
+          const data = Array.isArray(json) ? json : json.data || [];
+          document.getElementById("totalAppointments").innerText = data.length;
 
-    <tbody id="tableBody"></tbody>
-  </table>
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const upcoming = data.filter((app) => new Date(app.date) >= today);
+          document.getElementById("upcomingCount").innerText = upcoming.length;
 
-  <p id="emptyMessage" style="text-align:center; color:#546E7A; margin-top:15px;"></p>
-</div>
+          const table = document.getElementById("appointmentsTable");
+          const tbody = document.getElementById("tableBody");
+          const emptyMessage = document.getElementById("emptyMessage");
 
-<!-- FUNCTIONALITY (unchanged) -->
-<script>
-if (!Session.requireRole("client", "/login.html")) throw "redirecting";
-const user = Session.getUser();
-document.getElementById("welcomeName").innerText = `Welcome, ${user.full_name}!`;
+          if (!upcoming.length) {
+            emptyMessage.innerHTML = "No upcoming appointments.";
+            return;
+          }
 
-(async function load() {
-  try {
-    const res = await fetch(`http://localhost:5000/api/appointments/user/${user.id}`, {
-      headers: { "Authorization": `Bearer ${Session.getToken()}` }
-    });
+          table.style.display = "table";
+          emptyMessage.innerHTML = "";
 
-    const json = await res.json();
-    const data = Array.isArray(json) ? json : (json.data || []);
-    document.getElementById("totalAppointments").innerText = data.length;
-
-    const today = new Date(); today.setHours(0,0,0,0);
-    const upcoming = data.filter(app => new Date(app.date) >= today);
-    document.getElementById("upcomingCount").innerText = upcoming.length;
-
-    const table = document.getElementById("appointmentsTable");
-    const tbody = document.getElementById("tableBody");
-    const emptyMessage = document.getElementById("emptyMessage");
-
-    if (!upcoming.length) {
-      emptyMessage.innerHTML = "No upcoming appointments.";
-      return;
-    }
-
-    table.style.display = "table";
-    emptyMessage.innerHTML = "";
-
-    upcoming.forEach(app => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
+          upcoming.forEach((app) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
         <td>${app.property_title || "Property"}</td>
         <td>${app.date}</td>
         <td>${app.time}</td>
         <td>${app.status}</td>
         <td style="text-align:center;">
-          <button class="cancel-btn" onclick="cancelAppointment(${app.id}, this)">Cancel</button>
+          <button class="cancel-btn" onclick="cancelAppointment(${
+            app.id
+          }, this)">Cancel</button>
         </td>
       `;
-      tbody.appendChild(row);
-    });
+            tbody.appendChild(row);
+          });
+        } catch (err) {
+          console.error(err);
+          document.getElementById("emptyMessage").innerHTML =
+            "Error loading appointments.";
+        }
+      })();
 
-  } catch (err) {
-    console.error(err);
-    document.getElementById("emptyMessage").innerHTML = "Error loading appointments.";
-  }
-})();
+      async function cancelAppointment(id, btn) {
+        if (!confirm("Cancel this appointment?")) return;
 
-async function cancelAppointment(id, btn) {
-  if (!confirm("Cancel this appointment?")) return;
+        try {
+          const res = await fetch(
+            `${API_CONFIG.BASE_URL}/api/appointments/${id}`,
+            {
+              method: "DELETE",
+              headers: { Authorization: `Bearer ${Session.getToken()}` },
+            }
+          );
 
-  try {
-    const res = await fetch(`http://localhost:5000/api/appointments/${id}`, {
-      method: "DELETE",
-      headers: { "Authorization": `Bearer ${Session.getToken()}` }
-    });
+          const json = await res.json();
+          if (!res.ok) {
+            alert(json.error || "Failed to cancel.");
+            return;
+          }
 
-    const json = await res.json();
-    if (!res.ok) {
-      alert(json.error || "Failed to cancel.");
-      return;
-    }
-
-    btn.parentElement.parentElement.remove();
-    alert("Appointment cancelled.");
-    location.reload();
-
-  } catch (err) {
-    alert("Error cancelling appointment.");
-  }
-}
-</script>
-
-</body>
+          btn.parentElement.parentElement.remove();
+          alert("Appointment cancelled.");
+          location.reload();
+        } catch (err) {
+          alert("Error cancelling appointment.");
+        }
+      }
+    </script>
+  </body>
 </html>

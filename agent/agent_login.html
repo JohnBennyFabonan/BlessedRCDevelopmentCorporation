@@ -1,170 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Agent Login – Digital Realty</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Agent Login – Digital Realty</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: #e7f2ed;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+    <style>
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #e7f2ed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-    .auth-container {
-      background: white;
-      padding: 40px 35px;
-      width: 380px;
-      border-radius: 16px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.12);
-      text-align: center;
-    }
+      .auth-container {
+        background: white;
+        padding: 40px 35px;
+        width: 380px;
+        border-radius: 16px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+        text-align: center;
+      }
 
-    .auth-title {
-      font-size: 28px;
-      font-weight: 700;
-      color: #1B5E20;
-      margin-bottom: 10px;
-    }
+      .auth-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1b5e20;
+        margin-bottom: 10px;
+      }
 
-    .auth-form {
-      width: 100%;
-      text-align: left;
-    }
+      .auth-form {
+        width: 100%;
+        text-align: left;
+      }
 
-    .auth-form label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1B5E20;
-      margin-bottom: 6px;
-      display: block;
-    }
+      .auth-form label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1b5e20;
+        margin-bottom: 6px;
+        display: block;
+      }
 
-    .auth-form input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #cfd8dc;
-      outline: none;
-      margin-bottom: 18px;
-      font-size: 14px;
-    }
+      .auth-form input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #cfd8dc;
+        outline: none;
+        margin-bottom: 18px;
+        font-size: 14px;
+      }
 
-    .auth-form input:focus {
-      border-color: #1B5E20;
-      box-shadow: 0 0 4px rgba(27, 94, 32, 0.3);
-    }
+      .auth-form input:focus {
+        border-color: #1b5e20;
+        box-shadow: 0 0 4px rgba(27, 94, 32, 0.3);
+      }
 
-    .auth-btn {
-      width: 100%;
-      background: #1B5E20;
-      color: white;
-      padding: 12px 0;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+      .auth-btn {
+        width: 100%;
+        background: #1b5e20;
+        color: white;
+        padding: 12px 0;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+      }
 
-    .auth-btn:hover {
-      background: #174d1b;
-    }
+      .auth-btn:hover {
+        background: #174d1b;
+      }
 
-    #errorMsg {
-      color: red;
-      font-size: 14px;
-      text-align: center;
-      margin-bottom: 10px;
-      display: none;
-    }
+      #errorMsg {
+        color: red;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 10px;
+        display: none;
+      }
 
-    .login-links {
-      margin-top: 18px;
-      font-size: 14px;
-      text-align: center;
-    }
+      .login-links {
+        margin-top: 18px;
+        font-size: 14px;
+        text-align: center;
+      }
 
-    .login-links a {
-      color: #1B5E20;
-      text-decoration: none;
-      font-weight: 600;
-    }
+      .login-links a {
+        color: #1b5e20;
+        text-decoration: none;
+        font-weight: 600;
+      }
 
-    .login-links a:hover {
-      text-decoration: underline;
-    }
-  </style>
+      .login-links a:hover {
+        text-decoration: underline;
+      }
+    </style>
 
-  <script src="/assets/js/session.js"></script>
-</head>
+    <script src="/assets/js/session.js"></script>
+  </head>
 
-<body>
+  <body>
+    <div class="auth-container">
+      <h2 class="auth-title">Agent Login</h2>
 
-<div class="auth-container">
-  <h2 class="auth-title">Agent Login</h2>
+      <form id="agentLoginForm" class="auth-form">
+        <label>Email</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter agent email"
+          required
+        />
 
-  <form id="agentLoginForm" class="auth-form">
-    <label>Email</label>
-    <input type="email" id="email" placeholder="Enter agent email" required>
+        <label>Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+          required
+        />
 
-    <label>Password</label>
-    <input type="password" id="password" placeholder="Enter your password" required>
+        <p id="errorMsg">Invalid credentials</p>
 
-    <p id="errorMsg">Invalid credentials</p>
+        <button class="auth-btn" type="submit">Login</button>
+      </form>
 
-    <button class="auth-btn" type="submit">Login</button>
-  </form>
+      <div class="login-links">
+        <a href="../login.html">Login as Client</a> |
+        <a href="/staff/staff_login.html">Login as Staff</a> |
+        <a href="/admin/admin_login.html">Login as Admin</a>
+      </div>
+    </div>
 
-  <div class="login-links">
-    <a href="../login.html">Login as Client</a> |
-    <a href="/staff/staff_login.html">Login as Staff</a> |
-    <a href="/admin/admin_login.html">Login as Admin</a>
-  </div>
-</div>
+    <script src="/assets/js/config.js"></script>
+    <script>
+      const AUTH = `${API_CONFIG.BASE_URL}/api/auth`;
 
-<script>
-const AUTH = "http://localhost:5000/api/auth";
+      document
+        .getElementById("agentLoginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-document.getElementById("agentLoginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value.trim();
+          const errorBox = document.getElementById("errorMsg");
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const errorBox = document.getElementById("errorMsg");
+          errorBox.style.display = "none";
 
-  errorBox.style.display = "none";
+          try {
+            const res = await fetch(`${AUTH}/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
 
-  try {
-    const res = await fetch(`${AUTH}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
+            const json = await res.json().catch(() => null);
 
-    const json = await res.json().catch(() => null);
+            if (
+              !json ||
+              !json.token ||
+              json.user.role?.toLowerCase() !== "agent"
+            ) {
+              errorBox.textContent = "Invalid agent credentials.";
+              errorBox.style.display = "block";
+              return;
+            }
 
-    if (!json || !json.token || json.user.role?.toLowerCase() !== "agent") {
-      errorBox.textContent = "Invalid agent credentials.";
-      errorBox.style.display = "block";
-      return;
-    }
-
-    Session.saveSession(json.user, json.token);
-    window.location.href = "/agent/agent_dashboard.html";
-
-  } catch (err) {
-    console.error("LOGIN ERROR:", err);
-    errorBox.textContent = "Server error. Try again later.";
-    errorBox.style.display = "block";
-  }
-});
-</script>
-
-</body>
+            Session.saveSession(json.user, json.token);
+            window.location.href = "/agent/agent_dashboard.html";
+          } catch (err) {
+            console.error("LOGIN ERROR:", err);
+            errorBox.textContent = "Server error. Try again later.";
+            errorBox.style.display = "block";
+          }
+        });
+    </script>
+  </body>
 </html>

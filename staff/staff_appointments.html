@@ -1,203 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Staff – Appointments</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Staff – Appointments</title>
 
-  <!-- ICONS -->
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- ICONS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: #eef5f0;
-    }
+    <style>
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #eef5f0;
+      }
 
-    .layout { display: flex; }
+      .layout {
+        display: flex;
+      }
 
-    .sidebar {
-      width: 240px;
-      height: 100vh;
-      position: fixed;
-      left: 0;
-      top: 0;
-      background: #0f4d20;
-      padding: 30px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      box-shadow: 4px 0 12px rgba(0,0,0,0.15);
-      color: white;
-    }
+      .sidebar {
+        width: 240px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background: #0f4d20;
+        padding: 30px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+        color: white;
+      }
 
-    .sidebar-title {
-      font-size: 22px;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 15px;
-    }
+      .sidebar-title {
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 15px;
+      }
 
-    .side-link {
-      padding: 12px 14px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.10);
-      color: white;
-      font-size: 15px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: .2s;
-    }
+      .side-link {
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 15px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: 0.2s;
+      }
 
-    .side-link:hover {
-      background: rgba(255,255,255,0.25);
-      transform: translateX(5px);
-    }
+      .side-link:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateX(5px);
+      }
 
-    .side-link.active {
-      background: white;
-      color: #1B5E20;
-      font-weight: 700;
-    }
+      .side-link.active {
+        background: white;
+        color: #1b5e20;
+        font-weight: 700;
+      }
 
-    .main-content {
-      margin-left: 270px;
-      padding: 40px;
-      width: calc(100% - 270px);
-    }
+      .main-content {
+        margin-left: 270px;
+        padding: 40px;
+        width: calc(100% - 270px);
+      }
 
-    .page-title {
-      font-size: 30px;
-      font-weight: 700;
-      color: #1B5E20;
-      margin-bottom: 20px;
-    }
+      .page-title {
+        font-size: 30px;
+        font-weight: 700;
+        color: #1b5e20;
+        margin-bottom: 20px;
+      }
 
-    .content-card {
-      background: white;
-      padding: 35px;
-      border-radius: 18px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-    }
+      .content-card {
+        background: white;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      }
 
-    .appt-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      font-size: 14px;
-    }
+      .appt-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 14px;
+      }
 
-    .appt-table th {
-      background: #1B5E20;
-      color: white;
-      padding: 12px;
-      text-align: left;
-    }
+      .appt-table th {
+        background: #1b5e20;
+        color: white;
+        padding: 12px;
+        text-align: left;
+      }
 
-    .appt-table td {
-      background: #fafafa;
-      padding: 12px;
-      border-bottom: 1px solid #dcdcdc;
-    }
+      .appt-table td {
+        background: #fafafa;
+        padding: 12px;
+        border-bottom: 1px solid #dcdcdc;
+      }
 
-    .appt-table tr:hover td {
-      background: #e7f3eb;
-    }
+      .appt-table tr:hover td {
+        background: #e7f3eb;
+      }
 
-    .approve-btn, .decline-btn {
-      padding: 7px 12px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: .2s;
-    }
+      .approve-btn,
+      .decline-btn {
+        padding: 7px 12px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+      }
 
-    .approve-btn {
-      background: #1B5E20;
-      color: white;
-    }
+      .approve-btn {
+        background: #1b5e20;
+        color: white;
+      }
 
-    .decline-btn {
-      background: #b32020;
-      color: white;
-    }
-  </style>
-</head>
+      .decline-btn {
+        background: #b32020;
+        color: white;
+      }
+    </style>
+  </head>
 
-<body>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h2 class="sidebar-title">Staff Panel</h2>
 
-<div class="layout">
+        <a href="staff_upload_property.html" class="side-link">
+          <i class="ri-upload-cloud-fill"></i> Upload Property
+        </a>
 
-  <aside class="sidebar">
-    <h2 class="sidebar-title">Staff Panel</h2>
+        <a href="staff_manage_properties.html" class="side-link">
+          <i class="ri-building-2-fill"></i> Manage Properties
+        </a>
 
-    <a href="staff_upload_property.html" class="side-link">
-      <i class="ri-upload-cloud-fill"></i> Upload Property
-    </a>
+        <a href="staff_appointments.html" class="side-link active">
+          <i class="ri-calendar-check-fill"></i> Appointments
+        </a>
 
-    <a href="staff_manage_properties.html" class="side-link">
-      <i class="ri-building-2-fill"></i> Manage Properties
-    </a>
+        <a href="staff_account_settings.html" class="side-link">
+          <i class="ri-settings-3-fill"></i> Account Settings
+        </a>
+      </aside>
 
-    <a href="staff_appointments.html" class="side-link active">
-      <i class="ri-calendar-check-fill"></i> Appointments
-    </a>
+      <main class="main-content">
+        <div class="content-card">
+          <h2 class="page-title">All Appointments</h2>
 
-    <a href="staff_account_settings.html" class="side-link">
-      <i class="ri-settings-3-fill"></i> Account Settings
-    </a>
-  </aside>
-
-  <main class="main-content">
-    <div class="content-card">
-
-      <h2 class="page-title">All Appointments</h2>
-
-      <table class="appt-table" id="apptTable">
-        <thead>
-          <tr>
-            <th>Client</th>
-            <th>Property</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Message</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-
+          <table class="appt-table" id="apptTable">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Property</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Message</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </main>
     </div>
-  </main>
 
-</div>
+    <script src="/assets/js/config.js"></script>
+    <script>
+      const API = `${API_CONFIG.BASE_URL}/api`;
 
-<script>
-const API = "http://localhost:5000/api";
+      document.addEventListener("DOMContentLoaded", loadAppointments);
 
-document.addEventListener("DOMContentLoaded", loadAppointments);
+      async function loadAppointments() {
+        const tbody = document.querySelector("#apptTable tbody");
 
-async function loadAppointments() {
-  const tbody = document.querySelector("#apptTable tbody");
+        try {
+          const res = await fetch(`${API}/appointments`);
+          const json = await res.json();
 
-  try {
-    const res = await fetch(`${API}/appointments`);
-    const json = await res.json();
+          if (!json.success || json.data.length === 0) {
+            tbody.innerHTML =
+              "<tr><td colspan='6'>No appointments found.</td></tr>";
+            return;
+          }
 
-    if (!json.success || json.data.length === 0) {
-      tbody.innerHTML = "<tr><td colspan='6'>No appointments found.</td></tr>";
-      return;
-    }
+          tbody.innerHTML = "";
 
-    tbody.innerHTML = "";
+          json.data.forEach((a) => {
+            const status = a.status.toLowerCase();
 
-    json.data.forEach(a => {
-      const status = a.status.toLowerCase();
-
-      tbody.innerHTML += `
+            tbody.innerHTML += `
         <tr>
           <td>
             ${a.full_name}<br>
@@ -208,42 +211,46 @@ async function loadAppointments() {
           <td>${a.time}</td>
           <td>${a.message || ""}</td>
           <td>
-            <strong>${status.charAt(0).toUpperCase() + status.slice(1)}</strong><br>
-            ${status === "pending" ? `
+            <strong>${
+              status.charAt(0).toUpperCase() + status.slice(1)
+            }</strong><br>
+            ${
+              status === "pending"
+                ? `
               <button class="approve-btn" onclick="updateStatus(${a.id}, 'approved')">Approve</button>
               <button class="decline-btn" onclick="updateStatus(${a.id}, 'declined')">Decline</button>
-            ` : ""}
+            `
+                : ""
+            }
           </td>
         </tr>
       `;
-    });
+          });
+        } catch (err) {
+          tbody.innerHTML =
+            "<tr><td colspan='6'>Error loading appointments.</td></tr>";
+        }
+      }
 
-  } catch (err) {
-    tbody.innerHTML = "<tr><td colspan='6'>Error loading appointments.</td></tr>";
-  }
-}
+      async function updateStatus(id, status) {
+        if (!confirm(`Mark appointment as ${status.toUpperCase()}?`)) return;
 
-async function updateStatus(id, status) {
-  if (!confirm(`Mark appointment as ${status.toUpperCase()}?`)) return;
+        try {
+          const res = await fetch(`${API}/appointments/${id}/status`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status }),
+          });
 
-  try {
-    const res = await fetch(`${API}/appointments/${id}/status`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status })
-    });
+          const json = await res.json();
+          if (!json.success) return alert(json.error);
 
-    const json = await res.json();
-    if (!json.success) return alert(json.error);
-
-    alert(`Appointment marked as ${status.toUpperCase()}`);
-    loadAppointments();
-
-  } catch (err) {
-    alert("Server error updating status.");
-  }
-}
-</script>
-
-</body>
+          alert(`Appointment marked as ${status.toUpperCase()}`);
+          loadAppointments();
+        } catch (err) {
+          alert("Server error updating status.");
+        }
+      }
+    </script>
+  </body>
 </html>

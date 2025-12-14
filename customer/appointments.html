@@ -1,328 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>My Appointments – Digital Realty</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Appointments – Digital Realty</title>
+    <script src="/assets/js/config.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: #e7f2ed;
-      display: flex;
-      min-height: 100vh;
-    }
+    <style>
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #e7f2ed;
+        display: flex;
+        min-height: 100vh;
+      }
 
-/* ================================
+      /* ================================
    UNIVERSAL SIDEBAR — DIGITAL REALTY
 ================================= */
-.sidebar {
-  width: 230px;
-  background: #1B5E20;
-  padding: 30px 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-}
-
-.sidebar h2 {
-  font-size: 22px;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.side-link {
-  background: rgba(255,255,255,0.15);
-  padding: 12px 14px;
-  border-radius: 10px;
-  color: white;
-  font-size: 15px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: 0.2s;
-  display: block;
-}
-
-.side-link:hover {
-  background: rgba(255,255,255,0.25);
-  transform: translateX(4px);
-}
-
-/* ACTIVE LINK */
-.side-link.active {
-  background: white !important;
-  color: #1B5E20 !important;
-  font-weight: 600;
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-  }
-}
-
-
-    /* MAIN CONTENT */
-    .main-content {
-      flex: 1;
-      margin-left: 260px;
-      padding: 40px;
-    }
-
-    .page-title {
-      font-size: 28px;
-      font-weight: 700;
-      color: #1B5E20;
-      margin-bottom: 6px;
-    }
-
-    .page-subtitle {
-      color: #546E7A;
-      font-size: 14px;
-      margin-bottom: 30px;
-    }
-
-    /* APPOINTMENT CARD */
-    .appointment-card {
-      background: white;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-      margin-bottom: 22px;
-      border-left: 6px solid #1B5E20;
-      transition: 0.2s;
-    }
-
-    .appointment-card:hover {
-      transform: translateY(-3px);
-    }
-
-    .appointment-card h3 {
-      margin: 0 0 10px 0;
-      font-size: 20px;
-      color: #1B5E20;
-    }
-
-    .appointment-card p {
-      margin: 4px 0;
-      color: #455A64;
-      font-size: 14px;
-    }
-
-    .badge {
-      padding: 6px 12px;
-      border-radius: 10px;
-      font-size: 12px;
-      color: white;
-      font-weight: 600;
-      float: right;
-      margin-top: -5px;
-      margin-right: -5px;
-    }
-
-    .approved { background: #2E7D32; }
-    .pending { background: #FBC02D; }
-    .canceled { background: #d9534f; }
-
-    /* BUTTONS */
-    .btn-row {
-      margin-top: 14px;
-      display: flex;
-      gap: 10px;
-    }
-
-    .edit-btn, .cancel-btn {
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      border: none;
-      font-size: 14px;
-      font-weight: 600;
-      transition: 0.2s;
-    }
-
-    .edit-btn {
-      background: #1B5E20;
-      color: white;
-    }
-
-    .edit-btn:hover {
-      background: #164c19;
-    }
-
-    .cancel-btn {
-      background: #d9534f;
-      color: white;
-    }
-
-    .cancel-btn:hover {
-      background: #c9302c;
-    }
-
-    /* EMPTY STATE */
-    .empty-box {
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    .empty-box img {
-      width: 130px;
-      margin-bottom: 15px;
-      opacity: 0.8;
-    }
-
-    .empty-box p {
-      color: #546E7A;
-      font-size: 15px;
-    }
-
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.4);
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 25px;
-      border-radius: 14px;
-      width: 350px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      animation: fadeIn .2s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .modal-content input,
-    .modal-content textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border: 1px solid #b0bec5;
-      border-radius: 8px;
-      font-family: inherit;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
       .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
+        width: 230px;
+        background: #1b5e20;
+        padding: 30px 20px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
       }
+
+      .sidebar h2 {
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .side-link {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 12px 14px;
+        border-radius: 10px;
+        color: white;
+        font-size: 15px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: 0.2s;
+        display: block;
+      }
+
+      .side-link:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateX(4px);
+      }
+
+      /* ACTIVE LINK */
+      .side-link.active {
+        background: white !important;
+        color: #1b5e20 !important;
+        font-weight: 600;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 900px) {
+        .sidebar {
+          position: relative;
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      /* MAIN CONTENT */
       .main-content {
-        margin-left: 0;
+        flex: 1;
+        margin-left: 260px;
+        padding: 40px;
       }
-    }
 
-  </style>
-</head>
+      .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1b5e20;
+        margin-bottom: 6px;
+      }
 
-<body>
+      .page-subtitle {
+        color: #546e7a;
+        font-size: 14px;
+        margin-bottom: 30px;
+      }
 
-<!-- SESSION SYSTEM -->
-<script src="/assets/js/session.js"></script>
+      /* APPOINTMENT CARD */
+      .appointment-card {
+        background: white;
+        padding: 25px;
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        margin-bottom: 22px;
+        border-left: 6px solid #1b5e20;
+        transition: 0.2s;
+      }
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <h2>Blessed R&C Development Corporation</h2>
+      .appointment-card:hover {
+        transform: translateY(-3px);
+      }
 
-  <a href="../index.html" class="side-link">🏡 View Properties</a>
-  <a href="customer_dashboard.html" class="side-link">📊 Dashboard</a>
-  <a href="appointments.html" class="side-link active">📅 My Appointments</a>
-  <a href="account_settings.html" class="side-link">⚙️ Account Settings</a>
-  <a href="#" class="side-link" onclick="Session.logout('/login.html')">🚪 Logout</a>
-</aside>
+      .appointment-card h3 {
+        margin: 0 0 10px 0;
+        font-size: 20px;
+        color: #1b5e20;
+      }
 
+      .appointment-card p {
+        margin: 4px 0;
+        color: #455a64;
+        font-size: 14px;
+      }
 
+      .badge {
+        padding: 6px 12px;
+        border-radius: 10px;
+        font-size: 12px;
+        color: white;
+        font-weight: 600;
+        float: right;
+        margin-top: -5px;
+        margin-right: -5px;
+      }
 
-<!-- MAIN CONTENT -->
-<div class="main-content">
-  <h2 class="page-title">My Appointments</h2>
-  <p class="page-subtitle">Your scheduled lot viewing appointments</p>
+      .approved {
+        background: #2e7d32;
+      }
+      .pending {
+        background: #fbc02d;
+      }
+      .canceled {
+        background: #d9534f;
+      }
 
-  <div id="appointmentsList">
-    <p style="text-align:center; margin-top:20px;">Loading appointments...</p>
-  </div>
-</div>
+      /* BUTTONS */
+      .btn-row {
+        margin-top: 14px;
+        display: flex;
+        gap: 10px;
+      }
 
-<!-- EDIT MODAL -->
-<div id="editModal" class="modal">
-  <div class="modal-content">
-    <h3 style="margin-top:0; color:#1B5E20;">Edit Appointment</h3>
+      .edit-btn,
+      .cancel-btn {
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: 0.2s;
+      }
 
-    <label>Date</label>
-    <input type="date" id="editDate">
+      .edit-btn {
+        background: #1b5e20;
+        color: white;
+      }
 
-    <label>Time</label>
-    <input type="time" id="editTime">
+      .edit-btn:hover {
+        background: #164c19;
+      }
 
-    <label>Message</label>
-    <textarea id="editMessage" rows="3"></textarea>
+      .cancel-btn {
+        background: #d9534f;
+        color: white;
+      }
 
-    <div class="btn-row" style="margin-top:15px;">
-      <button class="edit-btn" onclick="saveEdit()">Save</button>
-      <button class="cancel-btn" onclick="closeEditModal()">Close</button>
+      .cancel-btn:hover {
+        background: #c9302c;
+      }
+
+      /* EMPTY STATE */
+      .empty-box {
+        text-align: center;
+        margin-top: 40px;
+      }
+
+      .empty-box img {
+        width: 130px;
+        margin-bottom: 15px;
+        opacity: 0.8;
+      }
+
+      .empty-box p {
+        color: #546e7a;
+        font-size: 15px;
+      }
+
+      /* MODAL */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 25px;
+        border-radius: 14px;
+        width: 350px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.2s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .modal-content input,
+      .modal-content textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 12px;
+        border: 1px solid #b0bec5;
+        border-radius: 8px;
+        font-family: inherit;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 900px) {
+        .sidebar {
+          position: relative;
+          width: 100%;
+          height: auto;
+        }
+        .main-content {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- SESSION SYSTEM -->
+    <script src="/assets/js/session.js"></script>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h2>Blessed R&C Development Corporation</h2>
+
+      <a href="../index.html" class="side-link">🏡 View Properties</a>
+      <a href="customer_dashboard.html" class="side-link">📊 Dashboard</a>
+      <a href="appointments.html" class="side-link active"
+        >📅 My Appointments</a
+      >
+      <a href="account_settings.html" class="side-link">⚙️ Account Settings</a>
+      <a href="#" class="side-link" onclick="Session.logout('/login.html')"
+        >🚪 Logout</a
+      >
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <h2 class="page-title">My Appointments</h2>
+      <p class="page-subtitle">Your scheduled lot viewing appointments</p>
+
+      <div id="appointmentsList">
+        <p style="text-align: center; margin-top: 20px">
+          Loading appointments...
+        </p>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- ORIGINAL FUNCTIONALITY (UNCHANGED JS) -->
-<script>
-if (!Session.requireRole("client", "/login.html")) throw "redirecting";
+    <!-- EDIT MODAL -->
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <h3 style="margin-top: 0; color: #1b5e20">Edit Appointment</h3>
 
-const user = Session.getUser();
-const API_BASE = "http://localhost:5000/api";
-let editingId = null;
+        <label>Date</label>
+        <input type="date" id="editDate" />
 
-(async function load() {
-  const container = document.getElementById("appointmentsList");
-  try {
-    const res = await fetch(`${API_BASE}/appointments/user/${user.id}`, {
-      headers: { "Authorization": `Bearer ${Session.getToken()}` }
-    });
-    const result = await res.json();
-    const appointments = Array.isArray(result) ? result : (result.data || []);
+        <label>Time</label>
+        <input type="time" id="editTime" />
 
-    if (!appointments.length) {
-      container.innerHTML = `
+        <label>Message</label>
+        <textarea id="editMessage" rows="3"></textarea>
+
+        <div class="btn-row" style="margin-top: 15px">
+          <button class="edit-btn" onclick="saveEdit()">Save</button>
+          <button class="cancel-btn" onclick="closeEditModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORIGINAL FUNCTIONALITY (UNCHANGED JS) -->
+    <script>
+      if (!Session.requireRole("client", "/login.html")) throw "redirecting";
+
+      const user = Session.getUser();
+      const API_BASE = `${API_CONFIG.BASE_URL}/api`;
+      let editingId = null;
+
+      (async function load() {
+        const container = document.getElementById("appointmentsList");
+        try {
+          const res = await fetch(`${API_BASE}/appointments/user/${user.id}`, {
+            headers: { Authorization: `Bearer ${Session.getToken()}` },
+          });
+          const result = await res.json();
+          const appointments = Array.isArray(result)
+            ? result
+            : result.data || [];
+
+          if (!appointments.length) {
+            container.innerHTML = `
         <div class="empty-box">
           <img src="https://cdn-icons-png.flaticon.com/512/4076/4076500.png">
           <p>No appointments found.</p>
         </div>`;
-      return;
-    }
+            return;
+          }
 
-    container.innerHTML = "";
-    appointments.forEach(app => {
-      const card = document.createElement("div");
-      card.classList.add("appointment-card");
+          container.innerHTML = "";
+          appointments.forEach((app) => {
+            const card = document.createElement("div");
+            card.classList.add("appointment-card");
 
-      const statusClass = app.status.toLowerCase();
-      const propertyTitle = app.property_title || `Property #${app.property_id}`;
+            const statusClass = app.status.toLowerCase();
+            const propertyTitle =
+              app.property_title || `Property #${app.property_id}`;
 
-      card.innerHTML = `
+            card.innerHTML = `
         <span class="badge ${statusClass}">${app.status}</span>
         <h3>${propertyTitle}</h3>
         <p><strong>Date:</strong> ${app.date}</p>
@@ -334,83 +352,93 @@ let editingId = null;
         <p><strong>Contact:</strong> ${app.contact}</p>
 
         <div class="btn-row">
-          <button class="edit-btn" onclick="openEditModal(${app.id}, '${app.date}', '${app.time}', \`${(app.message||"").replace(/`/g,'\\`')}\`)">Edit</button>
-          <button class="cancel-btn" onclick="cancelAppointment(${app.id}, this)">Cancel</button>
+          <button class="edit-btn" onclick="openEditModal(${app.id}, '${
+              app.date
+            }', '${app.time}', \`${(app.message || "").replace(
+              /`/g,
+              "\\`"
+            )}\`)">Edit</button>
+          <button class="cancel-btn" onclick="cancelAppointment(${
+            app.id
+          }, this)">Cancel</button>
         </div>
       `;
 
-      container.appendChild(card);
-    });
+            container.appendChild(card);
+          });
+        } catch (err) {
+          console.error("APPOINTMENT LOAD ERROR:", err);
+          container.innerHTML = "<p>Error loading appointments.</p>";
+        }
+      })();
 
-  } catch (err) {
-    console.error("APPOINTMENT LOAD ERROR:", err);
-    container.innerHTML = "<p>Error loading appointments.</p>";
-  }
-})();
+      function openEditModal(id, date, time, message) {
+        editingId = id;
+        document.getElementById("editDate").value = date;
+        document.getElementById("editTime").value = time;
+        document.getElementById("editMessage").value = message;
+        document.getElementById("editModal").style.display = "flex";
+      }
 
-function openEditModal(id, date, time, message) {
-  editingId = id;
-  document.getElementById("editDate").value = date;
-  document.getElementById("editTime").value = time;
-  document.getElementById("editMessage").value = message;
-  document.getElementById("editModal").style.display = "flex";
-}
+      function closeEditModal() {
+        document.getElementById("editModal").style.display = "none";
+      }
 
-function closeEditModal() {
-  document.getElementById("editModal").style.display = "none";
-}
+      async function saveEdit() {
+        const newDate = document.getElementById("editDate").value;
+        const newTime = document.getElementById("editTime").value;
+        const newMessage = document.getElementById("editMessage").value;
 
-async function saveEdit() {
-  const newDate = document.getElementById("editDate").value;
-  const newTime = document.getElementById("editTime").value;
-  const newMessage = document.getElementById("editMessage").value;
+        try {
+          const res = await fetch(`${API_BASE}/appointments/${editingId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Session.getToken()}`,
+            },
+            body: JSON.stringify({
+              date: newDate,
+              time: newTime,
+              message: newMessage,
+            }),
+          });
 
-  try {
-    const res = await fetch(`${API_BASE}/appointments/${editingId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${Session.getToken()}`
-      },
-      body: JSON.stringify({ date: newDate, time: newTime, message: newMessage })
-    });
+          const data = await res.json();
+          if (!res.ok) {
+            alert(data.error || "Failed to update appointment.");
+            return;
+          }
 
-    const data = await res.json();
-    if (!res.ok) {
-      alert(data.error || "Failed to update appointment.");
-      return;
-    }
+          alert("Appointment updated!");
+          closeEditModal();
+          location.reload();
+        } catch (err) {
+          console.error(err);
+          alert("Error saving changes.");
+        }
+      }
 
-    alert("Appointment updated!");
-    closeEditModal();
-    location.reload();
+      async function cancelAppointment(id, btn) {
+        if (!confirm("Cancel this appointment?")) return;
+        try {
+          const res = await fetch(`${API_BASE}/appointments/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${Session.getToken()}` },
+          });
 
-  } catch (err) {
-    console.error(err);
-    alert("Error saving changes.");
-  }
-}
+          const data = await res.json();
+          if (!res.ok) {
+            alert(data.error || "Failed to cancel.");
+            return;
+          }
 
-async function cancelAppointment(id, btn) {
-  if (!confirm("Cancel this appointment?")) return;
-  try {
-    const res = await fetch(`${API_BASE}/appointments/${id}`, {
-      method: "DELETE",
-      headers: { "Authorization": `Bearer ${Session.getToken()}` }
-    });
-
-    const data = await res.json();
-    if (!res.ok) { alert(data.error || "Failed to cancel."); return; }
-
-    alert("Appointment canceled.");
-    btn.parentElement.parentElement.remove();
-
-  } catch (err) {
-    console.error("Cancel error:", err);
-    alert("Error cancelling appointment.");
-  }
-}
-</script>
-
-</body>
+          alert("Appointment canceled.");
+          btn.parentElement.parentElement.remove();
+        } catch (err) {
+          console.error("Cancel error:", err);
+          alert("Error cancelling appointment.");
+        }
+      }
+    </script>
+  </body>
 </html>

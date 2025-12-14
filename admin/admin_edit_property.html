@@ -1,412 +1,444 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Edit Property – Admin</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Edit Property – Admin</title>
+    <script src="/assets/js/config.js"></script>
 
-  <!-- ICONS -->
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- ICONS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
 
-  <style>
-    /* ===== GLOBAL ===== */
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: #eef5f0;
-      display: flex;
-      min-height: 100vh;
-    }
+    <style>
+      /* ===== GLOBAL ===== */
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #eef5f0;
+        display: flex;
+        min-height: 100vh;
+      }
 
-    .layout {
-      display: flex;
-      width: 100%;
-    }
+      .layout {
+        display: flex;
+        width: 100%;
+      }
 
-    /* ===== SIDEBAR ===== */
-    .sidebar {
-      width: 240px;
-      background: #0f4d20;
-      padding: 30px 20px;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      position: fixed;
-      left: 0;
-      top: 0;
-      height: 100vh;
-      box-shadow: 4px 0 12px rgba(0,0,0,0.15);
-    }
+      /* ===== SIDEBAR ===== */
+      .sidebar {
+        width: 240px;
+        background: #0f4d20;
+        padding: 30px 20px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+      }
 
-    .sidebar-title {
-      font-size: 22px;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 25px;
-    }
+      .sidebar-title {
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 25px;
+      }
 
-    .side-link {
-      padding: 12px 14px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.10);
-      color: white;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: 0.2s ease-in-out;
-    }
+      .side-link {
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: 0.2s ease-in-out;
+      }
 
-    .side-link:hover {
-      background: rgba(255,255,255,0.20);
-      transform: translateX(5px);
-    }
+      .side-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(5px);
+      }
 
-    .side-link.active {
-      background: white;
-      color: #1B5E20;
-      font-weight: 600;
-    }
+      .side-link.active {
+        background: white;
+        color: #1b5e20;
+        font-weight: 600;
+      }
 
-    /* ===== MAIN CONTENT ===== */
-    .main-content {
-      margin-left: 270px;
-      padding: 40px;
-      width: calc(100% - 270px);
-    }
+      /* ===== MAIN CONTENT ===== */
+      .main-content {
+        margin-left: 270px;
+        padding: 40px;
+        width: calc(100% - 270px);
+      }
 
-    .page-title {
-      font-size: 30px;
-      font-weight: 700;
-      color: #1B5E20;
-      margin-bottom: 25px;
-    }
+      .page-title {
+        font-size: 30px;
+        font-weight: 700;
+        color: #1b5e20;
+        margin-bottom: 25px;
+      }
 
-    /* ===== FORM CARD ===== */
-    .form-card {
-      background: white;
-      padding: 35px;
-      border-radius: 18px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-      max-width: 900px;
-      margin: auto;
-    }
+      /* ===== FORM CARD ===== */
+      .form-card {
+        background: white;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        max-width: 900px;
+        margin: auto;
+      }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px 25px;
-    }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 25px;
+      }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
 
-    .form-group.full {
-      grid-column: span 2;
-    }
+      .form-group.full {
+        grid-column: span 2;
+      }
 
-    label {
-      font-weight: 600;
-      color: #1B5E20;
-      margin-bottom: 6px;
-    }
+      label {
+        font-weight: 600;
+        color: #1b5e20;
+        margin-bottom: 6px;
+      }
 
-    input, select, textarea {
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid #aac7b1;
-      font-size: 14px;
-      outline: none;
-      background: #fff;
-      transition: .2s;
-      font-family: inherit;
-    }
+      input,
+      select,
+      textarea {
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid #aac7b1;
+        font-size: 14px;
+        outline: none;
+        background: #fff;
+        transition: 0.2s;
+        font-family: inherit;
+      }
 
-    input:focus, select:focus, textarea:focus {
-      border-color: #1B5E20;
-      box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.22);
-    }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: #1b5e20;
+        box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.22);
+      }
 
-    textarea {
-      resize: none;
-      height: 90px;
-    }
+      textarea {
+        resize: none;
+        height: 90px;
+      }
 
-    /* ===== BUTTON ===== */
-    .submit-btn {
-      margin-top: 30px;
-      width: 100%;
-      padding: 14px;
-      background: #1B5E20;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: .25s ease;
-    }
+      /* ===== BUTTON ===== */
+      .submit-btn {
+        margin-top: 30px;
+        width: 100%;
+        padding: 14px;
+        background: #1b5e20;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.25s ease;
+      }
 
-    .submit-btn:hover {
-      background: #164d18;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(27, 94, 32, 0.22);
-    }
+      .submit-btn:hover {
+        background: #164d18;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(27, 94, 32, 0.22);
+      }
+    </style>
+  </head>
 
-  </style>
-</head>
+  <body>
+    <div class="layout">
+      <!-- ===== SIDEBAR ===== -->
+      <aside class="sidebar">
+        <h2 class="sidebar-title">Admin Panel</h2>
 
-<body>
+        <a href="admin_dashboard.html" class="side-link"
+          ><i class="ri-dashboard-fill"></i> Dashboard</a
+        >
+        <a href="admin_manage_properties.html" class="side-link active"
+          ><i class="ri-building-4-fill"></i> Manage Properties</a
+        >
+        <a href="admin_manage_appointments.html" class="side-link"
+          ><i class="ri-calendar-check-fill"></i> Appointments</a
+        >
+        <a href="admin_manage_staff.html" class="side-link"
+          ><i class="ri-team-fill"></i> Manage Staff</a
+        >
+        <a href="admin_manage_agents.html" class="side-link"
+          ><i class="ri-handshake-fill"></i> Manage Agents</a
+        >
+        <a href="admin_manage_customers.html" class="side-link"
+          ><i class="ri-user-3-fill"></i> Manage Clients</a
+        >
+        <a href="admin_account_settings.html" class="side-link"
+          ><i class="ri-settings-3-fill"></i> Account Settings</a
+        >
+        <a href="../index.html" class="side-link"
+          ><i class="ri-logout-box-r-fill"></i> Logout</a
+        >
+      </aside>
 
-<div class="layout">
+      <!-- ===== MAIN CONTENT ===== -->
+      <main class="main-content">
+        <h2 class="page-title">Edit Property</h2>
 
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="sidebar">
-    <h2 class="sidebar-title">Admin Panel</h2>
+        <div class="form-card">
+          <form
+            id="editForm"
+            onsubmit="saveEdit(event)"
+            enctype="multipart/form-data"
+          >
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Property Name</label>
+                <input type="text" id="propName" required />
+              </div>
 
-    <a href="admin_dashboard.html" class="side-link"><i class="ri-dashboard-fill"></i> Dashboard</a>
-    <a href="admin_manage_properties.html" class="side-link active"><i class="ri-building-4-fill"></i> Manage Properties</a>
-    <a href="admin_manage_appointments.html" class="side-link"><i class="ri-calendar-check-fill"></i> Appointments</a>
-    <a href="admin_manage_staff.html" class="side-link"><i class="ri-team-fill"></i> Manage Staff</a>
-    <a href="admin_manage_agents.html" class="side-link"><i class="ri-handshake-fill"></i> Manage Agents</a>
-    <a href="admin_manage_customers.html" class="side-link"><i class="ri-user-3-fill"></i> Manage Clients</a>
-    <a href="admin_account_settings.html" class="side-link"><i class="ri-settings-3-fill"></i> Account Settings</a>
-    <a href="../index.html" class="side-link"><i class="ri-logout-box-r-fill"></i> Logout</a>
-  </aside>
+              <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="propLocation" required />
+              </div>
 
-  <!-- ===== MAIN CONTENT ===== -->
-  <main class="main-content">
+              <div class="form-group">
+                <label>Price</label>
+                <input type="number" id="propPrice" required />
+              </div>
 
-    <h2 class="page-title">Edit Property</h2>
+              <div class="form-group">
+                <label>Lot Area (sqm)</label>
+                <input type="number" id="propArea" required />
+              </div>
 
-    <div class="form-card">
-      <form id="editForm" onsubmit="saveEdit(event)" enctype="multipart/form-data">
+              <div class="form-group">
+                <label>Phase</label>
+                <input type="text" id="propPhase" required />
+              </div>
 
-        <div class="form-grid">
+              <div class="form-group">
+                <label>Property Type</label>
+                <select id="propType">
+                  <option>Residential Lot</option>
+                  <option>Commercial Lot</option>
+                  <option>Corner Lot</option>
+                  <option>Inner Lot</option>
+                </select>
+              </div>
 
-          <div class="form-group">
-            <label>Property Name</label>
-            <input type="text" id="propName" required>
-          </div>
+              <div class="form-group">
+                <label>Status</label>
+                <select id="propStatus">
+                  <option>Available</option>
+                  <option>Reserved</option>
+                  <option>Sold</option>
+                </select>
+              </div>
 
-          <div class="form-group">
-            <label>Location</label>
-            <input type="text" id="propLocation" required>
-          </div>
+              <div class="form-group full">
+                <label>Description</label>
+                <textarea id="propDescription"></textarea>
+              </div>
 
-          <div class="form-group">
-            <label>Price</label>
-            <input type="number" id="propPrice" required>
-          </div>
+              <div class="form-group">
+                <label>Assigned Agent</label>
+                <select id="propAgent"></select>
+              </div>
 
-          <div class="form-group">
-            <label>Lot Area (sqm)</label>
-            <input type="number" id="propArea" required>
-          </div>
+              <div class="form-group">
+                <label>Upload New Images</label>
+                <input type="file" id="propImages" multiple accept="image/*" />
+              </div>
 
-          <div class="form-group">
-            <label>Phase</label>
-            <input type="text" id="propPhase" required>
-          </div>
+              <div class="form-group">
+                <label>Availability Map</label>
+                <input type="file" id="availabilityImg" accept="image/*" />
+              </div>
 
-          <div class="form-group">
-            <label>Property Type</label>
-            <select id="propType">
-              <option>Residential Lot</option>
-              <option>Commercial Lot</option>
-              <option>Corner Lot</option>
-              <option>Inner Lot</option>
-            </select>
-          </div>
+              <div class="form-group">
+                <label>VR Tour Link</label>
+                <input type="text" id="vrTour" />
+              </div>
 
-          <div class="form-group">
-            <label>Status</label>
-            <select id="propStatus">
-              <option>Available</option>
-              <option>Reserved</option>
-              <option>Sold</option>
-            </select>
-          </div>
+              <div class="form-group">
+                <label>Google Maps Link</label>
+                <input type="text" id="googleMap" />
+              </div>
+            </div>
 
-          <div class="form-group full">
-            <label>Description</label>
-            <textarea id="propDescription"></textarea>
-          </div>
-
-          <div class="form-group">
-            <label>Assigned Agent</label>
-            <select id="propAgent"></select>
-          </div>
-
-          <div class="form-group">
-            <label>Upload New Images</label>
-            <input type="file" id="propImages" multiple accept="image/*">
-          </div>
-
-          <div class="form-group">
-            <label>Availability Map</label>
-            <input type="file" id="availabilityImg" accept="image/*">
-          </div>
-
-          <div class="form-group">
-            <label>VR Tour Link</label>
-            <input type="text" id="vrTour">
-          </div>
-
-          <div class="form-group">
-            <label>Google Maps Link</label>
-            <input type="text" id="googleMap">
-          </div>
-
+            <button class="submit-btn">Save Changes</button>
+          </form>
         </div>
-
-        <button class="submit-btn">Save Changes</button>
-
-      </form>
+      </main>
     </div>
-  </main>
 
-</div>
-
-<!-- =======================================
+    <!-- =======================================
      ORIGINAL FUNCTIONALITY (UNCHANGED)
 ======================================= -->
-<script>
-/* Your full JS code from above remains EXACTLY the same */
-</script>
+    <script>
+      /* Your full JS code from above remains EXACTLY the same */
+    </script>
 
-<script>
-const API_BASE = "http://localhost:5000/api";
-const editId = localStorage.getItem("editPropertyId");
+    <script>
+      const API_BASE = `${API_CONFIG.BASE_URL}/api`;
+      const editId = localStorage.getItem("editPropertyId");
 
-// 🔐 ADMIN AUTH CHECK
-const user = JSON.parse(localStorage.getItem("user"));
-if (!user || localStorage.getItem("loggedIn") !== "true" || user.role !== "admin") {
-  alert("You must be logged in as Admin.");
-  window.location.href = "../login.html";
-}
+      // 🔐 ADMIN AUTH CHECK
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (
+        !user ||
+        localStorage.getItem("loggedIn") !== "true" ||
+        user.role !== "admin"
+      ) {
+        alert("You must be logged in as Admin.");
+        window.location.href = "../login.html";
+      }
 
-let currentProperty = null;
+      let currentProperty = null;
 
-// -------------------------------------------------------------
-// LOAD PROPERTY DETAILS
-// -------------------------------------------------------------
-document.addEventListener("DOMContentLoaded", async () => {
-  if (!editId) {
-    alert("No property selected.");
-    window.location.href = "admin_manage_properties.html";
-    return;
-  }
+      // -------------------------------------------------------------
+      // LOAD PROPERTY DETAILS
+      // -------------------------------------------------------------
+      document.addEventListener("DOMContentLoaded", async () => {
+        if (!editId) {
+          alert("No property selected.");
+          window.location.href = "admin_manage_properties.html";
+          return;
+        }
 
-  try {
-    const res = await fetch(`${API_BASE}/properties/${editId}`);
-    const json = await res.json();
+        try {
+          const res = await fetch(`${API_BASE}/properties/${editId}`);
+          const json = await res.json();
 
-    if (!json.success) throw new Error("Failed to load");
+          if (!json.success) throw new Error("Failed to load");
 
-    const p = json.data;
-    currentProperty = p;
+          const p = json.data;
+          currentProperty = p;
 
-    // FILL FIELDS
-    document.getElementById("propName").value = p.title || "";
-    document.getElementById("propLocation").value = p.location || "";
-    document.getElementById("propPrice").value = p.price || "";
-    document.getElementById("propArea").value = p.lot_area || "";
-    document.getElementById("propPhase").value = p.phase || "";
-    document.getElementById("propType").value = p.type || "";
-    document.getElementById("propStatus").value = p.status || "";
-    document.getElementById("propDescription").value = p.description || "";
-    document.getElementById("vrTour").value = p.virtual_tour || "";
-    document.getElementById("googleMap").value = p.google_map || "";
+          // FILL FIELDS
+          document.getElementById("propName").value = p.title || "";
+          document.getElementById("propLocation").value = p.location || "";
+          document.getElementById("propPrice").value = p.price || "";
+          document.getElementById("propArea").value = p.lot_area || "";
+          document.getElementById("propPhase").value = p.phase || "";
+          document.getElementById("propType").value = p.type || "";
+          document.getElementById("propStatus").value = p.status || "";
+          document.getElementById("propDescription").value =
+            p.description || "";
+          document.getElementById("vrTour").value = p.virtual_tour || "";
+          document.getElementById("googleMap").value = p.google_map || "";
 
-    loadAgents(p.agent);
+          loadAgents(p.agent);
+        } catch (err) {
+          console.error("LOAD ERROR:", err);
+          alert("Failed to load property.");
+        }
+      });
 
-  } catch (err) {
-    console.error("LOAD ERROR:", err);
-    alert("Failed to load property.");
-  }
-});
+      // -------------------------------------------------------------
+      // LOAD AGENTS DROPDOWN
+      // -------------------------------------------------------------
+      async function loadAgents(selectedId = null) {
+        try {
+          const res = await fetch(`${API_BASE}/agents`);
+          const json = await res.json();
 
-// -------------------------------------------------------------
-// LOAD AGENTS DROPDOWN
-// -------------------------------------------------------------
-async function loadAgents(selectedId = null) {
-  try {
-    const res = await fetch(`${API_BASE}/agents`);
-    const json = await res.json();
+          const dropdown = document.getElementById("propAgent");
+          dropdown.innerHTML = `<option value="">-- Select Agent --</option>`;
 
-    const dropdown = document.getElementById("propAgent");
-    dropdown.innerHTML = `<option value="">-- Select Agent --</option>`;
+          json.data.forEach((agent) => {
+            const opt = document.createElement("option");
+            opt.value = agent.id;
+            opt.textContent = agent.full_name;
+            dropdown.appendChild(opt);
+          });
 
-    json.data.forEach(agent => {
-      const opt = document.createElement("option");
-      opt.value = agent.id;
-      opt.textContent = agent.full_name;
-      dropdown.appendChild(opt);
-    });
+          if (selectedId) dropdown.value = selectedId;
+        } catch (err) {
+          console.error("AGENTS ERROR:", err);
+        }
+      }
 
-    if (selectedId) dropdown.value = selectedId;
+      // -------------------------------------------------------------
+      // SAVE PROPERTY UPDATE
+      // -------------------------------------------------------------
+      async function saveEdit(e) {
+        e.preventDefault();
 
-  } catch (err) {
-    console.error("AGENTS ERROR:", err);
-  }
-}
+        const formData = new FormData();
 
-// -------------------------------------------------------------
-// SAVE PROPERTY UPDATE
-// -------------------------------------------------------------
-async function saveEdit(e) {
-  e.preventDefault();
+        // BASIC DETAILS
+        formData.append("title", document.getElementById("propName").value);
+        formData.append(
+          "location",
+          document.getElementById("propLocation").value
+        );
+        formData.append("price", document.getElementById("propPrice").value);
+        formData.append("lot_area", document.getElementById("propArea").value);
+        formData.append("phase", document.getElementById("propPhase").value);
+        formData.append("type", document.getElementById("propType").value);
+        formData.append("status", document.getElementById("propStatus").value);
+        formData.append(
+          "description",
+          document.getElementById("propDescription").value
+        );
+        formData.append(
+          "virtual_tour",
+          document.getElementById("vrTour").value
+        );
+        formData.append(
+          "google_map",
+          document.getElementById("googleMap").value
+        );
+        formData.append("agent", document.getElementById("propAgent").value);
 
-  const formData = new FormData();
+        // IMAGES
+        const newImages = document.getElementById("propImages").files;
+        for (let img of newImages) formData.append("images", img);
 
-  // BASIC DETAILS
-  formData.append("title", document.getElementById("propName").value);
-  formData.append("location", document.getElementById("propLocation").value);
-  formData.append("price", document.getElementById("propPrice").value);
-  formData.append("lot_area", document.getElementById("propArea").value);
-  formData.append("phase", document.getElementById("propPhase").value);
-  formData.append("type", document.getElementById("propType").value);
-  formData.append("status", document.getElementById("propStatus").value);
-  formData.append("description", document.getElementById("propDescription").value);
-  formData.append("virtual_tour", document.getElementById("vrTour").value);
-  formData.append("google_map", document.getElementById("googleMap").value);
-  formData.append("agent", document.getElementById("propAgent").value);
+        const avail = document.getElementById("availabilityImg").files[0];
+        if (avail) formData.append("availability_image", avail);
 
-  // IMAGES
-  const newImages = document.getElementById("propImages").files;
-  for (let img of newImages) formData.append("images", img);
+        try {
+          const res = await fetch(`${API_BASE}/properties/${editId}`, {
+            method: "PUT",
+            body: formData,
+          });
 
-  const avail = document.getElementById("availabilityImg").files[0];
-  if (avail) formData.append("availability_image", avail);
+          const json = await res.json();
 
-  try {
-    const res = await fetch(`${API_BASE}/properties/${editId}`, {
-      method: "PUT",
-      body: formData
-    });
+          if (!res.ok || !json.success) {
+            alert(json.error || "Failed to update property.");
+            return;
+          }
 
-    const json = await res.json();
-
-    if (!res.ok || !json.success) {
-      alert(json.error || "Failed to update property.");
-      return;
-    }
-
-    alert("Property updated successfully!");
-    localStorage.removeItem("editPropertyId");
-    window.location.href = "admin_manage_properties.html";
-
-  } catch (err) {
-    console.error(err);
-    alert("Server error updating property.");
-  }
-}
-</script>
-
-</body>
+          alert("Property updated successfully!");
+          localStorage.removeItem("editPropertyId");
+          window.location.href = "admin_manage_properties.html";
+        } catch (err) {
+          console.error(err);
+          alert("Server error updating property.");
+        }
+      }
+    </script>
+  </body>
 </html>

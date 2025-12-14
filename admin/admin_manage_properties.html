@@ -1,265 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Admin – Manage Properties</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin – Manage Properties</title>
+    <script src="/assets/js/config.js"></script>
 
-  <!-- ICON LIBRARY -->
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- ICON LIBRARY -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
 
-  <style>
-    /* ===== GLOBAL ===== */
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: #eef5f0;
-      display: flex;
-      min-height: 100vh;
-    }
+    <style>
+      /* ===== GLOBAL ===== */
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #eef5f0;
+        display: flex;
+        min-height: 100vh;
+      }
 
-    .layout {
-      display: flex;
-      width: 100%;
-    }
+      .layout {
+        display: flex;
+        width: 100%;
+      }
 
-    /* ===== SIDEBAR ===== */
-    .sidebar {
-      width: 240px;
-      background: #0f4d20;
-      padding: 30px 20px;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      position: fixed;
-      height: 100vh;
-      box-shadow: 4px 0 12px rgba(0,0,0,0.15);
-    }
+      /* ===== SIDEBAR ===== */
+      .sidebar {
+        width: 240px;
+        background: #0f4d20;
+        padding: 30px 20px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        position: fixed;
+        height: 100vh;
+        box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+      }
 
-    .sidebar-title {
-      font-size: 22px;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 25px;
-    }
+      .sidebar-title {
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 25px;
+      }
 
-    .side-link {
-      padding: 12px 14px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.10);
-      color: white;
-      text-decoration: none;
-      font-size: 15px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: 0.2s;
-    }
+      .side-link {
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: 0.2s;
+      }
 
-    .side-link:hover {
-      background: rgba(255,255,255,0.20);
-      transform: translateX(5px);
-    }
+      .side-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(5px);
+      }
 
-    .side-link.active {
-      background: white;
-      color: #1B5E20;
-      font-weight: 600;
-    }
+      .side-link.active {
+        background: white;
+        color: #1b5e20;
+        font-weight: 600;
+      }
 
-    /* ===== MAIN ===== */
-    .main-content {
-      margin-left: 270px;
-      padding: 40px;
-      width: calc(100% - 270px);
-    }
+      /* ===== MAIN ===== */
+      .main-content {
+        margin-left: 270px;
+        padding: 40px;
+        width: calc(100% - 270px);
+      }
 
-    .page-title {
-      font-size: 30px;
-      font-weight: 700;
-      color: #1B5E20;
-      margin-bottom: 30px;
-    }
+      .page-title {
+        font-size: 30px;
+        font-weight: 700;
+        color: #1b5e20;
+        margin-bottom: 30px;
+      }
 
-    /* ===== TABLE ===== */
-    .table-wrapper {
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-      overflow-x: auto;
-    }
+      /* ===== TABLE ===== */
+      .table-wrapper {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+        overflow-x: auto;
+      }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
 
-    thead {
-      background: #1B5E20;
-      color: white;
-    }
+      thead {
+        background: #1b5e20;
+        color: white;
+      }
 
-    th, td {
-      padding: 14px 12px;
-      text-align: left;
-      border-bottom: 1px solid #e0e0e0;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
+      th,
+      td {
+        padding: 14px 12px;
+        text-align: left;
+        border-bottom: 1px solid #e0e0e0;
+        vertical-align: middle;
+        white-space: nowrap;
+      }
 
-    tbody tr:hover {
-      background: #f3f8f5;
-    }
+      tbody tr:hover {
+        background: #f3f8f5;
+      }
 
-    .table-img {
-      width: 80px;
-      height: 55px;
-      border-radius: 8px;
-      object-fit: cover;
-      background: #eee;
-    }
+      .table-img {
+        width: 80px;
+        height: 55px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: #eee;
+      }
 
-    .actions {
-      display: flex;
-      gap: 8px;
-    }
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
 
-    .edit-btn {
-      background: #1B5E20;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-    }
+      .edit-btn {
+        background: #1b5e20;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+      }
 
-    .edit-btn:hover {
-      background: #145a17;
-    }
+      .edit-btn:hover {
+        background: #145a17;
+      }
 
-    .delete-btn {
-      background: #C62828;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-    }
+      .delete-btn {
+        background: #c62828;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+      }
 
-    .delete-btn:hover {
-      background: #A41414;
-    }
-  </style>
-</head>
+      .delete-btn:hover {
+        background: #a41414;
+      }
+    </style>
+  </head>
 
-<body>
+  <body>
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <h2 class="sidebar-title">Admin Panel</h2>
 
-<div class="layout">
+        <a href="admin_dashboard.html" class="side-link"
+          ><i class="ri-dashboard-fill"></i> Dashboard</a
+        >
+        <a href="admin_manage_properties.html" class="side-link active"
+          ><i class="ri-building-4-fill"></i> Manage Properties</a
+        >
+        <a href="admin_manage_appointments.html" class="side-link"
+          ><i class="ri-calendar-check-fill"></i> Appointments</a
+        >
+        <a href="admin_manage_staff.html" class="side-link"
+          ><i class="ri-team-fill"></i> Manage Staff</a
+        >
+        <a href="admin_manage_agents.html" class="side-link"
+          ><i class="ri-handshake-fill"></i> Manage Agents</a
+        >
+        <a href="admin_manage_customers.html" class="side-link"
+          ><i class="ri-user-3-fill"></i> Manage Clients</a
+        >
+        <a href="admin_account_settings.html" class="side-link"
+          ><i class="ri-settings-3-fill"></i> Account Settings</a
+        >
+        <a href="#" onclick="logout()" class="side-link"
+          ><i class="ri-logout-box-r-fill"></i> Logout</a
+        >
+      </aside>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <h2 class="sidebar-title">Admin Panel</h2>
+      <!-- MAIN -->
+      <main class="main-content">
+        <h2 class="page-title">Manage Properties</h2>
 
-    <a href="admin_dashboard.html" class="side-link"><i class="ri-dashboard-fill"></i> Dashboard</a>
-    <a href="admin_manage_properties.html" class="side-link active"><i class="ri-building-4-fill"></i> Manage Properties</a>
-    <a href="admin_manage_appointments.html" class="side-link"><i class="ri-calendar-check-fill"></i> Appointments</a>
-    <a href="admin_manage_staff.html" class="side-link"><i class="ri-team-fill"></i> Manage Staff</a>
-    <a href="admin_manage_agents.html" class="side-link"><i class="ri-handshake-fill"></i> Manage Agents</a>
-    <a href="admin_manage_customers.html" class="side-link"><i class="ri-user-3-fill"></i> Manage Clients</a>
-    <a href="admin_account_settings.html" class="side-link"><i class="ri-settings-3-fill"></i> Account Settings</a>
-    <a href="#" onclick="logout()" class="side-link"><i class="ri-logout-box-r-fill"></i> Logout</a>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main-content">
-    <h2 class="page-title">Manage Properties</h2>
-
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Title</th>
-            <th>Location</th>
-            <th>Price</th>
-            <th>Lot Area</th>
-            <th>Phase</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Agent</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="propertyList">
-          <tr>
-            <td colspan="10">Loading properties...</td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Price</th>
+                <th>Lot Area</th>
+                <th>Phase</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Agent</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="propertyList">
+              <tr>
+                <td colspan="10">Loading properties...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
     </div>
-  </main>
 
-</div>
+    <!-- ===== FUNCTIONALITY (UNCHANGED) ===== -->
+    <script>
+      const API_BASE = `${API_CONFIG.BASE_URL}/api`;
+      const FILE_BASE = API_CONFIG.BASE_URL;
 
-<!-- ===== FUNCTIONALITY (UNCHANGED) ===== -->
-<script>
-const API_BASE = "http://localhost:5000/api";
-const FILE_BASE = "http://localhost:5000";
+      const user = JSON.parse(localStorage.getItem("user"));
+      const logged = localStorage.getItem("loggedIn");
 
-const user = JSON.parse(localStorage.getItem("user"));
-const logged = localStorage.getItem("loggedIn");
-
-if (!user || logged !== "true" || user.role !== "admin") {
-  alert("Admin access required.");
-  window.location.href = "../login.html";
-}
-
-document.addEventListener("DOMContentLoaded", async () => {
-  const container = document.getElementById("propertyList");
-
-  try {
-    const res = await fetch(`${API_BASE}/properties`);
-    const json = await res.json();
-    if (!json.success) throw new Error();
-
-    const properties = json.data;
-    container.innerHTML = "";
-
-    if (!properties.length) {
-      container.innerHTML = `<tr><td colspan="10">No properties found.</td></tr>`;
-      return;
-    }
-
-    for (const p of properties) {
-      let images = [];
-      if (Array.isArray(p.images)) images = p.images;
-      else if (typeof p.images === "string") {
-        try { images = JSON.parse(p.images); } catch {}
+      if (!user || logged !== "true" || user.role !== "admin") {
+        alert("Admin access required.");
+        window.location.href = "../login.html";
       }
 
-      // ✅ IMAGE FIX (S3 + LOCAL + FALLBACK)
-      let img = "../assets/img/no-image.jpg";
-      if (images.length > 0) {
-        img = images[0].startsWith("http")
-          ? images[0]
-          : `${FILE_BASE}${images[0]}`;
-      }
+      document.addEventListener("DOMContentLoaded", async () => {
+        const container = document.getElementById("propertyList");
 
-      let agentName = "Not Assigned";
-      if (p.agent) {
         try {
-          const resAgent = await fetch(`${API_BASE}/agents/${p.agent}`);
-          const agentJson = await resAgent.json();
-          if (agentJson.success) agentName = agentJson.data.full_name;
-        } catch {}
-      }
+          const res = await fetch(`${API_BASE}/properties`);
+          const json = await res.json();
+          if (!json.success) throw new Error();
 
-      const row = document.createElement("tr");
-      row.innerHTML = `
+          const properties = json.data;
+          container.innerHTML = "";
+
+          if (!properties.length) {
+            container.innerHTML = `<tr><td colspan="10">No properties found.</td></tr>`;
+            return;
+          }
+
+          for (const p of properties) {
+            let images = [];
+            if (Array.isArray(p.images)) images = p.images;
+            else if (typeof p.images === "string") {
+              try {
+                images = JSON.parse(p.images);
+              } catch {}
+            }
+
+            // ✅ IMAGE FIX (S3 + LOCAL + FALLBACK)
+            let img = "../assets/img/no-image.jpg";
+            if (images.length > 0) {
+              img = images[0].startsWith("http")
+                ? images[0]
+                : `${FILE_BASE}${images[0]}`;
+            }
+
+            let agentName = "Not Assigned";
+            if (p.agent) {
+              try {
+                const resAgent = await fetch(`${API_BASE}/agents/${p.agent}`);
+                const agentJson = await resAgent.json();
+                if (agentJson.success) agentName = agentJson.data.full_name;
+              } catch {}
+            }
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
         <td><img src="${img}" class="table-img"></td>
         <td><strong>${p.title}</strong></td>
         <td>${p.location || "N/A"}</td>
@@ -271,40 +291,45 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td>${agentName}</td>
         <td>
           <div class="actions">
-            <button class="edit-btn" onclick="editProperty(${p.id})">Edit</button>
-            <button class="delete-btn" onclick="deleteProperty(${p.id})">Delete</button>
+            <button class="edit-btn" onclick="editProperty(${
+              p.id
+            })">Edit</button>
+            <button class="delete-btn" onclick="deleteProperty(${
+              p.id
+            })">Delete</button>
           </div>
         </td>
       `;
-      container.appendChild(row);
-    }
-  } catch {
-    container.innerHTML = `<tr><td colspan="10">Error loading properties.</td></tr>`;
-  }
-});
+            container.appendChild(row);
+          }
+        } catch {
+          container.innerHTML = `<tr><td colspan="10">Error loading properties.</td></tr>`;
+        }
+      });
 
-function editProperty(id) {
-  localStorage.setItem("editPropertyId", id);
-  window.location.href = "admin_edit_property.html";
-}
+      function editProperty(id) {
+        localStorage.setItem("editPropertyId", id);
+        window.location.href = "admin_edit_property.html";
+      }
 
-async function deleteProperty(id) {
-  if (!confirm("Delete this property?")) return;
-  try {
-    const res = await fetch(`${API_BASE}/properties/${id}`, { method: "DELETE" });
-    const json = await res.json();
-    if (res.ok && json.success) location.reload();
-    else alert("Failed to delete property.");
-  } catch {
-    alert("Server error.");
-  }
-}
+      async function deleteProperty(id) {
+        if (!confirm("Delete this property?")) return;
+        try {
+          const res = await fetch(`${API_BASE}/properties/${id}`, {
+            method: "DELETE",
+          });
+          const json = await res.json();
+          if (res.ok && json.success) location.reload();
+          else alert("Failed to delete property.");
+        } catch {
+          alert("Server error.");
+        }
+      }
 
-function logout() {
-  localStorage.clear();
-  window.location.href = "../index.html";
-}
-</script>
-
-</body>
+      function logout() {
+        localStorage.clear();
+        window.location.href = "../index.html";
+      }
+    </script>
+  </body>
 </html>

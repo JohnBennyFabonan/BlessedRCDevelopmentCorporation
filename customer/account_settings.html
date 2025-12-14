@@ -1,326 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Account Settings – Digital Realty</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Account Settings – Digital Realty</title>
+    <script src="/assets/js/config.js"></script>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <style>
-    /* GLOBAL */
-   body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: #e7f2ed;
-      display: flex;
-      min-height: 100vh;
-    }
+    <style>
+      /* GLOBAL */
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #e7f2ed;
+        display: flex;
+        min-height: 100vh;
+      }
 
-/* ================================
+      /* ================================
    UNIVERSAL SIDEBAR — DIGITAL REALTY
 ================================= */
-.sidebar {
-  width: 230px;
-  background: #1B5E20;
-  padding: 30px 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-}
-
-.sidebar h2 {
-  font-size: 22px;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.side-link {
-  background: rgba(255,255,255,0.15);
-  padding: 12px 14px;
-  border-radius: 10px;
-  color: white;
-  font-size: 15px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: 0.2s;
-  display: block;
-}
-
-.side-link:hover {
-  background: rgba(255,255,255,0.25);
-  transform: translateX(4px);
-}
-
-/* ACTIVE LINK */
-.side-link.active {
-  background: white !important;
-  color: #1B5E20 !important;
-  font-weight: 600;
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-  }
-}
-
-    /* MAIN CONTENT */
-    .main-container {
-      flex: 1;
-      margin-left: 260px;
-      padding: 40px;
-    }
-
-    .settings-card {
-      max-width: 600px;
-      margin: auto;
-      background: white;
-      padding: 35px;
-      border-radius: 14px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    }
-
-    .settings-title {
-      font-size: 28px;
-      text-align: center;
-      font-weight: 700;
-      color: #1B5E20;
-      margin-bottom: 5px;
-    }
-
-    .settings-subtitle {
-      text-align: center;
-      color: #546E7A;
-      font-size: 14px;
-      margin-bottom: 25px;
-    }
-
-    /* FORM */
-    label {
-      font-weight: 600;
-      color: #1B5E20;
-      margin-top: 12px;
-      display: block;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px 14px;
-      margin-top: 6px;
-      border-radius: 10px;
-      border: 1px solid #b7cfc4;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .save-btn {
-      width: 100%;
-      margin-top: 25px;
-      padding: 12px;
-      background: #1B5E20;
-      color: white;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: .2s;
-    }
-
-    .save-btn:hover {
-      background: #164c19;
-    }
-
-    .back-link {
-      text-align: center;
-      margin-top: 20px;
-      display: block;
-      text-decoration: none;
-      font-weight: 600;
-      color: #1B5E20;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
       .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
+        width: 230px;
+        background: #1b5e20;
+        padding: 30px 20px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
       }
+
+      .sidebar h2 {
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 15px;
+      }
+
+      .side-link {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 12px 14px;
+        border-radius: 10px;
+        color: white;
+        font-size: 15px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: 0.2s;
+        display: block;
+      }
+
+      .side-link:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateX(4px);
+      }
+
+      /* ACTIVE LINK */
+      .side-link.active {
+        background: white !important;
+        color: #1b5e20 !important;
+        font-weight: 600;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 900px) {
+        .sidebar {
+          position: relative;
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      /* MAIN CONTENT */
       .main-container {
-        margin-left: 0;
+        flex: 1;
+        margin-left: 260px;
+        padding: 40px;
       }
-    }
-  </style>
-</head>
 
-<body>
+      .settings-card {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        padding: 35px;
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
 
-<!-- ✅ SIDEBAR (Perfect Match) -->
-<aside class="sidebar">
-  <h2>Blessed R&C Development Corporation</h2>
+      .settings-title {
+        font-size: 28px;
+        text-align: center;
+        font-weight: 700;
+        color: #1b5e20;
+        margin-bottom: 5px;
+      }
 
-  <a href="../index.html" class="side-link">🏡 View Properties</a>
-  <a href="customer_dashboard.html" class="side-link">📊 Dashboard</a>
-  <a href="appointments.html" class="side-link">📅 My Appointments</a>
-  <a href="account_settings.html" class="side-link active">⚙️ Account Settings</a>
-  <a href="#" class="side-link" onclick="logoutUser()">🚪 Logout</a>
-</aside>
+      .settings-subtitle {
+        text-align: center;
+        color: #546e7a;
+        font-size: 14px;
+        margin-bottom: 25px;
+      }
 
-<!-- MAIN CONTENT -->
-<div class="main-container">
-  <div class="settings-card">
-    <h2 class="settings-title">Account Settings</h2>
-    <p class="settings-subtitle">Update your personal information</p>
+      /* FORM */
+      label {
+        font-weight: 600;
+        color: #1b5e20;
+        margin-top: 12px;
+        display: block;
+      }
 
-    <form id="settingsForm">
+      input {
+        width: 100%;
+        padding: 12px 14px;
+        margin-top: 6px;
+        border-radius: 10px;
+        border: 1px solid #b7cfc4;
+        font-size: 14px;
+        outline: none;
+      }
 
-      <label>Full Name</label>
-      <input id="fullName" type="text" required>
+      .save-btn {
+        width: 100%;
+        margin-top: 25px;
+        padding: 12px;
+        background: #1b5e20;
+        color: white;
+        border-radius: 10px;
+        border: none;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+      }
 
-      <label>Email (cannot be changed)</label>
-      <input id="email" type="email" disabled>
+      .save-btn:hover {
+        background: #164c19;
+      }
 
-      <label>Contact Number</label>
-      <input id="contact" type="text" maxlength="11" required>
+      .back-link {
+        text-align: center;
+        margin-top: 20px;
+        display: block;
+        text-decoration: none;
+        font-weight: 600;
+        color: #1b5e20;
+      }
 
-      <label>Birthday</label>
-      <input id="birthday" type="date" required>
+      /* RESPONSIVE */
+      @media (max-width: 900px) {
+        .sidebar {
+          position: relative;
+          width: 100%;
+          height: auto;
+        }
+        .main-container {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
 
-      <label>Address</label>
-      <input id="address" type="text" required>
+  <body>
+    <!-- ✅ SIDEBAR (Perfect Match) -->
+    <aside class="sidebar">
+      <h2>Blessed R&C Development Corporation</h2>
 
-      <label>Change Password (optional)</label>
-      <input id="password" type="password" placeholder="Enter new password (optional)">
+      <a href="../index.html" class="side-link">🏡 View Properties</a>
+      <a href="customer_dashboard.html" class="side-link">📊 Dashboard</a>
+      <a href="appointments.html" class="side-link">📅 My Appointments</a>
+      <a href="account_settings.html" class="side-link active"
+        >⚙️ Account Settings</a
+      >
+      <a href="#" class="side-link" onclick="logoutUser()">🚪 Logout</a>
+    </aside>
 
-      <button class="save-btn" type="submit">Save Changes</button>
-    </form>
+    <!-- MAIN CONTENT -->
+    <div class="main-container">
+      <div class="settings-card">
+        <h2 class="settings-title">Account Settings</h2>
+        <p class="settings-subtitle">Update your personal information</p>
 
-    <a class="back-link" href="customer_dashboard.html">← Back to Dashboard</a>
-  </div>
-</div>
+        <form id="settingsForm">
+          <label>Full Name</label>
+          <input id="fullName" type="text" required />
 
-<!-- ORIGINAL FUNCTIONALITY (UNCHANGED) -->
-<script>
-/* ------------------------------
+          <label>Email (cannot be changed)</label>
+          <input id="email" type="email" disabled />
+
+          <label>Contact Number</label>
+          <input id="contact" type="text" maxlength="11" required />
+
+          <label>Birthday</label>
+          <input id="birthday" type="date" required />
+
+          <label>Address</label>
+          <input id="address" type="text" required />
+
+          <label>Change Password (optional)</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter new password (optional)"
+          />
+
+          <button class="save-btn" type="submit">Save Changes</button>
+        </form>
+
+        <a class="back-link" href="customer_dashboard.html"
+          >← Back to Dashboard</a
+        >
+      </div>
+    </div>
+
+    <!-- ORIGINAL FUNCTIONALITY (UNCHANGED) -->
+    <script>
+      /* ------------------------------
    STRICT LOGOUT FUNCTION
 --------------------------------*/
-function logoutUser() {
-    localStorage.clear();
-    sessionStorage.clear();
+      function logoutUser() {
+        localStorage.clear();
+        sessionStorage.clear();
 
-    // Prevent going back to protected pages
-    window.location.replace("/login.html");
-}
+        // Prevent going back to protected pages
+        window.location.replace("/login.html");
+      }
 
-/* ------------------------------
+      /* ------------------------------
    AUTH VALIDATION (unchanged)
 --------------------------------*/
-const user = JSON.parse(localStorage.getItem("user"));
-const loggedIn = localStorage.getItem("loggedIn");
+      const user = JSON.parse(localStorage.getItem("user"));
+      const loggedIn = localStorage.getItem("loggedIn");
 
-if (!user || loggedIn !== "true" || user.role !== "client") {
-    localStorage.clear();
-    sessionStorage.clear();
-    window.location.replace("/login.html");
-    throw new Error("Unauthorized access");
-}
+      if (!user || loggedIn !== "true" || user.role !== "client") {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.replace("/login.html");
+        throw new Error("Unauthorized access");
+      }
 
-const API_BASE = "http://localhost:5000/api/auth";
-let currentUser = user;
+      const API_BASE = `${API_CONFIG.BASE_URL}/api/auth`;
+      let currentUser = user;
 
-/* ------------------------------
+      /* ------------------------------
    LOAD USER INFO
 --------------------------------*/
-document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    const res = await fetch(`${API_BASE}/user/${currentUser.id}`);
-    const data = await res.json();
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const res = await fetch(`${API_BASE}/user/${currentUser.id}`);
+          const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.error || "Unable to load user details.");
-      return;
-    }
+          if (!res.ok) {
+            alert(data.error || "Unable to load user details.");
+            return;
+          }
 
-    document.getElementById("fullName").value = data.full_name;
-    document.getElementById("email").value = data.email;
-    document.getElementById("contact").value = data.contact || "";
-    document.getElementById("birthday").value = data.birthday || "";
-    document.getElementById("address").value = data.address || "";
+          document.getElementById("fullName").value = data.full_name;
+          document.getElementById("email").value = data.email;
+          document.getElementById("contact").value = data.contact || "";
+          document.getElementById("birthday").value = data.birthday || "";
+          document.getElementById("address").value = data.address || "";
+        } catch (err) {
+          console.error("Error loading account settings:", err);
+          alert("Unable to load account settings.");
+        }
+      });
 
-  } catch (err) {
-    console.error("Error loading account settings:", err);
-    alert("Unable to load account settings.");
-  }
-});
-
-/* ------------------------------
+      /* ------------------------------
    UPDATE USER INFO
 --------------------------------*/
-document.getElementById("settingsForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+      document
+        .getElementById("settingsForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-  const fullName = document.getElementById("fullName").value.trim();
-  const contact = document.getElementById("contact").value.trim();
-  const birthday = document.getElementById("birthday").value.trim();
-  const address = document.getElementById("address").value.trim();
-  const newPassword = document.getElementById("password").value.trim();
+          const fullName = document.getElementById("fullName").value.trim();
+          const contact = document.getElementById("contact").value.trim();
+          const birthday = document.getElementById("birthday").value.trim();
+          const address = document.getElementById("address").value.trim();
+          const newPassword = document.getElementById("password").value.trim();
 
-  if (!/^09\d{9}$/.test(contact)) {
-    alert("Contact number must start with 09 and be 11 digits long.");
-    return;
-  }
+          if (!/^09\d{9}$/.test(contact)) {
+            alert("Contact number must start with 09 and be 11 digits long.");
+            return;
+          }
 
-  const updateData = { full_name: fullName, contact, birthday, address };
+          const updateData = {
+            full_name: fullName,
+            contact,
+            birthday,
+            address,
+          };
 
-  if (newPassword.length > 0) {
-    if (newPassword.length < 8) {
-      alert("Password must be at least 8 characters.");
-      return;
-    }
-    updateData.password = newPassword;
-  }
+          if (newPassword.length > 0) {
+            if (newPassword.length < 8) {
+              alert("Password must be at least 8 characters.");
+              return;
+            }
+            updateData.password = newPassword;
+          }
 
-  try {
-    const res = await fetch(`${API_BASE}/update/${currentUser.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(updateData)
-    });
+          try {
+            const res = await fetch(`${API_BASE}/update/${currentUser.id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updateData),
+            });
 
-    const data = await res.json();
-    if (!res.ok) { 
-      alert(data.error || "Failed to update account."); 
-      return; 
-    }
+            const data = await res.json();
+            if (!res.ok) {
+              alert(data.error || "Failed to update account.");
+              return;
+            }
 
-    currentUser.full_name = fullName;
-    currentUser.contact = contact;
-    currentUser.birthday = birthday;
-    currentUser.address = address;
+            currentUser.full_name = fullName;
+            currentUser.contact = contact;
+            currentUser.birthday = birthday;
+            currentUser.address = address;
 
-    localStorage.setItem("user", JSON.stringify(currentUser));
+            localStorage.setItem("user", JSON.stringify(currentUser));
 
-    alert("Account updated successfully!");
-
-  } catch (err) {
-    console.error("Update error:", err);
-    alert("Error saving changes.");
-  }
-});
-</script>
-
-</body>
+            alert("Account updated successfully!");
+          } catch (err) {
+            console.error("Update error:", err);
+            alert("Error saving changes.");
+          }
+        });
+    </script>
+  </body>
 </html>

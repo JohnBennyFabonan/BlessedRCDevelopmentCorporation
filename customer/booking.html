@@ -1,222 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Book Appointment – Digital Realty</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Book Appointment – Digital Realty</title>
+    <script src="/assets/js/config.js"></script>
 
-  <style>
-    /* ===== GLOBAL ===== */
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #e7f2ed, #f4faf7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+    <style>
+      /* ===== GLOBAL ===== */
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #e7f2ed, #f4faf7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
 
-    /* ===== CARD CONTAINER ===== */
-    .booking-card {
-      width: 420px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 35px;
-      border-radius: 18px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-      animation: fadeIn .35s ease;
-      backdrop-filter: blur(8px);
-    }
+      /* ===== CARD CONTAINER ===== */
+      .booking-card {
+        width: 420px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        animation: fadeIn 0.35s ease;
+        backdrop-filter: blur(8px);
+      }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-    /* ===== HEADINGS ===== */
-    .title {
-      font-size: 28px;
-      font-weight: 700;
-      color: #1B5E20;
-      margin-bottom: 4px;
-      text-align: center;
-    }
+      /* ===== HEADINGS ===== */
+      .title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1b5e20;
+        margin-bottom: 4px;
+        text-align: center;
+      }
 
-    .subtitle {
-      font-size: 14px;
-      color: #546E7A;
-      text-align: center;
-      margin-bottom: 25px;
-    }
+      .subtitle {
+        font-size: 14px;
+        color: #546e7a;
+        text-align: center;
+        margin-bottom: 25px;
+      }
 
-    /* ===== FORM ===== */
-    label {
-      font-weight: 600;
-      font-size: 14px;
-      color: #1B5E20;
-      display: block;
-      margin-top: 14px;
-    }
+      /* ===== FORM ===== */
+      label {
+        font-weight: 600;
+        font-size: 14px;
+        color: #1b5e20;
+        display: block;
+        margin-top: 14px;
+      }
 
-    input, textarea {
-      width: 100%;
-      padding: 12px 14px;
-      margin-top: 6px;
-      border-radius: 12px;
-      border: 1px solid #c7dcd2;
-      font-size: 14px;
-      outline: none;
-      transition: 0.2s;
-      font-family: inherit;
-      background: #ffffff;
-    }
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px 14px;
+        margin-top: 6px;
+        border-radius: 12px;
+        border: 1px solid #c7dcd2;
+        font-size: 14px;
+        outline: none;
+        transition: 0.2s;
+        font-family: inherit;
+        background: #ffffff;
+      }
 
-    input:focus, textarea:focus {
-      border-color: #1B5E20;
-      box-shadow: 0 0 0 2px rgba(27,94,32,0.2);
-    }
+      input:focus,
+      textarea:focus {
+        border-color: #1b5e20;
+        box-shadow: 0 0 0 2px rgba(27, 94, 32, 0.2);
+      }
 
-    textarea {
-      resize: none;
-      height: 80px;
-    }
+      textarea {
+        resize: none;
+        height: 80px;
+      }
 
-    /* ===== BUTTON ===== */
-    .submit-btn {
-      margin-top: 25px;
-      width: 100%;
-      padding: 14px;
-      background: #1B5E20;
-      border: none;
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: 0.25s;
-    }
+      /* ===== BUTTON ===== */
+      .submit-btn {
+        margin-top: 25px;
+        width: 100%;
+        padding: 14px;
+        background: #1b5e20;
+        border: none;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.25s;
+      }
 
-    .submit-btn:hover {
-      background: #164c19;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(27,94,32,0.25);
-    }
+      .submit-btn:hover {
+        background: #164c19;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(27, 94, 32, 0.25);
+      }
 
-    /* ===== FOOTER LINK ===== */
-    .footer-text {
-      text-align: center;
-      margin-top: 18px;
-      font-size: 13px;
-      color: #546E7A;
-    }
+      /* ===== FOOTER LINK ===== */
+      .footer-text {
+        text-align: center;
+        margin-top: 18px;
+        font-size: 13px;
+        color: #546e7a;
+      }
 
-    .footer-text a {
-      color: #1B5E20;
-      font-weight: 600;
-      text-decoration: none;
-    }
+      .footer-text a {
+        color: #1b5e20;
+        font-weight: 600;
+        text-decoration: none;
+      }
 
-    .footer-text a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
+      .footer-text a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
 
-<body>
+  <body>
+    <script src="/assets/js/session.js"></script>
 
-<script src="/assets/js/session.js"></script>
+    <div class="booking-card">
+      <h2 class="title">Book Appointment</h2>
+      <p class="subtitle">Schedule a site viewing for this property</p>
 
-<div class="booking-card">
-  <h2 class="title">Book Appointment</h2>
-  <p class="subtitle">Schedule a site viewing for this property</p>
+      <form id="bookingForm">
+        <label>Full Name</label>
+        <input id="fullName" type="text" required />
 
-  <form id="bookingForm">
+        <label>Email</label>
+        <input id="email" type="email" required />
 
-    <label>Full Name</label>
-    <input id="fullName" type="text" required>
+        <label>Contact Number</label>
+        <input id="contact" type="text" maxlength="11" required />
 
-    <label>Email</label>
-    <input id="email" type="email" required>
+        <label>Preferred Date</label>
+        <input id="date" type="date" required />
 
-    <label>Contact Number</label>
-    <input id="contact" type="text" maxlength="11" required>
+        <label>Preferred Time</label>
+        <input id="time" type="time" required />
 
-    <label>Preferred Date</label>
-    <input id="date" type="date" required>
+        <label>Message (Optional)</label>
+        <textarea id="message" placeholder="Additional notes..."></textarea>
 
-    <label>Preferred Time</label>
-    <input id="time" type="time" required>
+        <button class="submit-btn" type="submit">Submit Booking</button>
 
-    <label>Message (Optional)</label>
-    <textarea id="message" placeholder="Additional notes..."></textarea>
+        <p class="footer-text">
+          Want to view another property?
+          <a href="../index.html">Back to Listings</a>
+        </p>
+      </form>
+    </div>
 
-    <button class="submit-btn" type="submit">Submit Booking</button>
+    <script>
+      /* ---------- DO NOT TOUCH: ORIGINAL FUNCTIONALITY ---------- */
+      if (!Session.requireRole("client", "/login.html")) throw "redirecting";
 
-    <p class="footer-text">
-      Want to view another property?
-      <a href="../index.html">Back to Listings</a>
-    </p>
-  </form>
-</div>
+      const user = Session.getUser();
+      const API_BASE = `${API_CONFIG.BASE_URL}/api`;
 
-<script>
-/* ---------- DO NOT TOUCH: ORIGINAL FUNCTIONALITY ---------- */
-if (!Session.requireRole("client", "/login.html")) throw "redirecting";
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("fullName").value = user.full_name || "";
+        document.getElementById("email").value = user.email || "";
+        document.getElementById("contact").value = user.contact || "";
+      });
 
-const user = Session.getUser();
-const API_BASE = "http://localhost:5000/api";
+      document
+        .getElementById("bookingForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const propertyId = localStorage.getItem("viewPropertyId");
+          if (!propertyId) {
+            alert("No property selected.");
+            return;
+          }
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("fullName").value = user.full_name || "";
-  document.getElementById("email").value = user.email || "";
-  document.getElementById("contact").value = user.contact || "";
-});
+          const selectedDate = new Date(document.getElementById("date").value);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          if (selectedDate < today) {
+            alert("You cannot book a past date.");
+            return;
+          }
 
-document.getElementById("bookingForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const propertyId = localStorage.getItem("viewPropertyId");
-  if (!propertyId) { alert("No property selected."); return; }
+          const timeValue = document.getElementById("time").value;
+          const [hour, minute] = timeValue.split(":").map(Number);
+          if (hour < 8 || hour > 16 || (hour === 16 && minute > 0)) {
+            alert("Booking hours are from 8:00 AM to 4:00 PM only.");
+            return;
+          }
 
-  const selectedDate = new Date(document.getElementById("date").value);
-  const today = new Date(); today.setHours(0,0,0,0);
-  if (selectedDate < today) { alert("You cannot book a past date."); return; }
+          const payload = {
+            user_id: user.id,
+            property_id: Number(propertyId),
+            full_name: document.getElementById("fullName").value,
+            email: document.getElementById("email").value,
+            contact: document.getElementById("contact").value,
+            date: document.getElementById("date").value,
+            time: timeValue,
+            message: document.getElementById("message").value || "",
+          };
 
-  const timeValue = document.getElementById("time").value;
-  const [hour, minute] = timeValue.split(":").map(Number);
-  if (hour < 8 || hour > 16 || (hour === 16 && minute > 0)) {
-    alert("Booking hours are from 8:00 AM to 4:00 PM only."); return;
-  }
+          try {
+            const res = await fetch(`${API_BASE}/appointments`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Session.getToken()}`,
+              },
+              body: JSON.stringify(payload),
+            });
 
-  const payload = {
-    user_id: user.id,
-    property_id: Number(propertyId),
-    full_name: document.getElementById("fullName").value,
-    email: document.getElementById("email").value,
-    contact: document.getElementById("contact").value,
-    date: document.getElementById("date").value,
-    time: timeValue,
-    message: document.getElementById("message").value || ""
-  };
+            const data = await res.json();
+            if (!res.ok) {
+              alert(data.error || "Unable to submit booking.");
+              return;
+            }
 
-  try {
-    const res = await fetch(`${API_BASE}/appointments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${Session.getToken()}` },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await res.json();
-    if (!res.ok) { alert(data.error || "Unable to submit booking."); return; }
-
-    alert("Your appointment request has been sent successfully!");
-    window.location.href = "appointments.html";
-
-  } catch (err) {
-    console.error("Booking Error:", err);
-    alert("A server error occurred. Please try again.");
-  }
-});
-</script>
-
-</body>
+            alert("Your appointment request has been sent successfully!");
+            window.location.href = "appointments.html";
+          } catch (err) {
+            console.error("Booking Error:", err);
+            alert("A server error occurred. Please try again.");
+          }
+        });
+    </script>
+  </body>
 </html>
