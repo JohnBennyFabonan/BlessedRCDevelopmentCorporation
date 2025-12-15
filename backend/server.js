@@ -4,7 +4,20 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors());
+// CORS Configuration - Allow frontend domain
+const corsOptions = {
+  origin: [
+    'https://digital-reality.onrender.com',
+    'https://digital-reality-mg9y.onrender.com',
+    'http://localhost:5500',
+    'http://localhost:3000',
+    'http://127.0.0.1:5500'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
