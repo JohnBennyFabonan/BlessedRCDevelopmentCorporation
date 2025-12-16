@@ -5,7 +5,7 @@ const API_CONFIG = {
     (window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1"
       ? "http://localhost:5000"
-      : "https://digital-reality-mg9y.onrender.com"),
+      : "https://blessedrandcdevelopmentcorp.com"),
 };
 
 // Export for use in other scripts
