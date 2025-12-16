@@ -7,6 +7,9 @@ const app = express();
 // CORS Configuration - Allow frontend domain
 const corsOptions = {
   origin: [
+    "https://blessedrandcdevelopmentcorp.com",
+    "https://www.blessedrandcdevelopmentcorp.com",
+    "https://api.blessedrandcdevelopmentcorp.com",
     "https://digital-reality.onrender.com",
     "https://digital-reality-mg9y.onrender.com",
     "http://localhost:5500",
