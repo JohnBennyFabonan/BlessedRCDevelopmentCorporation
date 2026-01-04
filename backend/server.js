@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const app = express();
 
-// CORS Configuration - Allow frontend domain
+// CORS Configuration
 const corsOptions = {
   origin: [
     "https://blessedrandcdevelopmentcorp.com",
@@ -15,6 +15,7 @@ const corsOptions = {
     "http://localhost:5500",
     "http://localhost:3000",
     "http://127.0.0.1:5500",
+    "http://localhost:5000",
   ],
   credentials: true,
   optionsSuccessStatus: 200,
@@ -24,7 +25,10 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// ROUTES
+// 🔥 ADD THIS LINE (THIS IS THE FIX)
+app.use("/api/chat", require("./routes/chat"));
+
+// OTHER ROUTES
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/properties", require("./routes/propertyRoutes"));
 app.use("/api/appointments", require("./routes/appointmentRoutes"));

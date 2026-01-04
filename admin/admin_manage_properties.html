@@ -12,153 +12,280 @@
     />
 
     <style>
-      /* ===== GLOBAL ===== */
-      body {
-        margin: 0;
-        font-family: "Poppins", sans-serif;
-        background: #eef5f0;
-        display: flex;
-        min-height: 100vh;
-      }
+  /* ===== GLOBAL ===== */
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #eef5f0;
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden; /* prevents page horizontal scroll */
+  }
 
-      .layout {
-        display: flex;
-        width: 100%;
-      }
+  .layout {
+    display: flex;
+    width: 100%;
+  }
 
-      /* ===== SIDEBAR ===== */
-      .sidebar {
-        width: 240px;
-        background: #0f4d20;
-        padding: 30px 20px;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-        position: fixed;
-        height: 100vh;
-        box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
-      }
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    width: 240px;
+    background: #0f4d20;
+    padding: 30px 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: fixed;
+    height: 100vh;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+  }
 
-      .sidebar-title {
-        font-size: 22px;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 25px;
-      }
+  .sidebar-title {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 25px;
+  }
 
-      .side-link {
-        padding: 12px 14px;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        text-decoration: none;
-        font-size: 15px;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        transition: 0.2s;
-      }
+  .side-link {
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.2s;
+  }
 
-      .side-link:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateX(5px);
-      }
+  .side-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+  }
 
-      .side-link.active {
-        background: white;
-        color: #1b5e20;
-        font-weight: 600;
-      }
+  .side-link.active {
+    background: white;
+    color: #1b5e20;
+    font-weight: 600;
+  }
 
-      /* ===== MAIN ===== */
-      .main-content {
-        margin-left: 270px;
-        padding: 40px;
-        width: calc(100% - 270px);
-      }
+  /* ===== MAIN ===== */
+  .main-content {
+  margin-left: 240px;
+  padding: 40px 40px 40px 60px; /* extra left padding */
+  width: calc(100% - 240px);
+  box-sizing: border-box;
+}
 
-      .page-title {
-        font-size: 30px;
-        font-weight: 700;
-        color: #1b5e20;
-        margin-bottom: 30px;
-      }
 
-      /* ===== TABLE ===== */
-      .table-wrapper {
-        background: white;
-        border-radius: 14px;
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
-        overflow-x: auto;
-      }
+  .page-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1b5e20;
+    margin-bottom: 30px;
+  }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-      }
+  /* ===== TABLE ===== */
+  .table-wrapper {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    overflow-x: auto; /* table scrolls, not page */
+    max-width: 100%;
+  }
 
-      thead {
-        background: #1b5e20;
-        color: white;
-      }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed; /* key fix */
+  }
 
-      th,
-      td {
-        padding: 14px 12px;
-        text-align: left;
-        border-bottom: 1px solid #e0e0e0;
-        vertical-align: middle;
-        white-space: nowrap;
-      }
+  thead {
+    background: #1b5e20;
+    color: white;
+  }
 
-      tbody tr:hover {
-        background: #f3f8f5;
-      }
+  th,
+  td {
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: middle;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
 
-      .table-img {
-        width: 80px;
-        height: 55px;
-        border-radius: 8px;
-        object-fit: cover;
-        background: #eee;
-      }
+  tbody tr:hover {
+    background: #f3f8f5;
+  }
 
-      .actions {
-        display: flex;
-        gap: 8px;
-      }
+  /* ===== COLUMN WIDTH CONTROL ===== */
+  th:nth-child(1),
+  td:nth-child(1) {
+    width: 90px; /* Image */
+  }
 
-      .edit-btn {
-        background: #1b5e20;
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-      }
+  th:nth-child(4),
+  td:nth-child(4) {
+    width: 110px; /* Price */
+  }
 
-      .edit-btn:hover {
-        background: #145a17;
-      }
+  th:nth-child(10),
+  td:nth-child(10) {
+    width: 140px; /* Actions */
+  }
 
-      .delete-btn {
-        background: #c62828;
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-      }
+  .table-img {
+    width: 80px;
+    height: 55px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #eee;
+  }
 
-      .delete-btn:hover {
-        background: #a41414;
-      }
-    </style>
+  .actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+
+  .edit-btn {
+    background: #1b5e20;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .edit-btn:hover {
+    background: #145a17;
+  }
+
+  .delete-btn {
+    background: #c62828;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .delete-btn:hover {
+    background: #a41414;
+  }
+  .actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.action-row {
+  display: flex;
+  gap: 8px;
+}
+
+.delete-full {
+  width: 80%;
+}
+.sold-btn {
+  background: #ff9800;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.sold-btn:hover {
+  background: #fb8c00;
+}
+
+.sold-btn:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-box {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  text-align: center;
+}
+
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btn-confirm {
+  background: #1b5e20;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-cancel {
+  background: #ccc;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #1b5e20;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.3s;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.error {
+  background: #c62828;
+}
+
+</style>
+
   </head>
 
   <body>
@@ -170,6 +297,9 @@
         <a href="admin_dashboard.html" class="side-link"
           ><i class="ri-dashboard-fill"></i> Dashboard</a
         >
+        <a href="admin_upload_property.html" class="side-link">
+    <i class="ri-upload-cloud-fill"></i> Upload Property
+  </a>
         <a href="admin_manage_properties.html" class="side-link active"
           ><i class="ri-building-4-fill"></i> Manage Properties</a
         >
@@ -224,112 +354,216 @@
     </div>
 
     <!-- ===== FUNCTIONALITY (UNCHANGED) ===== -->
-    <script>
-      const API_BASE = `${API_CONFIG.BASE_URL}/api`;
-      const FILE_BASE = API_CONFIG.BASE_URL;
+<script>
+  const API_BASE = `${API_CONFIG.BASE_URL}/api`;
+  const FILE_BASE = API_CONFIG.BASE_URL;
 
-      const user = JSON.parse(localStorage.getItem("user"));
-      const logged = localStorage.getItem("loggedIn");
+  /* ================= TOAST ================= */
+  function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.className = `toast show ${type === "error" ? "error" : ""}`;
 
-      if (!user || logged !== "true" || user.role !== "admin") {
-        alert("Admin access required.");
-        window.location.href = "../login.html";
+    setTimeout(() => {
+      toast.className = "toast";
+    }, 3000);
+  }
+
+  /* ================= MODAL CONFIRM ================= */
+  function showConfirm(message) {
+    return new Promise((resolve) => {
+      const overlay = document.getElementById("modalOverlay");
+      const msg = document.getElementById("modalMessage");
+      const btnConfirm = document.getElementById("modalConfirm");
+      const btnCancel = document.getElementById("modalCancel");
+
+      msg.textContent = message;
+      overlay.style.display = "flex";
+
+      btnConfirm.onclick = () => {
+        overlay.style.display = "none";
+        resolve(true);
+      };
+
+      btnCancel.onclick = () => {
+        overlay.style.display = "none";
+        resolve(false);
+      };
+    });
+  }
+
+  /* ================= AUTH CHECK ================= */
+  const user = JSON.parse(localStorage.getItem("user"));
+  const logged = localStorage.getItem("loggedIn");
+
+  if (!user || logged !== "true" || user.role !== "admin") {
+    showToast("Admin access required.", "error");
+    setTimeout(() => {
+      window.location.href = "../login.html";
+    }, 1500);
+  }
+
+  /* ================= LOAD PROPERTIES ================= */
+  document.addEventListener("DOMContentLoaded", async () => {
+    const container = document.getElementById("propertyList");
+
+    try {
+      const res = await fetch(`${API_BASE}/properties`);
+      const json = await res.json();
+      if (!json.success) throw new Error();
+
+      const properties = json.data;
+      container.innerHTML = "";
+
+      if (!properties.length) {
+        container.innerHTML = `<tr><td colspan="10">No properties found.</td></tr>`;
+        return;
       }
 
-      document.addEventListener("DOMContentLoaded", async () => {
-        const container = document.getElementById("propertyList");
-
-        try {
-          const res = await fetch(`${API_BASE}/properties`);
-          const json = await res.json();
-          if (!json.success) throw new Error();
-
-          const properties = json.data;
-          container.innerHTML = "";
-
-          if (!properties.length) {
-            container.innerHTML = `<tr><td colspan="10">No properties found.</td></tr>`;
-            return;
-          }
-
-          for (const p of properties) {
-            let images = [];
-            if (Array.isArray(p.images)) images = p.images;
-            else if (typeof p.images === "string") {
-              try {
-                images = JSON.parse(p.images);
-              } catch {}
-            }
-
-            // ✅ IMAGE FIX (S3 + LOCAL + FALLBACK)
-            let img = "../assets/img/no-image.jpg";
-            if (images.length > 0) {
-              img = images[0].startsWith("http")
-                ? images[0]
-                : `${FILE_BASE}${images[0]}`;
-            }
-
-            let agentName = "Not Assigned";
-            if (p.agent) {
-              try {
-                const resAgent = await fetch(`${API_BASE}/agents/${p.agent}`);
-                const agentJson = await resAgent.json();
-                if (agentJson.success) agentName = agentJson.data.full_name;
-              } catch {}
-            }
-
-            const row = document.createElement("tr");
-            row.innerHTML = `
-        <td><img src="${img}" class="table-img"></td>
-        <td><strong>${p.title}</strong></td>
-        <td>${p.location || "N/A"}</td>
-        <td>₱${Number(p.price || 0).toLocaleString()}</td>
-        <td>${p.lot_area || "N/A"} sqm</td>
-        <td>${p.phase || "N/A"}</td>
-        <td>${p.type || "N/A"}</td>
-        <td>${p.status || "N/A"}</td>
-        <td>${agentName}</td>
-        <td>
-          <div class="actions">
-            <button class="edit-btn" onclick="editProperty(${
-              p.id
-            })">Edit</button>
-            <button class="delete-btn" onclick="deleteProperty(${
-              p.id
-            })">Delete</button>
-          </div>
-        </td>
-      `;
-            container.appendChild(row);
-          }
-        } catch {
-          container.innerHTML = `<tr><td colspan="10">Error loading properties.</td></tr>`;
+      for (const p of properties) {
+        /* ===== IMAGE HANDLING ===== */
+        let images = [];
+        if (Array.isArray(p.images)) images = p.images;
+        else if (typeof p.images === "string") {
+          try {
+            images = JSON.parse(p.images);
+          } catch {}
         }
+
+        let img = "../assets/img/no-image.jpg";
+        if (images.length > 0) {
+          img = images[0].startsWith("http")
+            ? images[0]
+            : `${FILE_BASE}${images[0]}`;
+        }
+
+        /* ===== AGENT NAME ===== */
+        let agentName = "Not Assigned";
+        if (p.agent) {
+          try {
+            const resAgent = await fetch(`${API_BASE}/agents/${p.agent}`);
+            const agentJson = await resAgent.json();
+            if (agentJson.success) agentName = agentJson.data.full_name;
+          } catch {}
+        }
+
+        /* ===== TABLE ROW ===== */
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td><img src="${img}" class="table-img"></td>
+          <td><strong>${p.title}</strong></td>
+          <td>${p.location || "N/A"}</td>
+          <td>₱${Number(p.price || 0).toLocaleString()}</td>
+          <td>${p.lot_area || "N/A"} sqm</td>
+          <td>${p.phase || "N/A"}</td>
+          <td>${p.type || "N/A"}</td>
+          <td>${p.status || "N/A"}</td>
+          <td>${agentName}</td>
+          <td>
+            <div class="actions">
+              <div class="action-row">
+                <button class="edit-btn" onclick="editProperty(${p.id})">Edit</button>
+                <button
+                  class="sold-btn"
+                  onclick="markAsSold(${p.id})"
+                  ${p.status === "Sold" ? "disabled" : ""}
+                >
+                  Sold
+                </button>
+              </div>
+
+              <button
+                class="delete-btn delete-full"
+                onclick="deleteProperty(${p.id})"
+                ${p.status === "Sold" ? "disabled" : ""}
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        `;
+
+        container.appendChild(row);
+      }
+    } catch (error) {
+      console.error(error);
+      container.innerHTML = `<tr><td colspan="10">Error loading properties.</td></tr>`;
+    }
+  });
+
+  /* ================= ACTIONS ================= */
+  function editProperty(id) {
+    localStorage.setItem("editPropertyId", id);
+    window.location.href = "admin_edit_property.html";
+  }
+
+  async function markAsSold(id) {
+    if (!(await showConfirm("Mark this property as SOLD?"))) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/properties/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "Sold" }),
       });
 
-      function editProperty(id) {
-        localStorage.setItem("editPropertyId", id);
-        window.location.href = "admin_edit_property.html";
-      }
+      const json = await res.json();
 
-      async function deleteProperty(id) {
-        if (!confirm("Delete this property?")) return;
-        try {
-          const res = await fetch(`${API_BASE}/properties/${id}`, {
-            method: "DELETE",
-          });
-          const json = await res.json();
-          if (res.ok && json.success) location.reload();
-          else alert("Failed to delete property.");
-        } catch {
-          alert("Server error.");
-        }
+      if (res.ok && json.success) {
+        showToast("Property marked as Sold.");
+        setTimeout(() => location.reload(), 1200);
+      } else {
+        showToast(json.message || "Failed to mark as sold.", "error");
       }
+    } catch (error) {
+      console.error(error);
+      showToast("Server error.", "error");
+    }
+  }
 
-      function logout() {
-        localStorage.clear();
-        window.location.href = "../index.html";
+  async function deleteProperty(id) {
+    if (!(await showConfirm("Delete this property?"))) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/properties/${id}`, {
+        method: "DELETE",
+      });
+
+      const json = await res.json();
+
+      if (res.ok && json.success) {
+        showToast("Property deleted.");
+        setTimeout(() => location.reload(), 1200);
+      } else {
+        showToast("Failed to delete property.", "error");
       }
-    </script>
+    } catch (error) {
+      console.error(error);
+      showToast("Server error.", "error");
+    }
+  }
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = "../index.html";
+  }
+</script>
+
+
+<!-- ===== MODAL ===== -->
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal-box">
+    <p id="modalMessage"></p>
+    <div class="modal-actions">
+      <button id="modalCancel" class="btn-cancel">Cancel</button>
+      <button id="modalConfirm" class="btn-confirm">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast" class="toast"></div>
+
+
   </body>
 </html>

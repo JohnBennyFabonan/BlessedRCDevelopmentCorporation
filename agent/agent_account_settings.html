@@ -1,175 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Agent Account Settings – Digital Realty</title>
-    <script src="/assets/js/config.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <title>Agent Account Settings – Digital Realty</title>
+  <script src="/assets/js/config.js"></script>
 
-    <style>
-      body {
-        margin: 0;
-        font-family: "Poppins", sans-serif;
-        background: #eef5f0;
-      }
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #eef5f0;
+    }
 
-      /* NAVBAR */
-      .navbar {
-        background: white;
-        padding: 14px 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
+    /* ===============================
+       NAVBAR (MATCH AGENT DASHBOARD)
+    ================================ */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 98vw;
+      height: 70px;
 
-      .nav-right a {
-        margin-left: 20px;
-        font-weight: 600;
-        color: #0a5c45;
-        text-decoration: none;
-        padding: 8px 14px;
-        border-radius: 8px;
-        transition: 0.2s;
-      }
-      .nav-right a:hover {
-        background: #e3f2ec;
-      }
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
-      /* MAIN SETTINGS CARD */
-      .dashboard-container {
-        max-width: 700px;
-        margin: auto;
-        padding: 40px;
-      }
+      padding: 0 24px;
+      background: #1b5e20;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      z-index: 2000;
+    }
 
-      .dashboard-title {
-        font-size: 30px;
-        font-weight: 700;
-        color: #0a5c45;
-        margin-bottom: 5px;
-      }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+    }
 
-      .dashboard-subtitle {
-        font-size: 16px;
-        color: #4d6658;
-        margin-bottom: 25px;
-      }
+    .nav-logo {
+      height: 45px;
+      width: auto;
+    }
 
-      .auth-form label {
-        font-weight: 600;
-        color: #0a5c45;
-        margin-top: 14px;
-        display: block;
-      }
+    .nav-right {
+      display: flex;
+      gap: 12px;
+    }
 
-      .auth-form input {
-        width: 100%;
-        padding: 12px 14px;
-        margin-top: 6px;
-        border: 1px solid #aac7b1;
-        border-radius: 10px;
-        background: #fafafa;
-        outline: none;
-        transition: 0.2s;
-      }
+    .nav-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: background 0.2s ease;
+    }
 
-      .auth-form input:focus {
-        border-color: #0a5c45;
-        box-shadow: 0 0 0 3px rgba(10, 92, 69, 0.25);
-      }
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(255,255,255,0.15);
+    }
 
-      /* BUTTONS */
-      .auth-btn {
-        width: 100%;
-        padding: 12px;
-        background: #0a5c45;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 16px;
-        margin-top: 20px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.25s;
-      }
+    /* ===============================
+       MAIN SETTINGS CARD
+    ================================ */
+    .dashboard-container {
+      max-width: 700px;
+      margin: 110px auto 40px; /* space for fixed navbar */
+      padding: 40px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+    }
 
-      .auth-btn:hover {
-        background: #084d36;
-      }
+    .dashboard-title {
+      font-size: 30px;
+      font-weight: 700;
+      color: #0a5c45;
+      margin-bottom: 5px;
+    }
 
-      .cancel-btn {
-        width: 100%;
-        padding: 12px;
-        background: #555;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-size: 16px;
-        margin-top: 12px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.25s;
-      }
+    .dashboard-subtitle {
+      font-size: 16px;
+      color: #4d6658;
+      margin-bottom: 25px;
+    }
 
-      .cancel-btn:hover {
-        background: #333;
-      }
-    </style>
-  </head>
+    .auth-form label {
+      font-weight: 600;
+      color: #0a5c45;
+      margin-top: 14px;
+      display: block;
+    }
 
-  <body>
-    <script src="/assets/js/session.js"></script>
+    .auth-form input {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 6px;
+      border: 1px solid #aac7b1;
+      border-radius: 10px;
+      background: #fafafa;
+      outline: none;
+      transition: 0.2s;
+    }
 
-    <!-- NAVBAR -->
-    <header class="navbar">
-      <div class="nav-left">
-        <h2 style="margin: 0; font-weight: 700; color: #0a5c45">
-          Digital Realty – Agent
-        </h2>
-      </div>
+    .auth-form input:focus {
+      border-color: #0a5c45;
+      box-shadow: 0 0 0 3px rgba(10, 92, 69, 0.25);
+    }
 
-      <nav class="nav-right">
-        <a href="agent_dashboard.html">Dashboard</a>
-        <a href="agent_account_settings.html" class="active"
-          >Account Settings</a
-        >
-        <a href="#" id="logoutBtn">Logout</a>
-      </nav>
-    </header>
+    /* BUTTONS */
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      background: #0a5c45;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.25s;
+    }
 
-    <!-- ACCOUNT SETTINGS -->
-    <div class="dashboard-container">
-      <h2 class="dashboard-title">Account Settings</h2>
-      <p class="dashboard-subtitle">Manage your personal information</p>
+    .auth-btn:hover {
+      background: #084d36;
+    }
 
-      <form class="auth-form" id="profileForm">
-        <label>Full Name</label>
-        <input type="text" id="agentFullName" disabled required />
+    .cancel-btn {
+      width: 100%;
+      padding: 12px;
+      background: #555;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-top: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.25s;
+    }
 
-        <label>Email (cannot be changed)</label>
-        <input type="email" id="agentEmail" disabled />
+    .cancel-btn:hover {
+      background: #333;
+    }
+  </style>
+</head>
 
-        <label>Contact Number</label>
-        <input type="text" id="agentContact" maxlength="11" disabled required />
+<body>
+  <script src="/assets/js/session.js"></script>
 
-        <label>Change Password (optional)</label>
-        <input
-          type="password"
-          id="agentPassword"
-          disabled
-          placeholder="Enter new password"
-        />
-
-        <div id="buttonArea">
-          <button type="button" class="auth-btn" id="editBtn">
-            Edit Settings
-          </button>
-        </div>
-      </form>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">
+      <img
+        src="/assets/img/LOGO-removebg-preview.png"
+        class="nav-logo"
+        alt="Logo"
+      />
+      <span>Blessed R&C Development Corporation</span>
     </div>
+
+    <div class="nav-right">
+      <a href="agent_dashboard.html" class="nav-link">Dashboard</a>
+      <a href="agent_account_settings.html" class="nav-link active">
+        Account Setting
+      </a>
+      <a href="#" id="logoutBtn" class="nav-link">Logout</a>
+    </div>
+  </nav>
+
+  <!-- ACCOUNT SETTINGS -->
+  <div class="dashboard-container">
+    <h2 class="dashboard-title">Account Settings</h2>
+    <p class="dashboard-subtitle">Manage your personal information</p>
+
+    <form class="auth-form" id="profileForm">
+      <label>Full Name</label>
+      <input type="text" id="agentFullName" disabled required />
+
+      <label>Email (cannot be changed)</label>
+      <input type="email" id="agentEmail" disabled />
+
+      <label>Contact Number</label>
+      <input type="text" id="agentContact" maxlength="11" disabled required />
+
+      <label>Change Password (optional)</label>
+      <input
+        type="password"
+        id="agentPassword"
+        disabled
+        placeholder="Enter new password"
+      />
+
+      <div id="buttonArea">
+        <button type="button" class="auth-btn" id="editBtn">
+          Edit Settings
+        </button>
+      </div>
+    </form>
+  </div>
 
     <script>
       const API_BASE = `${API_CONFIG.BASE_URL}/api`;

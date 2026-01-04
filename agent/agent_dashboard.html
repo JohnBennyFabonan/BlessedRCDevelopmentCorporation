@@ -1,329 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Agent Dashboard – Digital Realty</title>
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <script src="/assets/js/config.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <title>Agent Dashboard – Digital Realty</title>
 
-    <style>
-      /* Modal Overlay */
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 9999;
-        left: 0;
-        top: 0;
+  <!-- STYLES -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+
+  <!-- CONFIG -->
+  <script src="/assets/js/config.js"></script>
+
+  <style>
+    /* ===============================
+       GLOBAL RESET
+    ================================ */
+    * {
+      box-sizing: border-box;
+    }
+
+    /* ===============================
+       NAVBAR
+    ================================ */
+    .navbar {
+  position: fixed;        /* 🔥 key fix */
+  top: 0;
+  left: 0;
+  width: 100vw;           /* full screen width */
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 40px;
+  background: #1b5e20;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  z-index: 2000;
+}
+
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .nav-logo {
+      height: 45px;
+      width: auto;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 12px;
+    }
+
+    .nav-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: background 0.2s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* ===============================
+       MODALS
+    ================================ */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(3px);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      padding: 25px;
+      border-radius: 15px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      right: 18px;
+      top: 15px;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    .modal-item {
+      background: #f7f7f7;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      border-left: 5px solid #0a5c45;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .nav-right {
         width: 100%;
-        height: 100%;
-        backdrop-filter: blur(3px);
-        background: rgba(0, 0, 0, 0.45);
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
+        justify-content: space-between;
       }
+    }
 
-      /* Modal Box */
-      .modal-box {
-        background: #ffffff;
-        width: 90%;
-        max-width: 600px;
-        max-height: 80vh;
-        border-radius: 15px;
-        padding: 25px;
-        overflow-y: auto;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        position: relative;
-      }
+    /* ===== FORCE NAVBAR VISIBILITY ===== */
+.navbar .nav-link {
+  color: #ffffff !important;
+  font-weight: 600;
+  opacity: 1 !important;
+  display: inline-block;
+}
 
-      /* Close Button */
-      .close-btn {
-        position: absolute;
-        right: 18px;
-        top: 15px;
-        font-size: 26px;
-        cursor: pointer;
-        color: #444;
-      }
+.navbar .nav-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
 
-      .close-btn:hover {
-        color: #0a5c45;
-      }
+  </style>
+</head>
 
-      .modal-item {
-        background: #f7f7f7;
-        padding: 15px;
-        margin-bottom: 12px;
-        border-radius: 12px;
-        border-left: 5px solid #0a5c45;
-      }
-    </style>
-  </head>
+<body class="auth-body">
 
-  <body class="auth-body">
-    <script src="/assets/js/session.js"></script>
+  <!-- SESSION -->
+  <script src="/assets/js/session.js"></script>
 
-    <header class="navbar">
-      <div class="nav-left">
-        <h2 style="margin: 0; font-weight: 700; color: #0a5c45">
-          Blessed R&C Development Corporation
-        </h2>
-      </div>
-
-      <nav class="nav-right">
-        <a href="agent_dashboard.html" class="nav-link">Dashboard</a>
-        <a href="agent_account_settings.html" class="nav-link">Profile</a>
-        <a href="#" class="nav-link" id="logoutLink">Logout</a>
-      </nav>
-    </header>
-
-    <!-- MAIN DASHBOARD -->
-    <div class="dashboard-container">
-      <h2 class="dashboard-title">Welcome, <span id="agentName"></span>!</h2>
-      <p class="dashboard-subtitle">Here is your daily overview</p>
-
-      <div class="stats-section">
-        <div class="stats-card" onclick="showAllAppointments()">
-          <div class="stats-icon">📅</div>
-          <h3 id="totalAppointments">0</h3>
-          <p>Total Assigned Appointments</p>
-        </div>
-
-        <div class="stats-card" onclick="showUpcomingAppointments()">
-          <div class="stats-icon">⏳</div>
-          <h3 id="upcomingCount">0</h3>
-          <p>Upcoming</p>
-        </div>
-
-        <div class="stats-card" onclick="showAssignedProperties()">
-          <div class="stats-icon">🏡</div>
-          <h3 id="totalProperties">0</h3>
-          <p>Assigned Properties</p>
-        </div>
-      </div>
-
-      <h3 class="section-title">Today's Appointments</h3>
-      <div id="todayAppointments"></div>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">
+      <img
+        src="/assets/img/LOGO-removebg-preview.png"
+        class="nav-logo"
+        alt="Logo"
+      />
+      <span>Blessed R&C Development Corporation</span>
     </div>
 
-    <!-- MODALS -->
-    <div id="modalAll" class="modal">
-      <div class="modal-box">
-        <h2>All Assigned Appointments</h2>
-        <span class="close-btn" onclick="closeModal('modalAll')">&times;</span>
-        <div id="modalAllContent"></div>
+    <div class="nav-right">
+  <a href="agent_dashboard.html" class="nav-link">Dashboard</a>
+
+  <!-- NEW MESSAGES BUTTON -->
+  <a href="agent_chat.html" class="nav-link">
+    💬 Messages
+  </a>
+
+  <a href="agent_account_settings.html" class="nav-link">Account Setting</a>
+  <a href="#" id="logoutLink" class="nav-link">Logout</a>
+</div>
+  </nav>
+
+  <!-- MAIN DASHBOARD -->
+  <div class="dashboard-container">
+    <h2 class="dashboard-title">
+      Welcome, <span id="agentName"></span>!
+    </h2>
+    <p class="dashboard-subtitle">Here is your daily overview</p>
+
+    <div class="stats-section">
+      <div class="stats-card" onclick="showAllAppointments()">
+        <div class="stats-icon">📅</div>
+        <h3 id="totalAppointments">0</h3>
+        <p>Total Assigned Appointments</p>
+      </div>
+
+      <div class="stats-card" onclick="showUpcomingAppointments()">
+        <div class="stats-icon">⏳</div>
+        <h3 id="upcomingCount">0</h3>
+        <p>Upcoming</p>
+      </div>
+
+      <div class="stats-card" onclick="showAssignedProperties()">
+        <div class="stats-icon">🏡</div>
+        <h3 id="totalProperties">0</h3>
+        <p>Assigned Properties</p>
       </div>
     </div>
 
-    <div id="modalUpcoming" class="modal">
-      <div class="modal-box">
-        <h2>Upcoming Appointments</h2>
-        <span class="close-btn" onclick="closeModal('modalUpcoming')"
-          >&times;</span
-        >
-        <div id="modalUpcomingContent"></div>
-      </div>
+    <h3 class="section-title">Today's Appointments</h3>
+    <div id="todayAppointments"></div>
+  </div>
+
+  <!-- MODALS -->
+  <div id="modalAll" class="modal">
+    <div class="modal-box">
+      <span class="close-btn" onclick="closeModal('modalAll')">&times;</span>
+      <h2>All Assigned Appointments</h2>
+      <div id="modalAllContent"></div>
     </div>
+  </div>
 
-    <div id="modalProperties" class="modal">
-      <div class="modal-box">
-        <h2>Assigned Properties</h2>
-        <span class="close-btn" onclick="closeModal('modalProperties')"
-          >&times;</span
-        >
-        <div id="modalPropertiesContent"></div>
-      </div>
+  <div id="modalUpcoming" class="modal">
+    <div class="modal-box">
+      <span class="close-btn" onclick="closeModal('modalUpcoming')">&times;</span>
+      <h2>Upcoming Appointments</h2>
+      <div id="modalUpcomingContent"></div>
     </div>
+  </div>
 
-    <script>
-      const API_BASE = `${API_CONFIG.BASE_URL}/api`;
+  <div id="modalProperties" class="modal">
+    <div class="modal-box">
+      <span class="close-btn" onclick="closeModal('modalProperties')">&times;</span>
+      <h2>Assigned Properties</h2>
+      <div id="modalPropertiesContent"></div>
+    </div>
+  </div>
 
-      let assignedAppointments = [];
-      let assignedProperties = [];
+  <!-- SCRIPT -->
+  <script>
+  const API_BASE = `${API_CONFIG.BASE_URL}/api`;
+  let assignedAppointments = [];
+  let assignedProperties = [];
 
-      // LOAD DASHBOARD
-      document.addEventListener("DOMContentLoaded", () => {
-        if (!Session.requireRole("agent", "/agent/agent_login.html")) return;
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!Session.requireRole("agent", "/agent/agent_login.html")) return;
 
-        document.getElementById("logoutLink").addEventListener("click", () => {
-          Session.logout("/login.html");
-        });
+    document.getElementById("logoutLink").addEventListener("click", () => {
+      Session.logout("/login.html");
+    });
 
-        loadAgentDashboard();
+    loadAgentDashboard();
+  });
+
+  async function cleanResponse(res) {
+    const json = await res.json();
+    return Array.isArray(json) ? json : json.data || [];
+  }
+
+  async function loadAgentDashboard() {
+    const agent = Session.getUser();
+    document.getElementById("agentName").textContent = agent.full_name;
+
+    const today = new Date().toISOString().split("T")[0];
+    const todayContainer = document.getElementById("todayAppointments");
+    todayContainer.innerHTML = "Loading...";
+
+    try {
+      /* ===============================
+         LOAD PROPERTIES (AGENT + ADMIN)
+      =============================== */
+
+      // 1️⃣ Agent-assigned properties
+      let agentProperties = [];
+      const agentRes = await fetch(`${API_BASE}/agents/assigned/${agent.id}`);
+      if (agentRes.ok) {
+        agentProperties = await cleanResponse(agentRes);
+      }
+
+      // 2️⃣ Admin-uploaded properties (global)
+      let adminProperties = [];
+      const adminRes = await fetch(`${API_BASE}/properties`);
+      if (adminRes.ok) {
+        adminProperties = await cleanResponse(adminRes);
+      }
+
+      // 3️⃣ Merge without duplicates
+      const propertyMap = new Map();
+      [...agentProperties, ...adminProperties].forEach(p => {
+        propertyMap.set(p.id, p);
       });
 
-      // CLEAN RESPONSE HANDLER
-      async function cleanResponse(fetchResponse) {
-        const raw = await fetchResponse.json();
-        if (Array.isArray(raw)) return raw;
-        if (raw.data && Array.isArray(raw.data)) return raw.data;
-        return [];
+      assignedProperties = Array.from(propertyMap.values());
+      document.getElementById("totalProperties").textContent =
+        assignedProperties.length;
+
+      /* ===============================
+         LOAD APPOINTMENTS
+      =============================== */
+
+      assignedAppointments = [];
+
+      for (const p of assignedProperties) {
+        const apRes = await fetch(`${API_BASE}/appointments/property/${p.id}`);
+        if (!apRes.ok) continue;
+
+        const appts = await cleanResponse(apRes);
+        appts
+          .filter(a => a.status?.toLowerCase() !== "declined")
+          .forEach(a => assignedAppointments.push(a));
       }
 
-      // LOAD DASHBOARD
-      async function loadAgentDashboard() {
-        const agent = Session.getUser();
-        if (!agent) return;
+      document.getElementById("totalAppointments").textContent =
+        assignedAppointments.length;
 
-        document.getElementById("agentName").textContent = agent.full_name;
+      document.getElementById("upcomingCount").textContent =
+        assignedAppointments.filter(a => a.date >= today).length;
 
-        const today = new Date().toISOString().split("T")[0];
-        const todayContainer = document.getElementById("todayAppointments");
-        todayContainer.innerHTML = "Loading...";
+      loadTodayAppointments(today, todayContainer);
 
-        try {
-          // LOAD PROPERTIES
-          const propsFetch = await fetch(
-            `${API_BASE}/agents/assigned/${agent.id}`
-          );
-          const propsJson = await cleanResponse(propsFetch);
-          assignedProperties = propsJson;
+    } catch (err) {
+      console.error(err);
+      todayContainer.innerHTML =
+        "<p style='color:red'>Failed to load data.</p>";
+    }
+  }
 
-          document.getElementById("totalProperties").textContent =
-            assignedProperties.length;
+  function loadTodayAppointments(today, container) {
+    const list = assignedAppointments.filter(a => a.date === today);
 
-          assignedAppointments = [];
+    if (!list.length) {
+      container.innerHTML = "<p>No appointments today.</p>";
+      return;
+    }
 
-          // LOAD APPOINTMENTS FOR EACH PROPERTY
-          for (const property of assignedProperties) {
-            const apFetch = await fetch(
-              `${API_BASE}/appointments/property/${property.id}`
-            );
-            const apJson = await cleanResponse(apFetch);
+    container.innerHTML = "";
+    list.sort((a, b) => a.time.localeCompare(b.time));
 
-            apJson.forEach((app) => {
-              assignedAppointments.push({
-                ...app,
+    list.forEach(app => {
+      container.innerHTML += `
+        <div class="appointment-card">
+          <h3>${app.property_title}</h3>
+          <p><strong>Time:</strong> ${app.time}</p>
+          <p><strong>Client:</strong> ${app.full_name}</p>
+          <p><strong>Contact:</strong> ${app.contact}</p>
+          <p><strong>Status:</strong> ${app.status}</p>
+        </div>`;
+    });
+  }
 
-                // ✅ FIXED — Use backend value, not undefined property.title
-                property_title: app.property_title,
-              });
-            });
-          }
+  function openModal(id) {
+    document.getElementById(id).style.display = "flex";
+  }
 
-          document.getElementById("totalAppointments").textContent =
-            assignedAppointments.length;
+  function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+  }
 
-          const upcoming = assignedAppointments.filter((a) => a.date >= today);
-          document.getElementById("upcomingCount").textContent =
-            upcoming.length;
-
-          loadTodayAppointments(today, todayContainer);
-        } catch (err) {
-          console.error(err);
-          todayContainer.innerHTML =
-            "<p style='color:red;'>Error loading data.</p>";
-        }
-      }
-
-      // TODAY APPOINTMENTS
-      function loadTodayAppointments(today, container) {
-        const list = assignedAppointments.filter((a) => a.date === today);
-
-        if (!list.length) {
-          container.innerHTML = "<p>No appointments today.</p>";
-          return;
-        }
-
-        container.innerHTML = "";
-
-        list.sort((a, b) => a.time.localeCompare(b.time));
-
-        list.forEach((app) => {
-          container.innerHTML += `
-      <div class="appointment-card">
-        <h3>${app.property_title}</h3>
-        <p><strong>Time:</strong> ${app.time}</p>
-        <p><strong>Client:</strong> ${app.full_name}</p>
-        <p><strong>Contact:</strong> ${app.contact}</p>
-        <p><strong>Status:</strong> ${app.status}</p>
-      </div>`;
-        });
-      }
-
-      // MODAL FUNCTIONS
-      function openModal(id) {
-        document.getElementById(id).style.display = "flex";
-      }
-      function closeModal(id) {
-        document.getElementById(id).style.display = "none";
-      }
-
-      // ALL APPOINTMENTS MODAL
-      function showAllAppointments() {
-        const box = document.getElementById("modalAllContent");
-        box.innerHTML = "";
-
-        if (!assignedAppointments.length) {
-          box.innerHTML = "<p>No assigned appointments.</p>";
-          openModal("modalAll");
-          return;
-        }
-
-        const sorted = [...assignedAppointments].sort((a, b) =>
-          a.date === b.date
-            ? a.time.localeCompare(b.time)
-            : a.date.localeCompare(b.date)
-        );
-
-        sorted.forEach((app) => {
-          box.innerHTML += `
+  function showAllAppointments() {
+    const box = document.getElementById("modalAllContent");
+    box.innerHTML = assignedAppointments.map(a => `
       <div class="modal-item">
-        <strong>${app.property_title}</strong><br>
-        📅 ${app.date} — 🕒 ${app.time}<br>
-        👤 ${app.full_name} (${app.contact})<br>
-        Status: ${app.status}
-      </div>`;
-        });
+        <strong>${a.property_title}</strong><br>
+        📅 ${a.date} 🕒 ${a.time}<br>
+        👤 ${a.full_name} (${a.contact})
+      </div>`).join("");
+    openModal("modalAll");
+  }
 
-        openModal("modalAll");
-      }
+  function showUpcomingAppointments() {
+    const today = new Date().toISOString().split("T")[0];
+    const box = document.getElementById("modalUpcomingContent");
 
-      // UPCOMING APPOINTMENTS MODAL
-      function showUpcomingAppointments() {
-        const box = document.getElementById("modalUpcomingContent");
-        box.innerHTML = "";
+    box.innerHTML = assignedAppointments
+      .filter(a => a.date >= today)
+      .map(a => `
+        <div class="modal-item">
+          <strong>${a.property_title}</strong><br>
+          📅 ${a.date} 🕒 ${a.time}
+        </div>`).join("");
 
-        const today = new Date().toISOString().split("T")[0];
-        const upcoming = assignedAppointments.filter((a) => a.date >= today);
+    openModal("modalUpcoming");
+  }
 
-        if (!upcoming.length) {
-          box.innerHTML = "<p>No upcoming appointments.</p>";
-          openModal("modalUpcoming");
-          return;
-        }
+  function showAssignedProperties() {
+    const box = document.getElementById("modalPropertiesContent");
+    box.innerHTML = assignedProperties.map(p =>
+      `<div class="modal-item">🏡 ${p.title}</div>`
+    ).join("");
+    openModal("modalProperties");
+  }
+</script>
 
-        upcoming.forEach((app) => {
-          box.innerHTML += `
-      <div class="modal-item">
-        <strong>${app.property_title}</strong><br>
-        📅 ${app.date} — 🕒 ${app.time}<br>
-        👤 ${app.full_name} (${app.contact})<br>
-        Status: ${app.status}
-      </div>`;
-        });
 
-        openModal("modalUpcoming");
-      }
-
-      // ASSIGNED PROPERTIES
-      function showAssignedProperties() {
-        const box = document.getElementById("modalPropertiesContent");
-        box.innerHTML = "";
-
-        if (!assignedProperties.length) {
-          box.innerHTML = "<p>No assigned properties.</p>";
-          openModal("modalProperties");
-          return;
-        }
-
-        assignedProperties.forEach((p) => {
-          box.innerHTML += `
-      <div class="modal-item">🏡 ${p.title}</div>`;
-        });
-
-        openModal("modalProperties");
-      }
-    </script>
-  </body>
+</body>
 </html>

@@ -5,6 +5,9 @@
     <title>Sign Up – Digital Realty</title>
     <link rel="stylesheet" href="../assets/css/style.css" />
     <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/navbar.js"></script>
+    <link rel="stylesheet" href="/assets/css/main.css">
+
 
     <style>
       #strengthBar {
@@ -40,13 +43,59 @@
       .password-wrapper {
         position: relative;
       }
+
+      /* ===== SUCCESS MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  background: #fff;
+  width: 90%;
+  max-width: 380px;
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.modal-box h3 {
+  margin: 0 0 10px;
+  color: #0f4d20;
+}
+
+.modal-box p {
+  font-size: 15px;
+  color: #555;
+}
+
+.modal-box button {
+  margin-top: 18px;
+  padding: 10px 24px;
+  background: #0f4d20;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
     </style>
   </head>
+
+  <div id="navbar"></div>
 
   <body class="auth-body">
     <div class="auth-container">
       <h2 class="auth-title">Create Account</h2>
-      <p class="auth-subtitle">Join Digital Realty today</p>
+      <p class="auth-subtitle">Join Blessed R&C Development Corp. today</p>
 
       <form class="auth-form" id="signupForm">
         <label>Full Name</label>
@@ -225,13 +274,30 @@
 
             localStorage.setItem("userEmail", email);
 
-            alert("Account created successfully! Please log in.");
-            window.location.href = "/login.html";
+            showSuccessModal();
           } catch (err) {
             console.error("SIGNUP ERROR:", err);
             alert("Server error. Please try again.");
           }
         });
+
+         function showSuccessModal() {
+    document.getElementById("successModal").style.display = "flex";
+  }
+
+  function redirectToLogin() {
+    window.location.href = "/login.html";
+  }
     </script>
+
+    <!-- SUCCESS MODAL -->
+<div id="successModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3>Account Created 🎉</h3>
+    <p>Your account was created successfully. Please log in.</p>
+    <button onclick="redirectToLogin()">OK</button>
+  </div>
+</div>
+
   </body>
 </html>

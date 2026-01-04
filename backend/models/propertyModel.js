@@ -18,8 +18,8 @@ const Property = {
   create: async (data) => {
     const query = `
       INSERT INTO properties 
-      (title, location, price, lot_area, phase, type, status, description,
-       images, agent, virtual_tour, google_map, availability_image, created_by)
+      (title, location, price, lot_area, phase, type, status,
+       description, images, agent, virtual_tour, google_map, availability_image, created_by)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
       RETURNING *;
     `;
@@ -31,7 +31,7 @@ const Property = {
       data.lot_area,
       data.phase,
       data.type,
-      data.status,
+      data.status || "Available",
       data.description,
       data.images,
       data.agent,
@@ -51,7 +51,9 @@ const Property = {
   // GET ALL PROPERTIES
   // ==========================
   getAll: async () => {
-    const result = await pool.query(`SELECT * FROM properties ORDER BY id DESC`);
+    const result = await pool.query(
+      `SELECT * FROM properties ORDER BY id DESC`
+    );
     return result.rows.map(row => ({
       ...row,
       images: parseImages(row.images)
@@ -62,7 +64,11 @@ const Property = {
   // GET PROPERTY BY ID
   // ==========================
   getById: async (id) => {
-    const result = await pool.query(`SELECT * FROM properties WHERE id=$1`, [id]);
+    const result = await pool.query(
+      `SELECT * FROM properties WHERE id=$1`,
+      [id]
+    );
+
     if (!result.rows.length) return null;
 
     const p = result.rows[0];
@@ -70,34 +76,28 @@ const Property = {
   },
 
   // ==========================
-  // UPDATE PROPERTY
+  // UPDATE PROPERTY (PATCH-SAFE) ✅
   // ==========================
   update: async (id, data) => {
+    const fields = [];
+    const values = [];
+    let index = 1;
+
+    // Build dynamic SET clause
+    for (const key in data) {
+      fields.push(`${key}=$${index}`);
+      values.push(data[key]);
+      index++;
+    }
+
     const query = `
-      UPDATE properties SET
-        title=$1, location=$2, price=$3, lot_area=$4, phase=$5,
-        type=$6, status=$7, description=$8, images=$9,
-        agent=$10, virtual_tour=$11, google_map=$12, availability_image=$13
-      WHERE id=$14
+      UPDATE properties
+      SET ${fields.join(", ")}
+      WHERE id=$${index}
       RETURNING *;
     `;
 
-    const values = [
-      data.title,
-      data.location,
-      data.price,
-      data.lot_area,
-      data.phase,
-      data.type,
-      data.status,
-      data.description,
-      data.images,
-      data.agent,
-      data.virtual_tour,
-      data.google_map,
-      data.availability_image,
-      id
-    ];
+    values.push(id);
 
     const result = await pool.query(query, values);
     const p = result.rows[0];
@@ -109,7 +109,10 @@ const Property = {
   // DELETE PROPERTY
   // ==========================
   delete: async (id) => {
-    const res = await pool.query(`DELETE FROM properties WHERE id=$1`, [id]);
+    const res = await pool.query(
+      `DELETE FROM properties WHERE id=$1`,
+      [id]
+    );
     return res.rowCount > 0;
   }
 };

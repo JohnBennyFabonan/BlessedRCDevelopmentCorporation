@@ -3,17 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <title>Customer Login – Digital Realty</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+
 
     <style>
       body {
-        margin: 0;
-        font-family: "Poppins", sans-serif;
-        background: #e7f2ed; /* soft mint background like homepage */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #e7f2ed;
+}
+
 
       .auth-container {
         background: white;
@@ -23,6 +22,14 @@
         box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
         text-align: center;
       }
+
+      .auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px); /* leaves space for navbar */
+}
+
 
       .auth-title {
         font-size: 28px;
@@ -124,9 +131,13 @@
     </style>
 
     <script src="/assets/js/session.js"></script>
+
   </head>
 
   <body>
+  <div id="navbar"></div>
+
+  <div class="auth-wrapper">
     <div class="auth-container">
       <h2 class="auth-title">Welcome Back</h2>
       <p class="auth-subtitle">Login to your Digital Realty account</p>
@@ -164,8 +175,12 @@
         </p>
       </form>
     </div>
+  </div>
 
-    <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/navbar.js"></script>
+
+
     <script>
       const API = `${API_CONFIG.BASE_URL}/api/auth`;
 
@@ -212,5 +227,7 @@
           }
         });
     </script>
+
+
   </body>
 </html>

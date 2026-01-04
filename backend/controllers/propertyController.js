@@ -77,10 +77,12 @@ exports.getPropertyById = async (req, res) => {
   }
 };
 
-// ================== UPDATE PROPERTY ==================
+// ================== UPDATE PROPERTY (FIXED) ==================
 exports.updateProperty = async (req, res) => {
   try {
     const data = { ...req.body };
+
+    // ❌ REMOVED availability logic (column does not exist)
 
     if (req.files?.images?.length) {
       data.images = JSON.stringify(

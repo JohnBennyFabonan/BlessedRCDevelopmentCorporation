@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Agent Chat – Digital Realty</title>
+
+  <style>
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: #e7f2ed;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===============================
+     NAVBAR (MATCH DASHBOARD)
+  ================================ */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 95vw;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 40px;
+    background: #1B5E20;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    z-index: 2000;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .nav-logo {
+    height: 45px;
+    width: auto;
+  }
+
+  .nav-right {
+    display: flex;
+    gap: 12px;
+  }
+
+  .nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+  }
+
+  .nav-link:hover {
+    background: rgba(255,255,255,0.15);
+  }
+
+  /* ===============================
+     MAIN LAYOUT
+  ================================ */
+  .chat-layout {
+    flex: 1;
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+    margin-top: 80px; /* 🔥 FIX FOR FIXED NAVBAR */
+    min-height: 0;
+  }
+
+  /* LEFT: CONVERSATION LIST */
+  .chat-list {
+    width: 320px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    overflow-y: auto;
+  }
+
+  .chat-item {
+    padding: 14px 16px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+  }
+
+  .chat-item.active,
+  .chat-item:hover {
+    background: #e8f5e9;
+  }
+
+  /* RIGHT: CHAT WINDOW */
+  .chat-window {
+    flex: 1;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .chat-header {
+    padding: 16px;
+    background: #1B5E20;
+    color: white;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* CHAT BODY */
+  .chat-body {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background: #f1f8f4;
+    min-height: 0;
+  }
+
+  /* MESSAGES */
+  .chat-msg {
+    max-width: 70%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    word-wrap: break-word;
+  }
+
+  .chat-msg.client {
+    background: #e0e0e0;
+    margin-right: auto;
+  }
+
+  .chat-msg.agent {
+    background: #1B5E20;
+    color: white;
+    margin-left: auto;
+  }
+
+  /* INPUT AREA */
+  .chat-input {
+    display: flex;
+    padding: 12px;
+    border-top: 1px solid #ddd;
+    background: white;
+  }
+
+  .chat-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+  }
+
+  .chat-input button {
+    margin-left: 10px;
+    background: #1B5E20;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+</style>
+
+<script src="/assets/js/session.js"></script>
+</head>
+
+<body>
+
+<!-- ✅ DASHBOARD NAVBAR -->
+<nav class="navbar">
+  <div class="logo">
+    <img
+      src="/assets/img/LOGO-removebg-preview.png"
+      class="nav-logo"
+      alt="Logo"
+    />
+    <span>Blessed R&C Development Corporation</span>
+  </div>
+
+  <div class="nav-right">
+    <a href="agent_dashboard.html" class="nav-link">Dashboard</a>
+    <a href="agent_chat.html" class="nav-link">💬 Messages</a>
+    <a href="agent_account_settings.html" class="nav-link">Account Setting</a>
+    <a href="#" id="logoutLink" class="nav-link">Logout</a>
+  </div>
+</nav>
+
+<div class="chat-layout">
+
+  <div class="chat-list" id="conversationList"></div>
+
+  <div class="chat-window">
+    <div class="chat-header" id="chatTitle">Select a conversation</div>
+    <div class="chat-body" id="chatMessages"></div>
+
+    <div class="chat-input">
+      <input type="text" id="replyInput" placeholder="Type a reply..." />
+      <button onclick="sendReply()">Send</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const API_BASE = "http://localhost:5000/api";
+const agent = Session.getUser();
+
+let currentPropertyId = null;
+let currentClientId = null;
+let chatInterval = null;
+
+/* LOAD CONVERSATIONS */
+async function loadConversations() {
+  const res = await fetch(`${API_BASE}/chat/agent/${agent.id}`);
+  const json = await res.json();
+  if (!json.success) return;
+
+  const list = document.getElementById("conversationList");
+  list.innerHTML = "";
+
+  json.data.forEach(c => {
+    const div = document.createElement("div");
+    div.className = "chat-item";
+    div.innerHTML = `
+      <strong>Property #${c.property_id}</strong><br/>
+      Client #${c.client_id}
+    `;
+    div.onclick = () => openChat(c.property_id, c.client_id, div);
+    list.appendChild(div);
+  });
+}
+document.getElementById("logoutLink").addEventListener("click", () => {
+  Session.logout("/login.html");
+});
+
+
+/* OPEN CHAT */
+function openChat(propertyId, clientId, el) {
+  document.querySelectorAll(".chat-item").forEach(i => i.classList.remove("active"));
+  el.classList.add("active");
+
+  currentPropertyId = propertyId;
+  currentClientId = clientId;
+
+  document.getElementById("chatTitle").textContent =
+    `Property #${propertyId} – Client #${clientId}`;
+
+  loadMessages();
+  clearInterval(chatInterval);
+  chatInterval = setInterval(loadMessages, 4000);
+}
+
+/* LOAD MESSAGES */
+async function loadMessages() {
+  if (!currentPropertyId || !currentClientId) return;
+
+  const res = await fetch(
+    `${API_BASE}/chat/${currentPropertyId}/${agent.id}/${currentClientId}`
+  );
+  const json = await res.json();
+  if (!json.success) return;
+
+  const chat = document.getElementById("chatMessages");
+  chat.innerHTML = "";
+
+  json.data.forEach(m => {
+    const div = document.createElement("div");
+    div.className = m.sender_role === "agent" ? "chat-msg agent" : "chat-msg client";
+    div.textContent = m.message;
+    chat.appendChild(div);
+  });
+
+  chat.scrollTop = chat.scrollHeight;
+}
+
+/* SEND REPLY */
+async function sendReply() {
+  const input = document.getElementById("replyInput");
+  const message = input.value.trim();
+  if (!message) return;
+
+  await fetch(`${API_BASE}/chat/send-agent`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      property_id: currentPropertyId,
+      agent_id: agent.id,
+      client_id: currentClientId,
+      message
+    })
+  });
+
+  input.value = "";
+  loadMessages();
+}
+
+/* INIT */
+if (!agent || agent.role !== "agent") {
+  alert("Agent access only");
+  window.location.href = "/login.html";
+} else {
+  loadConversations();
+}
+</script>
+
+</body>
+</html>

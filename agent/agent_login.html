@@ -3,17 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <title>Agent Login – Digital Realty</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+
 
     <style>
-      body {
-        margin: 0;
-        font-family: "Poppins", sans-serif;
-        background: #e7f2ed;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
+     body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #e7f2ed;
+}
+
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px); /* navbar height */
+}
+
+
 
       .auth-container {
         background: white;
@@ -105,7 +112,11 @@
   </head>
 
   <body>
-    <div class="auth-container">
+    <div id="navbar"></div>
+
+<div class="auth-wrapper">
+  <div class="auth-container">
+
       <h2 class="auth-title">Agent Login</h2>
 
       <form id="agentLoginForm" class="auth-form">
@@ -180,5 +191,7 @@
           }
         });
     </script>
+    <script src="/assets/js/navbar.js"></script>
+
   </body>
 </html>

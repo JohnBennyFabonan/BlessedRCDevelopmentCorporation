@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload Property – Admin</title>
+
+  <!-- ICONS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ===== GLOBAL ===== */
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #eef5f0;
+    }
+
+    .layout {
+      display: flex;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      background: #0f4d20;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+      color: white;
+    }
+
+    .sidebar-title {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .side-link {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.2s;
+    }
+
+    .side-link i {
+      font-size: 18px;
+    }
+
+    .side-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(5px);
+    }
+
+    .side-link.active {
+      background: white;
+      color: #1b5e20;
+      font-weight: 600;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      margin-left: 260px;
+      padding: 40px;
+      width: calc(100% - 260px);
+    }
+
+    .page-title {
+      font-size: 30px;
+      font-weight: 700;
+      color: #1b5e20;
+      margin-bottom: 20px;
+    }
+
+    .content-card {
+      background: white;
+      padding: 35px;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ===== FORM ===== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 25px;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #1b5e20;
+    }
+
+    input,
+    select,
+    textarea {
+      padding: 12px 14px;
+      border: 1px solid #aac7b1;
+      border-radius: 10px;
+      font-size: 14px;
+      background: #fafafa;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #1b5e20;
+      box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.25);
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: #1b5e20;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .submit-btn:hover {
+      background: #0d3e14;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(27, 94, 32, 0.25);
+    }
+
+    /* ===== MODAL ===== */
+    #modalOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .modal-box {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 14px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .modal-box button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #1b5e20;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Admin Panel</h2>
+
+    <a href="admin_dashboard.html" class="side-link">
+      <i class="ri-dashboard-fill"></i> Dashboard
+    </a>
+
+    <a href="admin_upload_property.html" class="side-link active">
+      <i class="ri-upload-cloud-fill"></i> Upload Property
+    </a>
+
+    <a href="admin_manage_properties.html" class="side-link">
+      <i class="ri-building-2-fill"></i> Manage Properties
+    </a>
+
+    <a href="admin_appointments.html" class="side-link">
+      <i class="ri-calendar-check-fill"></i> Appointments
+    </a>
+
+    <a href="admin_manage_staff.html" class="side-link">
+      <i class="ri-group-fill"></i> Manage Staff
+    </a>
+
+    <a href="admin_manage_agents.html" class="side-link">
+      <i class="ri-user-star-fill"></i> Manage Agents
+    </a>
+
+    <a href="admin_manage_clients.html" class="side-link">
+      <i class="ri-user-3-fill"></i> Manage Clients
+    </a>
+
+    <a href="#" onclick="logout()" class="side-link">
+      <i class="ri-logout-box-r-fill"></i> Logout
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="content-card">
+      <h2 class="page-title">Upload New Property</h2>
+
+      <form id="uploadForm" enctype="multipart/form-data">
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Property Name</label>
+            <input type="text" name="title" required />
+          </div>
+
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" name="location" required />
+          </div>
+
+          <div class="form-group">
+            <label>Price</label>
+            <input type="number" name="price" required />
+          </div>
+
+          <div class="form-group">
+            <label>Lot Area</label>
+            <input type="number" name="lot_area" required />
+          </div>
+
+          <div class="form-group">
+            <label>Phase</label>
+            <input type="text" name="phase" required />
+          </div>
+
+          <div class="form-group">
+            <label>Property Type</label>
+            <select name="type">
+              <option>Residential Lot</option>
+              <option>Commercial Lot</option>
+              <option>Corner Lot</option>
+              <option>Inner Lot</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Status</label>
+            <select name="status">
+              <option>Available</option>
+              <option>Reserved</option>
+              <option>Sold</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="grid-column: span 2">
+            <label>Description</label>
+            <textarea name="description" rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Assigned Agent</label>
+            <select name="agent" id="agentDropdown" required></select>
+          </div>
+
+          <div class="form-group">
+            <label>Property Images</label>
+            <input type="file" name="images" multiple accept="image/*" required />
+          </div>
+
+          <div class="form-group">
+            <label>Availability Map</label>
+            <input type="file" name="availability_image" accept="image/*" />
+          </div>
+
+          <div class="form-group">
+            <label>VR Tour Link</label>
+            <input type="text" name="virtual_tour" />
+          </div>
+
+          <div class="form-group">
+            <label>Google Maps Link</label>
+            <input type="text" name="google_map" />
+          </div>
+
+        </div>
+
+        <button class="submit-btn" type="submit">Upload Property</button>
+      </form>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div id="modalOverlay">
+  <div class="modal-box">
+    <p id="modalMessage"></p>
+    <button onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<!-- ===== SCRIPT ===== -->
+<script src="/assets/js/config.js"></script>
+<script>
+  const API = `${API_CONFIG.BASE_URL}/api`;
+  const user = JSON.parse(localStorage.getItem("user"));
+  const loggedIn = localStorage.getItem("loggedIn");
+
+  function showModal(message, callback = null) {
+    document.getElementById("modalMessage").textContent = message;
+    document.getElementById("modalOverlay").style.display = "flex";
+    window.modalCallback = callback;
+  }
+
+  function closeModal() {
+    document.getElementById("modalOverlay").style.display = "none";
+    if (window.modalCallback) {
+      window.modalCallback();
+      window.modalCallback = null;
+    }
+  }
+
+  if (!user || loggedIn !== "true" || user.role !== "admin") {
+    showModal("Admin access required.", () => {
+      window.location.href = "admin_login.html";
+    });
+  }
+
+  async function loadAgents() {
+    const res = await fetch(`${API}/admin/agents`);
+    const json = await res.json();
+    const dropdown = document.getElementById("agentDropdown");
+
+    dropdown.innerHTML = `<option value="">-- Select Agent --</option>`;
+    if (json.success) {
+      json.data.forEach(agent => {
+        const opt = document.createElement("option");
+        opt.value = agent.id;
+        opt.textContent = agent.full_name;
+        dropdown.appendChild(opt);
+      });
+    }
+  }
+  loadAgents();
+
+  document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const images = document.querySelector("input[name='images']").files;
+    formData.delete("images");
+    for (const file of images) formData.append("images", file);
+
+    formData.append("created_by", user.id);
+
+    const res = await fetch(`${API}/properties`, {
+      method: "POST",
+      body: formData,
+    });
+
+    const json = await res.json();
+    if (json.success) {
+      showModal("Property uploaded successfully!", () => {
+        window.location.href = "admin_manage_properties.html";
+      });
+    } else {
+      showModal(json.error || "Upload failed.");
+    }
+  });
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = "../index.html";
+  }
+</script>
+</body>
+</html>

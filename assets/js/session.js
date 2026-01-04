@@ -32,12 +32,17 @@ const Session = {
     return localStorage.getItem("loggedIn") === "true" && !!this.getUser();
   },
 
-  // Require a role — if not satisfied, redirect to login (returns true when ok)
-  requireRole(role, redirectTo = "/login.html") {
+  // Require a role — supports silent (modal-based) mode
+  requireRole(role, redirectTo = "/login.html", options = {}) {
     const user = this.getUser();
+
     if (!user || !this.isLoggedIn() || (role && user.role !== role)) {
-      // do not clear other keys here - just redirect
-      window.alert(`${role[0].toUpperCase()+role.slice(1)} access required.`);
+
+      // 🔕 Silent mode: let the page handle UI (modal)
+      if (options.silent) return false;
+
+      // Default behavior (used by other pages)
+      window.alert(`${role[0].toUpperCase() + role.slice(1)} access required.`);
       window.location.href = redirectTo;
       return false;
     }
@@ -52,8 +57,19 @@ const Session = {
     localStorage.removeItem("sessionAt");
   },
 
+  // 🔐 Logout with history protection
   logout(redirectTo = "/index.html") {
     this.clearAuth();
-    window.location.href = redirectTo;
+
+    // Replace current page in history (prevents back navigation)
+    window.location.replace(redirectTo);
+
+    // Extra safety: block browser back button
+    setTimeout(() => {
+      window.history.pushState(null, "", redirectTo);
+      window.onpopstate = function () {
+        window.location.replace(redirectTo);
+      };
+    }, 0);
   }
 };

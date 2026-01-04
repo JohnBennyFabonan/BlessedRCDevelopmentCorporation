@@ -128,6 +128,61 @@
       .footer-text a:hover {
         text-decoration: underline;
       }
+
+      /* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-box {
+  background: white;
+  padding: 25px 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  animation: pop 0.25s ease;
+}
+
+.modal-box p {
+  font-size: 15px;
+  color: #37474f;
+  margin-bottom: 20px;
+}
+
+.modal-box button {
+  background: #1b5e20;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-box button:hover {
+  background: #164c19;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
     </style>
   </head>
 
@@ -167,77 +222,127 @@
     </div>
 
     <script>
-      /* ---------- DO NOT TOUCH: ORIGINAL FUNCTIONALITY ---------- */
-      if (!Session.requireRole("client", "/login.html")) throw "redirecting";
+  /* ---------- DO NOT TOUCH: ORIGINAL FUNCTIONALITY ---------- */
+  if (!Session.requireRole("client", "/login.html")) throw "redirecting";
 
-      const user = Session.getUser();
-      const API_BASE = `${API_CONFIG.BASE_URL}/api`;
+  const user = Session.getUser();
+  const API_BASE = `${API_CONFIG.BASE_URL}/api`;
 
-      document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById("fullName").value = user.full_name || "";
-        document.getElementById("email").value = user.email || "";
-        document.getElementById("contact").value = user.contact || "";
-      });
+  /* ===== MODAL FUNCTIONS ===== */
+  function showModal(message, callback = null) {
+    const overlay = document.getElementById("modalOverlay");
+    const msg = document.getElementById("modalMessage");
 
-      document
-        .getElementById("bookingForm")
-        .addEventListener("submit", async function (e) {
-          e.preventDefault();
-          const propertyId = localStorage.getItem("viewPropertyId");
-          if (!propertyId) {
-            alert("No property selected.");
-            return;
-          }
+    if (!overlay || !msg) {
+      console.warn("Modal not found, falling back to alert.");
+      alert(message);
+      return;
+    }
 
-          const selectedDate = new Date(document.getElementById("date").value);
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          if (selectedDate < today) {
-            alert("You cannot book a past date.");
-            return;
-          }
+    msg.textContent = message;
+    overlay.style.display = "flex";
 
-          const timeValue = document.getElementById("time").value;
-          const [hour, minute] = timeValue.split(":").map(Number);
-          if (hour < 8 || hour > 16 || (hour === 16 && minute > 0)) {
-            alert("Booking hours are from 8:00 AM to 4:00 PM only.");
-            return;
-          }
+    // Optional callback (for success redirect)
+    overlay.dataset.callback = callback ? "true" : "false";
+    window.modalCallback = callback;
+  }
 
-          const payload = {
-            user_id: user.id,
-            property_id: Number(propertyId),
-            full_name: document.getElementById("fullName").value,
-            email: document.getElementById("email").value,
-            contact: document.getElementById("contact").value,
-            date: document.getElementById("date").value,
-            time: timeValue,
-            message: document.getElementById("message").value || "",
-          };
+  function closeModal() {
+    const overlay = document.getElementById("modalOverlay");
+    if (overlay) overlay.style.display = "none";
 
-          try {
-            const res = await fetch(`${API_BASE}/appointments`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${Session.getToken()}`,
-              },
-              body: JSON.stringify(payload),
-            });
+    if (window.modalCallback) {
+      window.modalCallback();
+      window.modalCallback = null;
+    }
+  }
 
-            const data = await res.json();
-            if (!res.ok) {
-              alert(data.error || "Unable to submit booking.");
-              return;
-            }
+  /* ===== PREFILL USER DATA ===== */
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("fullName").value = user.full_name || "";
+    document.getElementById("email").value = user.email || "";
+    document.getElementById("contact").value = user.contact || "";
+  });
 
-            alert("Your appointment request has been sent successfully!");
-            window.location.href = "appointments.html";
-          } catch (err) {
-            console.error("Booking Error:", err);
-            alert("A server error occurred. Please try again.");
-          }
+  /* ===== SUBMIT BOOKING ===== */
+  document
+    .getElementById("bookingForm")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const propertyId = localStorage.getItem("viewPropertyId");
+      if (!propertyId) {
+        showModal("No property selected.");
+        return;
+      }
+
+      const selectedDate = new Date(document.getElementById("date").value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate < today) {
+        showModal("You cannot book a past date.");
+        return;
+      }
+
+      const timeValue = document.getElementById("time").value;
+      const [hour, minute] = timeValue.split(":").map(Number);
+
+      if (hour < 8 || hour > 16 || (hour === 16 && minute > 0)) {
+        showModal("Booking hours are from 8:00 AM to 4:00 PM only.");
+        return;
+      }
+
+      const payload = {
+        user_id: user.id,
+        property_id: Number(propertyId),
+        full_name: document.getElementById("fullName").value,
+        email: document.getElementById("email").value,
+        contact: document.getElementById("contact").value,
+        date: document.getElementById("date").value,
+        time: timeValue,
+        message: document.getElementById("message").value || "",
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/appointments`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Session.getToken()}`,
+          },
+          body: JSON.stringify(payload),
         });
-    </script>
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showModal(data.error || "Unable to submit booking.");
+          return;
+        }
+
+        showModal(
+          "Your appointment request has been sent successfully!",
+          () => {
+            window.location.href = "appointments.html";
+          }
+        );
+
+      } catch (err) {
+        console.error("Booking Error:", err);
+        showModal("A server error occurred. Please try again.");
+      }
+    });
+</script>
+
+
+    <!-- ===== MODAL ===== -->
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal-box">
+    <p id="modalMessage"></p>
+    <button onclick="closeModal()">OK</button>
+  </div>
+</div>
+
   </body>
 </html>

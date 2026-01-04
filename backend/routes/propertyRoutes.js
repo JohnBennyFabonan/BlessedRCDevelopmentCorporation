@@ -42,9 +42,21 @@ router.post(
 );
 
 // =============================
-// UPDATE PROPERTY
+// UPDATE PROPERTY (PUT)
 // =============================
 router.put(
+  "/:id",
+  upload.fields([
+    { name: "images", maxCount: 10 },
+    { name: "availability_image", maxCount: 1 }
+  ]),
+  propertyController.updateProperty
+);
+
+// =============================
+// UPDATE PROPERTY (PATCH) ✅ ADDED
+// =============================
+router.patch(
   "/:id",
   upload.fields([
     { name: "images", maxCount: 10 },
