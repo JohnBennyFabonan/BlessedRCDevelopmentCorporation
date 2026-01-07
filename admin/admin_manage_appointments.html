@@ -172,6 +172,89 @@
       .decline-btn:hover {
         background: #922b21;
       }
+
+      /* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-box {
+  background: white;
+  width: 360px;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.modal-box h3 {
+  margin: 0 0 10px;
+  color: #1b5e20;
+}
+
+.modal-box p {
+  font-size: 14px;
+  color: #444;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-cancel {
+  background: #ccc;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal-confirm {
+  background: #1b5e20;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #333;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.success {
+  background: #2fa84f;
+}
+
+.toast.error {
+  background: #d9534f;
+}
+
     </style>
   </head>
 
@@ -237,95 +320,150 @@
     </div>
 
     <script>
-      const API = `${API_CONFIG.BASE_URL}/api`;
+  const API = `${API_CONFIG.BASE_URL}/api`;
 
-      // Require Admin Login
-      Session.requireRole("admin", "/admin/admin_login.html");
+  // Require Admin Login
+  Session.requireRole("admin", "/admin/admin_login.html");
 
-      // Load Appointments
-      async function loadAppointments() {
-        const tbody = document.querySelector("#apptTable tbody");
-        tbody.innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
+  /* ===============================
+     MODAL + TOAST (UI ONLY)
+  =============================== */
+  let pendingAction = null;
 
-        try {
-          const res = await fetch(`${API}/appointments`);
-          const json = await res.json();
+  function showModal(message, action) {
+    document.getElementById("modalMessage").innerText = message;
+    document.getElementById("confirmModal").style.display = "flex";
 
-          tbody.innerHTML = "";
+    pendingAction = action;
 
-          if (!json.success || !json.data.length) {
-            tbody.innerHTML =
-              "<tr><td colspan='7'>No appointments found.</td></tr>";
-            return;
-          }
+    document.getElementById("modalConfirmBtn").onclick = () => {
+      if (pendingAction) pendingAction();
+      closeModal();
+    };
+  }
 
-          json.data.forEach((a) => {
-            const status = a.status.toLowerCase();
+  function closeModal() {
+    document.getElementById("confirmModal").style.display = "none";
+    pendingAction = null;
+  }
 
-            const row = `
-        <tr>
-          <td>${a.full_name}</td>
-          <td>${a.property_title || "Property #" + a.property_id}</td>
-          <td>${a.date}</td>
-          <td>${a.time}</td>
-          <td>${a.message || ""}</td>
-          <td>
-            <span class="status-box ${status}">
-              ${status.charAt(0).toUpperCase() + status.slice(1)}
-            </span>
-          </td>
-          <td>
-            ${
-              status === "pending"
-                ? `
-              <button class="approve-btn" onclick="updateStatus(${a.id}, 'approved')">Approve</button>
-              <button class="decline-btn" onclick="updateStatus(${a.id}, 'declined')">Decline</button>
-            `
-                : "—"
-            }
-          </td>
-        </tr>
-      `;
+  function showToast(message, type = "success") {
+    const toast = document.getElementById("toast");
+    toast.innerText = message;
+    toast.className = `toast show ${type}`;
 
-            tbody.insertAdjacentHTML("beforeend", row);
-          });
-        } catch (err) {
-          console.error("❌ LOAD ERROR:", err);
-          tbody.innerHTML =
-            "<tr><td colspan='7'>Error loading appointments.</td></tr>";
-        }
+    setTimeout(() => {
+      toast.className = "toast";
+    }, 3000);
+  }
+
+  /* ===============================
+     LOAD APPOINTMENTS
+     (DECLINED ARE NOT REMOVED)
+  =============================== */
+  async function loadAppointments() {
+    const tbody = document.querySelector("#apptTable tbody");
+    tbody.innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
+
+    try {
+      const res = await fetch(`${API}/appointments`);
+      const json = await res.json();
+
+      tbody.innerHTML = "";
+
+      if (!json.success || !json.data.length) {
+        tbody.innerHTML =
+          "<tr><td colspan='7'>No appointments found.</td></tr>";
+        return;
       }
 
-      // =====================================
-      // UPDATE STATUS (ADMIN)
-      // =====================================
-      async function updateStatus(id, status) {
-        if (!confirm(`Mark appointment as ${status.toUpperCase()}?`)) return;
+      json.data.forEach((a) => {
+        const status = a.status.toLowerCase();
 
-        try {
-          const res = await fetch(`${API}/appointments/${id}/status`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status }),
-          });
+        const row = `
+          <tr>
+            <td>${a.full_name}</td>
+            <td>${a.property_title || "Property #" + a.property_id}</td>
+            <td>${a.date}</td>
+            <td>${a.time}</td>
+            <td>${a.message || ""}</td>
+            <td>
+              <span class="status-box ${status}">
+                ${status.charAt(0).toUpperCase() + status.slice(1)}
+              </span>
+            </td>
+            <td>
+              ${
+                status === "pending"
+                  ? `
+                <button class="approve-btn" onclick="updateStatus(${a.id}, 'approved')">Approve</button>
+                <button class="decline-btn" onclick="updateStatus(${a.id}, 'declined')">Decline</button>
+              `
+                  : `<span style="color:#888;font-size:13px;">No action</span>`
+              }
+            </td>
+          </tr>
+        `;
 
-          const json = await res.json();
+        tbody.insertAdjacentHTML("beforeend", row);
+      });
+    } catch (err) {
+      console.error("❌ LOAD ERROR:", err);
+      tbody.innerHTML =
+        "<tr><td colspan='7'>Error loading appointments.</td></tr>";
+    }
+  }
 
-          if (!res.ok || !json.success) {
-            alert(json.error || "Failed to update status.");
-            return;
-          }
+  /* ===============================
+     UPDATE STATUS (ADMIN)
+     (NO ROW REMOVAL)
+  =============================== */
+  async function updateStatus(id, status) {
+    showModal(`Mark appointment as ${status.toUpperCase()}?`, async () => {
+      try {
+        const res = await fetch(`${API}/appointments/${id}/status`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status }),
+        });
 
-          alert(`Appointment marked as ${status.toUpperCase()}`);
-          loadAppointments();
-        } catch (err) {
-          console.error("❌ UPDATE STATUS ERROR:", err);
-          alert("Server error updating status.");
+        const json = await res.json();
+
+        if (!res.ok || !json.success) {
+          showToast(json.error || "Failed to update status.", "error");
+          return;
         }
-      }
 
-      // Initial load
-      loadAppointments();
-    </script>
+        showToast(`Appointment marked as ${status.toUpperCase()}`, "success");
+        loadAppointments(); // reloads table, keeps declined visible
+      } catch (err) {
+        console.error("❌ UPDATE STATUS ERROR:", err);
+        showToast("Server error updating status.", "error");
+      }
+    });
+  }
+
+  // Initial load
+  loadAppointments();
+</script>
+
+
+
+    <!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <h3 id="modalTitle">Confirm Action</h3>
+    <p id="modalMessage"></p>
+
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" id="modalConfirmBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
   </body>
 </html>
