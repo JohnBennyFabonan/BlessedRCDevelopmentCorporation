@@ -186,14 +186,19 @@
 
     .modal-content {
       background: white;
-      padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+      max-width: 90vw;      /* allow big image */
+      max-height: 90vh;
     }
 
     .availability-img {
-      max-width: 500px;
-      border-radius: 10px;
+     max-width: 900px;     /* about 2x larger */
+     max-height: 80vh;     /* prevent overflow */
+     width: 100%;
+     height: auto;
+     border-radius: 12px;
     }
 
     .close {
