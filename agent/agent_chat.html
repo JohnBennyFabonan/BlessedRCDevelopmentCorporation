@@ -74,7 +74,7 @@
     display: flex;
     padding: 20px;
     gap: 20px;
-    margin-top: 80px; /* 🔥 FIX FOR FIXED NAVBAR */
+    margin-top: 80px;
     min-height: 0;
   }
 
@@ -96,6 +96,16 @@
   .chat-item.active,
   .chat-item:hover {
     background: #e8f5e9;
+  }
+
+  /* 🔔 UNREAD NOTIFICATION */
+  .chat-item.unread {
+    font-weight: 700;
+    background: #c8e6c9;
+  }
+
+  .chat-item.unread strong {
+    color: #1B5E20;
   }
 
   /* RIGHT: CHAT WINDOW */
@@ -173,9 +183,9 @@
     cursor: pointer;
     font-weight: 600;
   }
-</style>
+  </style>
 
-<script src="/assets/js/session.js"></script>
+  <script src="/assets/js/session.js"></script>
 </head>
 
 <body>
@@ -183,11 +193,7 @@
 <!-- ✅ DASHBOARD NAVBAR -->
 <nav class="navbar">
   <div class="logo">
-    <img
-      src="/assets/img/LOGO-removebg-preview.png"
-      class="nav-logo"
-      alt="Logo"
-    />
+    <img src="/assets/img/LOGO-removebg-preview.png" class="nav-logo" />
     <span>Blessed R&C Development Corporation</span>
   </div>
 
@@ -226,6 +232,7 @@ const agent = Session.getUser();
 let currentPropertyId = null;
 let currentClientId = null;
 let chatInterval = null;
+const lastMessageMap = {}; // 🔔 notification tracker
 
 /* LOAD CONVERSATIONS */
 async function loadConversations() {
@@ -237,20 +244,32 @@ async function loadConversations() {
   list.innerHTML = "";
 
   json.data.forEach(c => {
+    const key = `${c.property_id}-${c.client_id}`;
     const div = document.createElement("div");
     div.className = "chat-item";
+
     div.innerHTML = `
       <strong>Property #${c.property_id}</strong><br/>
       Client #${c.client_id}
     `;
-    div.onclick = () => openChat(c.property_id, c.client_id, div);
+
+    if (
+      lastMessageMap[key] &&
+      c.last_message_at > lastMessageMap[key] &&
+      c.last_sender === "client"
+    ) {
+      div.classList.add("unread");
+    }
+
+    div.onclick = () => {
+      openChat(c.property_id, c.client_id, div);
+      div.classList.remove("unread");
+    };
+
     list.appendChild(div);
+    lastMessageMap[key] = c.last_message_at;
   });
 }
-document.getElementById("logoutLink").addEventListener("click", () => {
-  Session.logout("/login.html");
-});
-
 
 /* OPEN CHAT */
 function openChat(propertyId, clientId, el) {
@@ -312,12 +331,18 @@ async function sendReply() {
   loadMessages();
 }
 
+/* LOGOUT */
+document.getElementById("logoutLink").addEventListener("click", () => {
+  Session.logout("/login.html");
+});
+
 /* INIT */
 if (!agent || agent.role !== "agent") {
   alert("Agent access only");
   window.location.href = "/login.html";
 } else {
   loadConversations();
+  setInterval(loadConversations, 5000); // 🔔 live notifications
 }
 </script>
 
