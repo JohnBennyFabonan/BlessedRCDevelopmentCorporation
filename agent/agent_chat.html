@@ -231,10 +231,11 @@ const agent = Session.getUser();
 
 let currentPropertyId = null;
 let currentClientId = null;
+let currentPropertyTitle = "";
+let currentClientName = "";
 let chatInterval = null;
-const lastMessageMap = {}; // 🔔 notification tracker
 
-/* LOAD CONVERSATIONS */
+/* ================= LOAD CONVERSATIONS ================= */
 async function loadConversations() {
   const res = await fetch(`${API_BASE}/chat/agent/${agent.id}`);
   const json = await res.json();
@@ -243,51 +244,69 @@ async function loadConversations() {
   const list = document.getElementById("conversationList");
   list.innerHTML = "";
 
-  json.data.forEach(c => {
-    const key = `${c.property_id}-${c.client_id}`;
+  for (const c of json.data) {
     const div = document.createElement("div");
     div.className = "chat-item";
 
-    div.innerHTML = `
-      <strong>Property #${c.property_id}</strong><br/>
-      Client #${c.client_id}
-    `;
+    /* FETCH PROPERTY */
+    let propertyTitle = "Unknown Property";
+    try {
+      const propRes = await fetch(`${API_BASE}/properties/${c.property_id}`);
+      const propJson = await propRes.json();
+      if (propJson.success) propertyTitle = propJson.data.title;
+    } catch {}
 
-    if (
-      lastMessageMap[key] &&
-      c.last_message_at > lastMessageMap[key] &&
-      c.last_sender === "client"
-    ) {
-      div.classList.add("unread");
-    }
-
-    div.onclick = () => {
-      openChat(c.property_id, c.client_id, div);
-      div.classList.remove("unread");
-    };
-
-    list.appendChild(div);
-    lastMessageMap[key] = c.last_message_at;
-  });
+    /* FETCH CLIENT */
+   /* FETCH CLIENT */
+let clientName = "Unknown Client";
+try {
+  const clientRes = await fetch(`${API_BASE}/users/${c.client_id}`);
+  const clientJson = await clientRes.json();
+  if (clientJson.success) {
+    clientName = clientJson.data.full_name || clientJson.data.name;
+  }
+} catch (err) {
+  console.error("Client fetch failed", err);
 }
 
-/* OPEN CHAT */
-function openChat(propertyId, clientId, el) {
-  document.querySelectorAll(".chat-item").forEach(i => i.classList.remove("active"));
+    div.innerHTML = `
+      <strong>${propertyTitle}</strong><br/>
+      <small>${clientName}</small>
+    `;
+
+    div.onclick = () =>
+      openChat(c.property_id, c.client_id, propertyTitle, clientName, div);
+
+    list.appendChild(div);
+  }
+}
+
+/* ================= LOGOUT ================= */
+document.getElementById("logoutLink").addEventListener("click", () => {
+  Session.logout("/login.html");
+});
+
+/* ================= OPEN CHAT ================= */
+function openChat(propertyId, clientId, propertyTitle, clientName, el) {
+  document.querySelectorAll(".chat-item").forEach(i =>
+    i.classList.remove("active")
+  );
   el.classList.add("active");
 
   currentPropertyId = propertyId;
   currentClientId = clientId;
+  currentPropertyTitle = propertyTitle;
+  currentClientName = clientName;
 
   document.getElementById("chatTitle").textContent =
-    `Property #${propertyId} – Client #${clientId}`;
+    `${propertyTitle} – ${clientName}`;
 
   loadMessages();
   clearInterval(chatInterval);
   chatInterval = setInterval(loadMessages, 4000);
 }
 
-/* LOAD MESSAGES */
+/* ================= LOAD MESSAGES ================= */
 async function loadMessages() {
   if (!currentPropertyId || !currentClientId) return;
 
@@ -302,7 +321,8 @@ async function loadMessages() {
 
   json.data.forEach(m => {
     const div = document.createElement("div");
-    div.className = m.sender_role === "agent" ? "chat-msg agent" : "chat-msg client";
+    div.className =
+      m.sender_role === "agent" ? "chat-msg agent" : "chat-msg client";
     div.textContent = m.message;
     chat.appendChild(div);
   });
@@ -310,7 +330,7 @@ async function loadMessages() {
   chat.scrollTop = chat.scrollHeight;
 }
 
-/* SEND REPLY */
+/* ================= SEND REPLY ================= */
 async function sendReply() {
   const input = document.getElementById("replyInput");
   const message = input.value.trim();
@@ -331,18 +351,12 @@ async function sendReply() {
   loadMessages();
 }
 
-/* LOGOUT */
-document.getElementById("logoutLink").addEventListener("click", () => {
-  Session.logout("/login.html");
-});
-
-/* INIT */
+/* ================= INIT ================= */
 if (!agent || agent.role !== "agent") {
   alert("Agent access only");
   window.location.href = "/login.html";
 } else {
   loadConversations();
-  setInterval(loadConversations, 5000); // 🔔 live notifications
 }
 </script>
 
