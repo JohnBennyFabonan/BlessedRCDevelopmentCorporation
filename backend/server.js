@@ -2,6 +2,9 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
+// ✅ PostgreSQL pool (USE YOUR EXISTING DB CONFIG FILE)
+const pool = require("./config/db"); // make sure this path is correct
+
 const app = express();
 
 // CORS Configuration
@@ -25,16 +28,38 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// 🔥 ADD THIS LINE (THIS IS THE FIX)
+// ROUTES
 app.use("/api/chat", require("./routes/chat"));
-
-// OTHER ROUTES
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/properties", require("./routes/propertyRoutes"));
 app.use("/api/appointments", require("./routes/appointmentRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/staff", require("./routes/staffRoutes"));
 app.use("/api/agents", require("./routes/agentRoutes"));
+
+/* ================= USERS API (FIX FOR UNKNOWN CLIENT) ================= */
+app.get("/api/users/:id", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const result = await pool.query(
+      "SELECT id, full_name FROM users WHERE id = $1",
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.json({ success: false });
+    }
+
+    res.json({
+      success: true,
+      data: result.rows[0],
+    });
+  } catch (err) {
+    console.error("USER FETCH ERROR:", err);
+    res.status(500).json({ success: false });
+  }
+});
 
 app.get("/", (req, res) => {
   res.json({ message: "Digital Realty API running 🚀" });
