@@ -104,6 +104,23 @@
     background: #c8e6c9;
   }
 
+  /* 🟢 GREEN DOT BADGE */
+.chat-item {
+  position: relative;
+}
+
+.chat-item.unread::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: #2e7d32;
+  border-radius: 50%;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
   .chat-item.unread strong {
     color: #1B5E20;
   }
@@ -222,17 +239,13 @@
 </div>
 
 <script>
-const API_BASE =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000/api"
-    : "https://digital-reality-mg9y.onrender.com/api";
+// 🔒 LOCK API to LOCAL backend (DEV MODE)
+const API_BASE = "http://localhost:5000/api";
 
 const agent = Session.getUser();
 
 let currentPropertyId = null;
 let currentClientId = null;
-let currentPropertyTitle = "";
-let currentClientName = "";
 let chatInterval = null;
 
 /* ================= LOAD CONVERSATIONS ================= */
@@ -248,6 +261,11 @@ async function loadConversations() {
     const div = document.createElement("div");
     div.className = "chat-item";
 
+    // 🟢 ADD UNREAD INDICATOR
+    if (c.has_unread) {
+      div.classList.add("unread");
+    }
+
     /* FETCH PROPERTY */
     let propertyTitle = "Unknown Property";
     try {
@@ -257,17 +275,16 @@ async function loadConversations() {
     } catch {}
 
     /* FETCH CLIENT */
-   /* FETCH CLIENT */
-let clientName = "Unknown Client";
-try {
-  const clientRes = await fetch(`${API_BASE}/users/${c.client_id}`);
-  const clientJson = await clientRes.json();
-  if (clientJson.success) {
-    clientName = clientJson.data.full_name || clientJson.data.name;
-  }
-} catch (err) {
-  console.error("Client fetch failed", err);
-}
+    let clientName = "Unknown Client";
+    try {
+      const clientRes = await fetch(`${API_BASE}/users/${c.client_id}`);
+      const clientJson = await clientRes.json();
+      if (clientJson.success) {
+        clientName = clientJson.data.full_name || clientJson.data.name;
+      }
+    } catch (err) {
+      console.error("Client fetch failed", err);
+    }
 
     div.innerHTML = `
       <strong>${propertyTitle}</strong><br/>
@@ -281,25 +298,32 @@ try {
   }
 }
 
-/* ================= LOGOUT ================= */
-document.getElementById("logoutLink").addEventListener("click", () => {
-  Session.logout("/login.html");
-});
-
 /* ================= OPEN CHAT ================= */
-function openChat(propertyId, clientId, propertyTitle, clientName, el) {
+async function openChat(propertyId, clientId, propertyTitle, clientName, el) {
   document.querySelectorAll(".chat-item").forEach(i =>
     i.classList.remove("active")
   );
   el.classList.add("active");
 
+  // 🟢 REMOVE UNREAD STATE IMMEDIATELY
+  el.classList.remove("unread");
+
   currentPropertyId = propertyId;
   currentClientId = clientId;
-  currentPropertyTitle = propertyTitle;
-  currentClientName = clientName;
 
   document.getElementById("chatTitle").textContent =
     `${propertyTitle} – ${clientName}`;
+
+  // 🟢 MARK MESSAGES AS READ (BACKEND)
+  await fetch(`${API_BASE}/chat/mark-read`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      property_id: propertyId,
+      agent_id: agent.id,
+      client_id: clientId
+    })
+  });
 
   loadMessages();
   clearInterval(chatInterval);
