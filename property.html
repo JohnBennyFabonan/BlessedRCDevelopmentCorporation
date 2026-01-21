@@ -384,11 +384,11 @@ const isLocal =
 
 const API_BASE = isLocal
   ? "http://localhost:5000/api"
-  : "https://digital-realty-mg9y.onrender.com/api";
+  : "https://digital-reality-mg9y.onrender.com/api";
 
 const FILE_BASE = isLocal
   ? "http://localhost:5000"
-  : "https://digital-realty-mg9y.onrender.com";
+  : "https://digital-reality-mg9y.onrender.com";
 
 /* ================= GLOBAL STATE ================= */
 let currentPropertyId = null;
@@ -399,39 +399,36 @@ let lastMessageCount = 0;
 
 /* ================= MAIN LOAD ================= */
 document.addEventListener("DOMContentLoaded", async () => {
-  // 1️⃣ GET PROPERTY ID (localStorage → URL fallback)
+  /* 1️⃣ GET PROPERTY ID — URL ONLY (PRODUCTION SAFE) */
   const params = new URLSearchParams(window.location.search);
-  const urlId = params.get("id");
-  const storedId = localStorage.getItem("viewPropertyId");
+  const id = params.get("id");
 
-  const id = storedId || urlId;
   if (!id) {
-    alert("No property selected.");
+    alert("Invalid property link.");
+    window.location.href = "/properties.html";
     return;
   }
 
   currentPropertyId = id;
 
-  // sync for future navigation
-  localStorage.setItem("viewPropertyId", id);
-
-  // 2️⃣ USER SESSION
+  /* 2️⃣ USER SESSION */
   const user = Session.getUser();
   if (user && user.role === "client") {
     currentClientId = user.id;
   }
 
   try {
-    // 3️⃣ FETCH PROPERTY
+    /* 3️⃣ FETCH PROPERTY */
     const res = await fetch(`${API_BASE}/properties/${id}`);
 
     if (res.status === 404) {
       alert("Property not found.");
+      window.location.href = "/properties.html";
       return;
     }
 
     if (!res.ok) {
-      throw new Error("Property API failed");
+      throw new Error(`Property API failed: ${res.status}`);
     }
 
     const json = await res.json();
@@ -502,7 +499,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       img.startsWith("http") ? img : `${FILE_BASE}${img}`
     );
 
-    if (!images.length) images = ["../assets/img/no-image.jpg"];
+    if (!images.length) images = ["/assets/img/no-image.jpg"];
 
     const mainImage = document.getElementById("mainImage");
     mainImage.src = images[0];
@@ -556,7 +553,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     console.error("PROPERTY LOAD ERROR:", err);
-    alert("Unable to load property. Please try again.");
+    alert("Unable to load property. Please try again later.");
   }
 });
 
@@ -621,7 +618,6 @@ function closeAvailability() {
   document.getElementById("availabilityModal").style.display = "none";
 }
 </script>
-
 
 <!-- FLOATING CHAT BUTTON -->
 <div id="chatFab" onclick="toggleChat()">💬</div>
